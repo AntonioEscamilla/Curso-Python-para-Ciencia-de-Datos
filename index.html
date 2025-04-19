@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python para Ciencia de Datos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <style>
+        :root {
+            --primary-dark: #04142b;
+            --primary-medium: #142a45;
+            --accent-green: #00ff85;
+            --text-light: #e6e8ea;
+            --text-grey: #a3a8ae;
+            --progress-bg: #1f3754;
+            --code-bg: #1e1e1e;
+            --output-border: #b07ff3;
+            
+            /* Colores para los recuadros informativos */
+            --note-bg: #c5e0ff;
+            --note-border: #0d47a1;
+            --warning-bg: #ffe082;
+            --warning-border: #e65100;
+            --tip-bg: #b9f6ca;
+            --tip-border: #1b5e20;
+            --info-text: #222222;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: var(--text-light);
+            background-color: var(--primary-dark);
+        }
+        
+        .course-header {
+            background-color: var(--primary-dark);
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .course-label {
+            color: var(--text-grey);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .course-title {
+            color: var(--text-light);
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        .course-author {
+            color: var(--text-grey);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1.5rem 0;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 6px;
+            background-color: var(--progress-bg);
+            border-radius: 3px;
+            margin-right: 15px;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent-green);
+            border-radius: 3px;
+        }
+        
+        .progress-info {
+            display: flex;
+            align-items: center;
+            color: var(--text-grey);
+            font-size: 0.9rem;
+        }
+        
+        .progress-info i {
+            margin-right: 5px;
+        }
+        
+        .btn {
+            background-color: var(--accent-green);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 6px;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .btn-practice {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 1.2rem;
+        }
+        
+        .btn-practice i {
+            margin-right: 8px;
+            color: #ff8a00;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        nav {
+            background-color: var(--primary-medium);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        nav a {
+            color: var(--text-grey);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        nav a:hover, nav a.active {
+            color: var(--text-light);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        nav a.active {
+            border-left: 3px solid var(--accent-green);
+        }
+        
+        .content-section {
+            background-color: var(--primary-medium);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        h1, h2, h3 {
+            color: var(--text-light);
+            font-weight: 700;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-green);
+        }
+        
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            color: #e6e6e6;
+        }
+        
+        /* Para código dentro de los bloques de información con texto oscuro */
+        .note code, .warning code, .tip code {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: var(--info-text);
+            font-weight: 500;
+        }
+        
+        /* Estilos para bloques de código */
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            position: relative;
+            border-left: 3px solid var(--accent-green);
+            line-height: 1.5;
+        }
+        
+        pre code,
+        pre code.hljs,
+        .hljs {
+            background-color: var(--code-bg) !important;
+            padding: 0;
+            color: #d4d4d4;
+        }
+        
+        /* Forzar que no haya ningún fondo en los elementos dentro del código */
+        pre *, pre code *, pre code.hljs * {
+            background-color: transparent !important;
+        }
+        
+        /* Mantener colores de sintaxis */
+        .hljs-comment {
+            color: #6a9955 !important;
+            background-color: transparent !important;
+        }
+        
+        .hljs-keyword, .hljs-built_in, .hljs-literal {
+            color: #ff7b72 !important;
+            background-color: transparent !important;
+        }
+        
+        .hljs-string {
+            color: #ce9178 !important;
+            background-color: transparent !important;
+        }
+        
+        .hljs-number {
+            color: #b5cea8 !important;
+            background-color: transparent !important;
+        }
+        
+        .hljs-function, .hljs-title.function_ {
+            color: #dcdcaa !important;
+            background-color: transparent !important;
+        }
+        
+        .hljs-variable {
+            color: #9cdcfe !important;
+            background-color: transparent !important;
+        }
+        
+        .output {
+            background-color: #000000;
+            border-left: 4px solid var(--output-border);
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #f1f1f1;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            border-radius: 0 8px 8px 0;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+        
+        /* Estilos para recuadros informativos */
+        .note, .warning, .tip {
+            border-radius: 6px;
+            padding: 0.8rem 1.2rem;
+            margin: 1.5rem 0;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            border-left-width: 6px;
+            border-left-style: solid;
+            color: var(--info-text);
+        }
+        
+        /* Estilo para NOTA - azul */
+        .note {
+            background-color: var(--note-bg);
+            border-left-color: var(--note-border);
+        }
+        
+        .note::before {
+            content: "Nota:";
+            font-weight: 700;
+            color: var(--note-border);
+            margin-right: 0.3rem;
+        }
+        
+        /* Estilo para ADVERTENCIA - amarillo/naranja */
+        .warning {
+            background-color: var(--warning-bg);
+            border-left-color: var(--warning-border);
+        }
+        
+        .warning::before {
+            content: "Advertencia:";
+            font-weight: 700;
+            color: var(--warning-border);
+            margin-right: 0.3rem;
+        }
+        
+        /* Estilo para TIP - verde */
+        .tip {
+            background-color: var(--tip-bg);
+            border-left-color: var(--tip-border);
+        }
+        
+        .tip::before {
+            content: "Tip:";
+            font-weight: 700;
+            color: var(--tip-border);
+            margin-right: 0.3rem;
+        }
+        
+        .welcome-message {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            color: var(--text-grey);
+        }
+        
+        .highlight {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+        
+        .icon-clock:before {
+            content: "⏱️";
+            margin-right: 5px;
+        }
+        
+        .icon-dumbbell:before {
+            content: "🏋️";
+            margin-right: 5px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1rem;
+            color: var(--text-grey);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Estilos para imágenes */
+        .img-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .img-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .caption {
+            color: var(--text-grey);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .course-title {
+                font-size: 1.6rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+        }
+
+        .table-container {
+            margin: 2rem auto;
+            max-width: 800px; /* Ancho máximo para centrar */
+        }
+
+        .builtin-functions {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--primary-medium);
+            color: var(--text-light);
+            margin: 0 auto; /* Centrar la tabla */
+        }
+
+        .builtin-functions tr:nth-child(odd) {
+            background-color: var(--primary-medium); /* Primer tono de azul */
+        }
+
+        .builtin-functions tr:nth-child(even) {
+            background-color: rgba(30, 60, 100, 0.6); /* Segundo tono de azul más claro */
+        }
+
+        .builtin-functions td {
+            padding: 10px 15px;
+            text-align: left;
+            border: none; /* Eliminar bordes laterales */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Línea horizontal blanca */
+        }
+
+        /* Doble línea en la parte superior de la primera fila */
+        .builtin-functions tr:first-child td {
+            border-top: 3px double rgba(255, 255, 255, 0.4);
+        }
+
+        .builtin-functions code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            color: var(--accent-green);
+        }
+
+        .builtin-functions tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .resources-list {
+            margin: 1.5rem 0;
+        }
+
+        .resources-list li {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .resources-list strong {
+            color: var(--accent-green);
+        }
+
+        .resources-list {
+            margin: 1.5rem 0;
+        }
+        
+        .resources-list li {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .resources-list strong {
+            color: var(--accent-green);
+        }
+        
+        .resources-list a {
+            color: var(--accent-green) !important; /* Forzar color verde */
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .resources-list a:hover {
+            text-decoration: underline;
+            opacity: 0.9; /* Ligero cambio de opacidad al pasar el cursor */
+        }
+
+        .feedback-section {
+            background-color: var(--primary-medium);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .feedback-section h3 {
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+        }
+
+        .feedback-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .feedback-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .feedback-yes {
+            background-color: rgba(0, 255, 133, 0.2);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .feedback-no {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-light);
+        }
+
+        .feedback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .feedback-icon {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .license-icons {
+            display: inline-flex;
+            gap: 0.5rem;
+            margin-left: 1rem;
+            align-items: center;
+        }
+
+        .license-link {
+            display: flex;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .license-icon {
+            width: 28px;
+            height: 28px;
+            transition: transform 0.2s ease;
+        }
+
+        .icon-tooltip {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .icon-tooltip:hover .license-icon {
+            transform: scale(1.1);
+        }
+
+        .icon-tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .icon-tooltip:hover::after {
+            opacity: 1;
+        }
+
+        .hamburger-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .hamburger-button {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 40px;
+            height: 35px;
+            background-color: var(--primary-medium);
+            border: none;
+            border-radius: 5px;
+            padding: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .bar {
+            height: 3px;
+            width: 100%;
+            background-color: var(--accent-green);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-content {
+            position: absolute;
+            right: 0;
+            top: 50px;
+            width: 250px;
+            background-color: var(--primary-medium);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            transform: scale(0.95);
+            transform-origin: top right;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .menu-content h3 {
+            color: var(--accent-green);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .menu-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-content li {
+            margin-bottom: 0.7rem;
+        }
+
+        .menu-content a {
+            color: var(--text-light);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-content a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--accent-green);
+        }
+
+        /* Clase para mostrar/ocultar el menú */
+        .hamburger-menu.active .menu-content {
+            transform: scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Animación de las barras cuando está activo */
+        .hamburger-menu.active .bar:nth-child(1) {
+            transform: translateY(10px) rotate(45deg);
+        }
+
+        .hamburger-menu.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active .bar:nth-child(3) {
+            transform: translateY(-10px) rotate(-45deg);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="hamburger-menu">
+        <button class="hamburger-button" aria-label="Abrir menú de navegación">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        
+        <div class="menu-content">
+            <h3>Secciones</h3>
+            <ul>
+                <li><a href="#intro">Introducción</a></li>
+                <li><a href="#tipos-datos-python">Tipos de Datos</a></li>
+                <li><a href="#variables-python">Variables</a></li>
+                <li><a href="#estructuras-datos">Estructuras de Datos</a></li>
+                <li><a href="#sentencias-control">Sentencias de Control</a></li>
+                <li><a href="#funciones-python">Funciones</a></li>
+                <li><a href="#material-consulta">Material de Consulta</a></li>
+                <li><a href="#referencias">Referencias</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="course-header">
+        <div class="container">
+            <div class="course-label">CURSO</div>
+            <h1 class="course-title">Python para Ciencia de Datos</h1>
+            <div class="course-author">Ph.D. Antonio Escamilla P.</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%;"></div>
+                </div>
+                <div class="progress-info">
+                    <span class="icon-clock"></span>
+                    4 hours to go
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between;">
+                <button class="btn btn-practice" onclick="document.getElementById('material-consulta').scrollIntoView({behavior: 'smooth'})">
+                    <span class="icon-dumbbell"></span>
+                    Practica
+                </button>
+                <button class="btn">Continuar</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#" class="active">1. Introducción a Python</a></li>
+                <li><a href="#">2. NumPy</a></li>
+                <li><a href="#">3. Pandas</a></li>
+                <li><a href="#">4. Polars</a></li>
+                <li><a href="#">5. Visualización</a></li>
+                <li><a href="#">6. Machine Learning</a></li>
+                <li><a href="#">7. Regresión</a></li>
+                <li><a href="#">8. Clasificación</a></li>
+                <li><a href="#">9. Clustering</a></li>
+            </ul>
+        </nav>
+        
+        <div class="content-section">
+            <h1 id="intro">Capítulo 1: Introducción al Lenguaje Python</h1>
+            
+            <h2 id="introduccion-python-ds">Python para Ciencia de Datos</h2>
+            
+            <p>Python se ha convertido en el lenguaje de programación dominante en la ciencia de datos, y no es por casualidad. Su combinación única de simplicidad, legibilidad y potencia lo ha transformado en la herramienta preferida por analistas, científicos de datos e investigadores en todo el mundo.</p>
+            
+            <h3>¿Por qué Python es crucial en la ciencia de datos?</h3>
+            
+            <ul>
+                <li><strong>Ecosistema especializado</strong>: Python cuenta con un robusto conjunto de bibliotecas diseñadas específicamente para ciencia de datos. NumPy, Pandas, Scikit-learn, TensorFlow y Matplotlib forman un arsenal completo para cualquier tarea analítica, desde la manipulación de datos hasta el aprendizaje automático avanzado.</li>
+                
+                <li><strong>Curva de aprendizaje accesible</strong>: A diferencia de otros lenguajes, Python prioriza la simplicidad sintáctica y la legibilidad. Esta característica permite que profesionales de diversos campos —incluso sin experiencia previa en programación— puedan comenzar a analizar datos rápidamente.</li>
+                
+                <li><strong>Versatilidad incomparable</strong>: Python no solo es excelente para análisis de datos, sino que también puede integrarse fácilmente con otros sistemas, crear aplicaciones web, automatizar tareas y mucho más. Esta flexibilidad elimina la necesidad de cambiar entre diferentes lenguajes durante un proyecto.</li>
+                
+                <li><strong>Comunidad global activa</strong>: Existe una extensa comunidad que constantemente desarrolla nuevas herramientas, comparte conocimientos y ofrece soporte, lo que garantiza que Python se mantenga a la vanguardia de las innovaciones en ciencia de datos.</li>
+                
+                <li><strong>Adopción empresarial masiva</strong>: Organizaciones de todos los tamaños, desde startups hasta gigantes tecnológicos como Google, Meta y Netflix, utilizan Python para sus pipelines de análisis de datos, lo que ha convertido esta habilidad en una de las más demandadas en el mercado laboral actual.</li>
+            </ul>
+            
+            <p>En este curso, construiremos desde los fundamentos del lenguaje hasta las técnicas avanzadas de manipulación y análisis de datos. Aprenderás a transformar datos crudos en conocimientos accionables, descubrir patrones ocultos y comunicar tus hallazgos de manera efectiva a través de visualizaciones impactantes.</p>
+            
+            <p>La habilidad de programar en Python para ciencia de datos te permitirá abordar problemas complejos, tomar decisiones basadas en evidencia y generar valor en prácticamente cualquier industria o campo de investigación. ¡Comencemos este fascinante viaje al mundo del análisis de datos con Python!</p>
+            
+            <h2 id="historia-python">La Historia de Python</h2>
+            
+            <p>Contrario a lo que muchos piensan, el nombre del lenguaje Python no hace referencia a la serpiente, sino a una peculiar fuente de inspiración: el grupo cómico británico "Monty Python". Guido van Rossum, el creador del lenguaje, era fan del programa de televisión "Monty Python's Flying Circus" y decidió nombrar su creación en honor a este show.</p>
+   
+            <p>Python nació a finales de los años 80 como un proyecto personal de Van Rossum mientras trabajaba en el Centro para las Matemáticas y la Informática (CWI) en los Países Bajos. Su objetivo era crear un lenguaje que fuera accesible para principiantes pero lo suficientemente potente para los expertos. La primera versión pública (Python 0.9.0) se lanzó en febrero de 1991.</p>
+            
+            <div class="img-container">
+                <img src="https://gvanrossum.github.io/images/DO6GvRlo.gif" alt="Guido van Rossum, creador de Python">
+                <div class="caption">Guido van Rossum, el creador de Python</div>
+            </div>
+            
+            <p>A lo largo de su evolución, Python ha mantenido sus principios fundamentales de diseño, resumidos en "El Zen de Python" (accesible escribiendo <code>import this</code> en cualquier intérprete de Python). Este conjunto de 19 aforismos incluye ideas como "Lo simple es mejor que lo complejo" y "La legibilidad cuenta", filosofías que han contribuido enormemente a la popularidad del lenguaje en el campo de la ciencia de datos.</p>
+            
+            <div class="note">
+                El espíritu lúdico que inspiró el nombre de Python permanece como parte integral de su cultura. La comunidad Python valora la diversión y la claridad, lo que se refleja en la documentación oficial, donde abundan referencias humorísticas y ejemplos con elementos de la cultura popular. Este enfoque accesible y amigable ha sido clave para convertir a Python en el lenguaje ideal para principiantes y expertos por igual.
+            </div>
+            
+            <h2 id="python-shell">Comenzando con Python</h2>
+            
+            <p>Ahora que conoces un poco sobre Python, comencemos a experimentar. Una de las formas más sencillas de trabajar con Python es utilizando un intérprete o "shell", un entorno donde puedes escribir código Python y ver inmediatamente los resultados.</p>
+            
+            <p>Empecemos con algo simple y usemos Python como una calculadora:</p>
+            
+            <pre><code class="language-python"># Una simple operación aritmética
+4 + 5</code></pre>
+            
+            <div class="output">9</div>
+            
+            <p>El intérprete de Python interpreta lo que escribiste y muestra el resultado de tu cálculo, 9. El shell que usamos habitualmente para trabajar es IPython (Python Interactivo), una versión mejorada del intérprete estándar de Python que incluye muchas funcionalidades útiles para la ciencia de datos.</p>
+            
+            <div class="tip">
+                IPython fue creado por Fernando Pérez y forma parte del ecosistema más amplio de Jupyter, herramientas fundamentales en la ciencia de datos moderna.
+            </div>
+            
+            <h2 id="scripts-python">Scripts de Python</h2>
+            
+            <p>Además de trabajar interactivamente con Python, también puedes ejecutar scripts de Python. Estos son simplemente archivos de texto con la extensión <code>.py</code> que contienen una lista de comandos Python que se ejecutan secuencialmente, casi como si estuvieras escribiendo los comandos en el shell tú mismo, línea por línea.</p>
+            
+            <p>Veamos un ejemplo simple de script:</p>
+            
+            <pre><code class="language-python"># Este es un script de Python simple
+# Realizamos algunos cálculos básicos
+resultado = 4 + 5
+print("El resultado es:", resultado)</code></pre>
+            
+            <div class="output">El resultado es: 9</div>
+            
+            <p>Observa que en los scripts, necesitas usar explícitamente la función <code>print()</code> si quieres generar alguna salida. Colocar tu código en scripts de Python en lugar de escribir cada paso interactivamente te ayudará a mantener la estructura y evitará tener que reescribir todo una y otra vez si quieres hacer un cambio; simplemente haces el cambio en el script y ejecutas todo de nuevo.</p>
+            
+            <div class="warning">
+                Si no utilizas la función <code>print()</code> en tus scripts, no verás ningún resultado en la salida, aunque el código se ejecute correctamente.
+            </div>
+            
+            <h2 id="empezando">Comenzando tu viaje</h2>
+            
+            <p>Ahora que tienes una idea de las diferentes formas de trabajar con Python, estás listo para comenzar. Te recomendamos usar el intérprete para experimentar y probar ideas rápidas, mientras que los scripts son ideales para soluciones más permanentes y complejas.</p>
+            
+            <p>A lo largo de este curso, iremos construyendo tus habilidades de programación para ciencia de datos paso a paso. No te preocupes si no tienes experiencia previa en programación; Python es conocido por ser amigable para principiantes y el enfoque práctico de este curso te ayudará a adquirir confianza rápidamente.</p>
+            
+            <p>¡Comencemos este fascinante viaje juntos y no olvides divertirte mientras aprendes!</p>
+        </div>
+
+        <div class="content-section">
+            <h2 id="tipos-datos-python">Tipos de Datos Básicos en Python</h2>
+            
+            <p>Python maneja diversos tipos de datos que son fundamentales para almacenar y manipular información. Cada tipo de dato tiene sus propias características y operaciones asociadas.</p>
+            
+            <h3>Números</h3>
+            <p>Python tiene varios tipos numéricos que utilizaremos constantemente en análisis de datos:</p>
+            
+            <pre><code class="language-python"># Números enteros (int)
+5
+-10
+42
+
+# Operaciones con enteros
+print(10 + 5)     # Suma
+print(20 - 7)     # Resta
+print(6 * 8)      # Multiplicación
+print(100 // 6)   # División entera
+print(17 % 5)     # Módulo (resto de la división)
+print(2 ** 8)     # Potenciación (2 elevado a 8)</code></pre>
+            
+            <div class="output">15<br>13<br>48<br>16<br>2<br>256</div>
+            
+            <p>Las operaciones con números enteros son precisas y eficientes. Observa que la división normal (/) siempre devuelve un número de punto flotante, mientras que la división entera (//) devuelve un entero truncando la parte decimal.</p>
+            
+            <pre><code class="language-python"># Números de punto flotante (float)
+3.14
+-0.001
+2.5e6  # Notación científica: 2.5 × 10^6
+
+# Operaciones con flotantes
+print(3.5 + 2.1)  # Suma
+print(9.8 - 4.2)  # Resta
+print(2.5 * 3.0)  # Multiplicación
+print(7.0 / 2.0)  # División
+print(2.5 ** 2.0) # Potenciación con flotantes</code></pre>
+            
+            <div class="output">5.6<br>5.6000000000000005<br>7.5<br>3.5<br>6.25</div>
+            
+            <div class="warning">
+                Las operaciones con números de punto flotante pueden tener pequeños errores de redondeo debido a la forma en que las computadoras representan números decimales internamente.
+            </div>
+            
+            <h3>Booleanos</h3>
+            <p>Los valores booleanos representan la verdad lógica: <code>True</code> (verdadero) o <code>False</code> (falso). Son fundamentales para crear condiciones y expresiones lógicas:</p>
+            
+            <pre><code class="language-python"># Valores booleanos
+True
+False
+
+# Operaciones lógicas
+print(True and False)  # AND lógico
+print(True or False)   # OR lógico
+print(not True)        # NOT lógico
+
+# Operaciones de comparación que devuelven booleanos
+print(5 > 3)      # Mayor que
+print(10 <= 10)   # Menor o igual que
+print(7 == 7)     # Igualdad
+print(5 != 10)    # Desigualdad</code></pre>
+            
+            <div class="output">
+                False <br>
+                True<br>
+                False<br>
+                True<br>
+                True<br>
+                True<br>
+                True
+            </div>
+            
+            <div class="note">
+                Los booleanos son esenciales en las estructuras de control de Python, como las condiciones <code>if</code> y los bucles <code>while</code>, que veremos más adelante.
+            </div>
+            
+            <h3>Strings (Cadenas de texto)</h3>
+            <p>Las cadenas de texto, o strings, son secuencias de caracteres encerrados entre comillas:</p>
+            
+            <pre><code class="language-python"># Strings
+print("Hola, mundo")
+print('Python para Ciencia de Datos')</code></pre>
+            
+            <div class="output">
+                Hola, mundo<br>
+                Python para Ciencia de Datos
+            </div>
+            
+            <h3>La función type()</h3>
+            <p>Podemos utilizar la función <code>type()</code> para determinar el tipo de dato de cualquier valor en Python:</p>
+            
+            <pre><code class="language-python"># Verificando diferentes tipos
+print(type(42))
+print(type(3.14))
+print(type(True))
+print(type("Hola"))</code></pre>
+            
+            <div class="output">
+                &lt;class 'int'&gt;<br>
+                &lt;class 'float'&gt;<br>
+                &lt;class 'bool'&gt;<br>
+                &lt;class 'str'&gt;
+            </div>
+            
+            <div class="tip">
+                Conocer el tipo de datos con los que trabajas es fundamental en ciencia de datos, ya que diferentes tipos admiten diferentes operaciones y puede afectar el resultado de tus análisis.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 id="variables-python">Variables en Python</h2>
+
+            <p>Una de las características fundamentales de Python es su manejo de variables. En Python, no necesitas declarar el tipo de variable antes de usarla, lo que hace que el código sea más limpio y fácil de escribir.</p>
+
+            <pre><code class="language-python"># Asignación de variables
+nombre = "Carlos"
+edad = 28
+peso = 70.5
+
+# Asignación múltiple
+x, y, z = 10, "Hola", True
+
+print(nombre, edad, peso)
+print(x, y, z)</code></pre>
+            
+            <div class="output">
+                Carlos 28 70.5 <br>
+                10 Hola True
+            </div>
+            
+            <p>Como puedes ver, Python infiere el tipo de la variable según el valor que le asignas. Esto se conoce como "tipado dinámico".</p>
+            
+            <div class="note">
+                En Python, puedes cambiar el tipo de una variable simplemente asignándole un valor de otro tipo, algo que no es posible en lenguajes de tipado estático como Java o C++.
+            </div>
+
+            <h3>Convenciones de nomenclatura</h3>
+
+            <p>Para nombrar variables en Python, es importante seguir estas convenciones:</p>
+
+            <ul>
+                <li>Los nombres pueden contener letras, números y guiones bajos</li>
+                <li>No pueden comenzar con un número</li>
+                <li>No pueden contener espacios o caracteres especiales</li>
+                <li>Son sensibles a mayúsculas y minúsculas (edad, Edad y EDAD son tres variables diferentes)</li>
+            </ul>
+
+            <pre><code class="language-python"># Ejemplos de nombres de variables válidos
+mi_variable = 10
+contador1 = 0
+_variable_privada = "secreto"
+
+# Ejemplos de nombres de variables inválidos
+# 1variable = 20  # No puede comenzar con número
+# mi-variable = 30  # No puede contener guiones
+# mi variable = 40  # No puede contener espacios</code></pre>
+            
+            <div class="tip">
+                En Python, se utiliza la convención "snake_case" para nombrar variables y funciones: palabras en minúsculas separadas por guiones bajos.
+            </div>
+
+            <h3>Variables y comportamiento según el tipo</h3>
+
+            <p>En Python, es importante entender que los operadores pueden comportarse de manera diferente dependiendo del tipo de datos con el que trabajas. Observa estos ejemplos:</p>
+
+            <pre><code class="language-python"># Suma de enteros
+5 + 7
+
+# Concatenación de cadenas
+"Hola" + " Python"</code></pre>
+            
+            <div class="output">12<br>"Hola Python"</div>
+            
+            <p>Para los enteros, el operador + realiza una suma aritmética, mientras que para las cadenas (strings), el mismo operador concatena o une los textos. Este es un principio general en Python: el comportamiento del código depende de los tipos de datos con los que estás trabajando.</p>
+            
+            <p>Podemos almacenar estos valores en variables para reutilizarlos:</p>
+            
+            <pre><code class="language-python"># Creando variables con diferentes tipos
+numero_a = 5
+numero_b = 7
+resultado_numeros = numero_a + numero_b
+
+texto_a = "Hola"
+texto_b = " Python"
+resultado_textos = texto_a + texto_b
+
+# Mostrando los resultados
+print(resultado_numeros)
+print(resultado_textos)
+
+# Comprobando el tipo de las variables resultado
+type(resultado_numeros)
+type(resultado_textos)</code></pre>
+            
+            <div class="output">12<br>Hola Python<br>&lt;class 'int'&gt;<br>&lt;class 'str'&gt;</div>
+
+            <div class="tip">
+                Al asignar valores a variables, Python determina automáticamente su tipo según el valor asignado. Esto facilita la escritura de código, pero debes tener en cuenta el tipo de datos cuando realices operaciones.
+            </div>
+
+            <h3>Imprimir con formato</h3>
+            <p>Existen varias formas de formatear strings en Python:</p>
+
+            <pre><code class="language-python"># Usando f-strings (Python 3.6+)
+nombre = "Juan"
+edad = 25
+print(f"Hola, me llamo {nombre} y tengo {edad} años.")
+
+# Usando método format()
+print("Hola, me llamo {} y tengo {} años.".format(nombre, edad))
+
+# Usando % (estilo antiguo)
+print("Hola, me llamo %s y tengo %d años." % (nombre, edad))</code></pre>
+            
+            <div class="output">Hola, me llamo Juan y tengo 25 años.<br>Hola, me llamo Juan y tengo 25 años.<br>Hola, me llamo Juan y tengo 25 años.</div>
+            
+            <div class="tip">
+               Los f-strings son la forma más moderna y eficiente de formatear strings en Python. Permiten incluir expresiones directamente dentro de las llaves.
+            </div>
+
+            <h3>Entrada de datos del usuario</h3>
+
+            <p>Puedes obtener entrada del usuario con la función <code>input()</code>:</p>
+
+            <pre><code class="language-python"># Solicitar datos al usuario
+nombre = input("Introduce tu nombre: ")
+edad = int(input("Introduce tu edad: "))  # Convertir a entero
+
+print(f"Hola {nombre}, tienes {edad} años.")</code></pre>
+            
+            <div class="output">Introduce tu nombre: <i>María</i><br>Introduce tu edad: <i>28</i><br>Hola María, tienes 28 años.</div>
+            
+            <div class="note">
+               La función <code>input()</code> siempre devuelve un string, por eso necesitamos usar funciones como <code>int()</code> o <code>float()</code> para convertir la entrada a números cuando sea necesario.
+            </div>
+
+        </div>
+
+        <div class="content-section">
+            <h2 id="estructuras-datos">Estructuras de Datos en Python</h2>
+            
+            <p>Python ofrece varias estructuras de datos incorporadas que son fundamentales para el análisis de datos. Estas estructuras permiten almacenar, organizar y manipular colecciones de datos de manera eficiente.</p>
+            
+            <h2 id="listas">Listas</h2>
+            
+            <p>Las listas son una de las estructuras de datos más versátiles en Python. Una lista es una colección ordenada y mutable de elementos que pueden ser de diferentes tipos.</p>
+            
+            <pre><code class="language-python"># Crear una lista
+numeros = [1, 2, 3, 4, 5]
+mixta = [10, "hola", True, 3.14]
+
+# Verificar el tipo
+type(numeros)</code></pre>
+            
+            <div class="output">&lt;class 'list'&gt;</div>
+            
+            <h3>Indexación en Listas y Strings</h3>
+            
+            <p>Los elementos de una lista están indexados, comenzando desde 0 para el primer elemento. También se pueden usar índices negativos para acceder a elementos desde el final.</p>
+            
+            <pre><code class="language-python"># Lista de ejemplo
+frutas = ["manzana", "banana", "cereza", "durazno", "fresa"]
+
+# Acceder a elementos por índice
+print(frutas[0])      # Primer elemento
+print(frutas[2])      # Tercer elemento
+print(frutas[-1])     # Último elemento
+print(frutas[-2])     # Penúltimo elemento</code></pre>
+            
+            <div class="output">manzana<br>cereza<br>fresa<br>durazno</div>
+            
+            <p>La indexación también funciona con strings, ya que son secuencias de caracteres:</p>
+            
+            <pre><code class="language-python"># Indexación en strings
+nombre = "Python"
+print(nombre[0])    # Primera letra
+print(nombre[-1])   # Última letra</code></pre>
+            
+            <div class="output">P<br>n</div>
+            
+            <div class="warning">
+                Si intentas acceder a un índice que no existe, Python generará un error <code>IndexError</code>. Siempre verifica que el índice sea válido antes de acceder a él.
+            </div>
+            
+            <h3>Selección de varios elementos (Slicing)</h3>
+            
+            <p>El slicing permite seleccionar un subconjunto de elementos de una lista o string utilizando la sintaxis <code>[inicio:fin:paso]</code>, donde <code>inicio</code> es el índice donde comienza la selección (incluido), <code>fin</code> es el índice donde termina (excluido) y <code>paso</code> define el intervalo entre elementos:</p>
+            
+            <pre><code class="language-python"># Slicing de listas
+numeros = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# Sintaxis: lista[inicio:fin:paso]
+print(numeros[2:5])     # Elementos del índice 2 al 4
+print(numeros[:4])      # Elementos desde el inicio hasta el índice 3
+print(numeros[6:])      # Elementos desde el índice 6 hasta el final
+print(numeros[1:8:2])   # Elementos del 1 al 7 con paso 2
+print(numeros[::-1])    # Lista invertida</code></pre>
+            
+            <div class="output">[2, 3, 4]<br>[0, 1, 2, 3]<br>[6, 7, 8, 9]<br>[1, 3, 5, 7]<br>[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]</div>
+            
+            <div class="tip">
+                El slicing con paso negativo es una forma sencilla de invertir una lista o cadena en Python.
+            </div>
+
+            <p>El slicing funciona de la misma manera con strings. Observa los índices positivos y negativos para la palabra "Python":</p>
+
+            <pre>+---+---+---+---+---+---+
+| P | y | t | h | o | n |
++---+---+---+---+---+---+
+  0   1   2   3   4   5
+ -6  -5  -4  -3  -2  -1</pre>
+
+            <pre><code class="language-python"># Slicing con strings
+texto = "Python"
+
+# Diferentes formas de hacer slicing
+print(texto[0:2])    # Primeros dos caracteres
+print(texto[2:])     # Desde el tercer carácter hasta el final
+print(texto[:4])     # Desde el inicio hasta el cuarto carácter (excluido)
+print(texto[-2:])    # Últimos dos caracteres
+print(texto[::2])    # Caracteres con paso 2 (posiciones pares)
+print(texto[::-1])   # String invertido</code></pre>
+
+            <div class="output">Py<br>thon<br>Pyth<br>on<br>Pto<br>nohtyP</div>
+            
+            <h3>Indexación anidada</h3>
+            
+            <p>Puedes tener listas dentro de listas (estructuras anidadas) y acceder a sus elementos utilizando múltiples índices:</p>
+    
+            <pre><code class="language-python"># Lista anidada con múltiples niveles
+arreglo = [1, 2, 3, [4, 5, ["colombia"]]]  # Lista con otra lista al interior
+
+# Acceder a elementos anidados
+print(arreglo[0])             # Primer elemento
+print(arreglo[3])             # Cuarto elemento (que es una lista)
+print(arreglo[3][0])          # Primer elemento de la lista anidada
+print(arreglo[3][2])          # Tercer elemento de la lista anidada (otra lista)
+print(arreglo[3][2][0])       # Elemento dentro de la lista doblemente anidada</code></pre>
+    
+            <div class="output">1<br>[4, 5, ['colombia']]<br>4<br>['colombia']<br>colombia</div>
+            
+            <h3>Agregar datos en una lista</h3>
+            
+            <p>Las listas son mutables, lo que significa que puedes modificarlas después de crearlas:</p>
+            
+            <pre><code class="language-python"># Métodos para agregar elementos
+frutas = ["manzana", "banana", "cereza"]
+
+# Agregar un elemento al final
+frutas.append("durazno")
+print(frutas)
+
+# Insertar un elemento en una posición específica
+frutas.insert(1, "arándano")
+print(frutas)
+
+# Extender una lista con otra lista
+frutas.extend(["fresa", "uva"])
+print(frutas)</code></pre>
+            
+            <div class="output">['manzana', 'banana', 'cereza', 'durazno']<br>['manzana', 'arándano', 'banana', 'cereza', 'durazno']<br>['manzana', 'arándano', 'banana', 'cereza', 'durazno', 'fresa', 'uva']</div>
+            
+            <h3>Asignar valores a una posición</h3>
+            
+            <p>Puedes cambiar el valor de un elemento existente asignándole un nuevo valor:</p>
+            
+            <pre><code class="language-python"># Modificar elementos por índice
+colores = ["rojo", "verde", "azul"]
+print(colores)
+
+# Cambiar el segundo elemento
+colores[1] = "amarillo"
+print(colores)
+
+# También puedes modificar múltiples elementos con slicing
+numeros = [1, 2, 3, 4, 5]
+numeros[1:4] = [20, 30, 40]
+print(numeros)</code></pre>
+            
+            <div class="output">['rojo', 'verde', 'azul']<br>['rojo', 'amarillo', 'azul']<br>[1, 20, 30, 40, 5]</div>
+            
+            <h3>Borrar Elementos de una lista</h3>
+            
+            <p>Existen varios métodos para eliminar elementos de una lista:</p>
+            
+            <pre><code class="language-python"># Diferentes formas de eliminar elementos
+frutas = ["manzana", "banana", "cereza", "durazno", "fresa"]
+print(frutas)
+
+# Eliminar un elemento por su valor
+frutas.remove("cereza")
+print(frutas)
+
+# Eliminar un elemento por su índice y obtenerlo
+fruta_eliminada = frutas.pop(1)
+print(f"Se eliminó: {fruta_eliminada}")
+print(frutas)
+
+# Eliminar el último elemento
+ultima = frutas.pop()
+print(f"Último elemento: {ultima}")
+print(frutas)
+
+# Eliminar un elemento por índice sin devolverlo
+del frutas[0]
+print(frutas)</code></pre>
+            
+            <div class="output">['manzana', 'banana', 'cereza', 'durazno', 'fresa']<br>['manzana', 'banana', 'durazno', 'fresa']<br>Se eliminó: banana<br>['manzana', 'durazno', 'fresa']<br>Último elemento: fresa<br>['manzana', 'durazno']<br>['durazno']</div>
+            
+            <div class="note">
+                El método <code>remove()</code> elimina solo la primera ocurrencia del valor. Si necesitas eliminar todas las ocurrencias, deberás usar un bucle o comprensión de listas.
+            </div>
+            
+            <h3>Concatenar listas</h3>
+            
+            <p>Puedes combinar listas utilizando el operador + o el método extend():</p>
+            
+            <pre><code class="language-python"># Concatenar listas
+lista1 = [1, 2, 3]
+lista2 = [4, 5, 6]
+
+# Usando el operador +
+lista_combinada = lista1 + lista2
+print(lista_combinada)
+
+# Usando extend (modifica la lista original)
+numeros_originales = [10, 20, 30]
+numeros_adicionales = [40, 50]
+numeros_originales.extend(numeros_adicionales)
+print(numeros_originales)</code></pre>
+            
+            <div class="output">[1, 2, 3, 4, 5, 6]<br>[10, 20, 30, 40, 50]</div>
+            
+            <div class="tip">
+                La diferencia entre <code>+</code> y <code>extend()</code> es que el operador <code>+</code> crea una nueva lista, mientras que <code>extend()</code> modifica la lista original.
+            </div>
+            
+            <h2 id="diccionarios">Diccionarios</h2>
+            
+            <p>Los diccionarios son colecciones no ordenadas de pares clave-valor. Son ideales para almacenar y recuperar datos mediante una clave única.</p>
+            
+            <pre><code class="language-python"># Crear un diccionario
+persona = {
+   "nombre": "Ana",
+   "edad": 28,
+   "profesion": "Data Scientist",
+   "lenguajes": ["Python", "R", "SQL"]
+}
+
+# Acceder a valores por clave
+print(persona["nombre"])
+print(persona["lenguajes"])
+
+# Método get (seguro, devuelve None o un valor predeterminado si la clave no existe)
+print(persona.get("salario"))  # La clave no existe
+print(persona.get("salario", "No especificado"))  # Valor predeterminado</code></pre>
+            
+            <div class="output">Ana<br>['Python', 'R', 'SQL']<br>None<br>No especificado</div>
+            
+            <p>Los diccionarios son mutables, por lo que puedes añadir, modificar o eliminar elementos:</p>
+            
+            <pre><code class="language-python"># Modificar un diccionario
+persona = {"nombre": "Ana", "edad": 28}
+
+# Agregar nuevos pares clave-valor
+persona["ciudad"] = "Barcelona"
+persona["email"] = "ana@ejemplo.com"
+print(persona)
+
+# Modificar un valor existente
+persona["edad"] = 29
+print(persona)
+
+# Eliminar un par clave-valor
+del persona["email"]
+print(persona)
+
+# Obtener todas las claves y valores
+print(persona.keys())
+print(persona.values())
+print(persona.items())  # Pares clave-valor como tuplas</code></pre>
+            
+            <div class="output">{'nombre': 'Ana', 'edad': 28, 'ciudad': 'Barcelona', 'email': 'ana@ejemplo.com'}<br>{'nombre': 'Ana', 'edad': 29, 'ciudad': 'Barcelona', 'email': 'ana@ejemplo.com'}<br>{'nombre': 'Ana', 'edad': 29, 'ciudad': 'Barcelona'}<br>dict_keys(['nombre', 'edad', 'ciudad'])<br>dict_values(['Ana', 29, 'Barcelona'])<br>dict_items([('nombre', 'Ana'), ('edad', 29), ('ciudad', 'Barcelona')])</div>
+            
+            <div class="warning">
+                A diferencia de las listas, los diccionarios no tienen un orden garantizado en versiones de Python anteriores a 3.7. A partir de Python 3.7, los diccionarios mantienen el orden de inserción.
+            </div>
+            
+            <h2 id="tuplas">Tuplas</h2>
+            
+            <p>Las tuplas son secuencias inmutables, lo que significa que no pueden modificarse después de crearse. Son similares a las listas, pero se definen con paréntesis en lugar de corchetes.</p>
+            
+            <pre><code class="language-python"># Crear tuplas
+coordenadas = (10.5, 20.8)
+persona = ("Ana", 28, "Ingeniera")
+
+# Tupla con un solo elemento (necesita una coma)
+singleton = (42,)
+
+# Verificar el tipo
+print(type(coordenadas))</code></pre>
+            
+            <div class="output">&lt;class 'tuple'&gt;</div>
+            
+            <p>Aunque las tuplas son inmutables, puedes acceder a sus elementos igual que en las listas:</p>
+            
+            <pre><code class="language-python"># Acceder a elementos de una tupla
+persona = ("Ana", 28, "Ingeniera")
+print(persona[0])  # Primer elemento
+print(persona[-1])  # Último elemento
+
+# Desempaquetar una tupla (muy útil)
+nombre, edad, profesion = persona
+print(f"{nombre} tiene {edad} años y es {profesion}")
+
+# Slicing también funciona con tuplas
+coordenadas = (1, 2, 3, 4, 5)
+print(coordenadas[1:4])</code></pre>
+            
+            <div class="output">Ana<br>Ingeniera<br>Ana tiene 28 años y es Ingeniera<br>(2, 3, 4)</div>
+            
+            <div class="note">
+                Las tuplas son inmutables, por lo que no puedes agregar, eliminar o modificar elementos. Si intentas hacerlo, Python generará un <code>TypeError</code>.
+            </div>
+            
+            <div class="tip">
+                Las tuplas son útiles cuando quieres asegurarte de que una colección de datos no cambie, como coordenadas, configuraciones o claves de diccionarios.
+            </div>
+            
+            <h2 id="cast">Conversión entre tipos (Cast)</h2>
+            
+            <p>Python permite convertir entre diferentes tipos de datos utilizando funciones de conversión:</p>
+            
+            <pre><code class="language-python"># Conversión entre tipos numéricos
+entero = 42
+flotante = float(entero)  # int a float
+print(flotante)
+
+decimal = 3.14
+entero_redondeado = int(decimal)  # float a int (trunca, no redondea)
+print(entero_redondeado)
+
+# Conversión entre secuencias
+lista = [1, 2, 3]
+tupla = tuple(lista)  # lista a tupla
+print(tupla)
+
+tupla = (4, 5, 6)
+lista = list(tupla)  # tupla a lista
+print(lista)
+
+# Strings a números y viceversa
+numero_str = "123"
+numero_int = int(numero_str)  # string a int
+print(numero_int + 7)
+
+numero = 456
+numero_str = str(numero)  # número a string
+print(numero_str + " es un número")</code></pre>
+            
+            <div class="output">42.0<br>3<br>(1, 2, 3)<br>[4, 5, 6]<br>130<br>456 es un número</div>
+            
+            <div class="warning">
+                La conversión de tipos puede provocar pérdida de datos. Por ejemplo, convertir un float a int elimina la parte decimal, y no todos los strings pueden convertirse a números.
+            </div>
+            
+            <pre><code class="language-python"># Conversión entre diccionarios y listas
+lista_pares = [("nombre", "Juan"), ("edad", 30)]
+diccionario = dict(lista_pares)  # lista de tuplas a diccionario
+print(diccionario)
+
+diccionario = {"a": 1, "b": 2}
+lista_items = list(diccionario.items())  # items del diccionario a lista
+print(lista_items)</code></pre>
+            
+            <div class="output">{'nombre': 'Juan', 'edad': 30}<br>[('a', 1), ('b', 2)]</div>
+            
+            <div class="note">
+                La conversión de tipos (casting) es fundamental cuando trabajamos con datos de diferentes fuentes, como archivos CSV, bases de datos o entradas de usuario.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 id="sentencias-control">Sentencias de Control en Python</h2>
+            
+            <p>Las sentencias de control permiten modificar el flujo de ejecución de un programa, haciendo que ciertos bloques de código se ejecuten o se omitan según determinadas condiciones, o que se repitan varias veces. A diferencia de otros lenguajes que utilizan llaves <code>{}</code> o palabras clave como <code>begin</code>-<code>end</code>, Python utiliza la indentación (espacios al inicio de cada línea) para definir bloques de código.</p>
+            
+            <div class="note">
+                La indentación en Python no es solo una cuestión de estilo, sino que es parte fundamental de la sintaxis. Se recomienda usar 4 espacios para cada nivel de indentación, siguiendo la guía de estilo oficial PEP 8.
+            </div>
+            
+            <h2 id="condicionales">Condicionales: if, elif, else</h2>
+            
+            <p>Las estructuras condicionales permiten ejecutar diferentes bloques de código dependiendo de si ciertas condiciones son verdaderas o falsas. En Python, utilizamos <code>if</code>, <code>elif</code> (else if) y <code>else</code> para construir estas estructuras.</p>
+            
+            <pre><code class="language-python"># Estructura básica de condicionales
+edad = 18
+
+if edad < 18:
+   print("Eres menor de edad")
+elif edad == 18:
+   print("Acabas de cumplir la mayoría de edad")
+else:
+   print("Eres mayor de edad")
+
+# Condicionales anidados
+puntuacion = 85
+
+if puntuacion >= 60:
+   print("Aprobado")
+   if puntuacion >= 90:
+       print("Sobresaliente")
+   elif puntuacion >= 80:
+       print("Notable")
+   else:
+       print("Bien")
+else:
+   print("Reprobado")</code></pre>
+            
+            <div class="output">Acabas de cumplir la mayoría de edad<br>Aprobado<br>Notable</div>
+            
+            <div class="tip">
+                Puedes utilizar operadores lógicos como <code>and</code>, <code>or</code> y <code>not</code> para combinar múltiples condiciones en una sola expresión condicional.
+            </div>
+            
+            <pre><code class="language-python"># Uso de operadores lógicos en condicionales
+edad = 25
+tiene_licencia = True
+
+if edad >= 18 and tiene_licencia:
+   print("Puede conducir")
+else:
+   print("No puede conducir")
+
+# Expresiones condicionales compactas (operador ternario)
+mensaje = "Puede votar" if edad >= 18 else "No puede votar"
+print(mensaje)</code></pre>
+            
+            <div class="output">Puede conducir<br>Puede votar</div>
+            
+            <h2 id="ciclos-for">Ciclos for</h2>
+            
+            <p>Los ciclos <code>for</code> en Python son extremadamente versátiles y se utilizan para iterar sobre secuencias (como listas, tuplas, diccionarios, conjuntos o strings) o cualquier objeto iterable. A diferencia de otros lenguajes, el ciclo <code>for</code> de Python se asemeja más al "foreach" de otros lenguajes.</p>
+            
+            <pre><code class="language-python"># Iteración básica con for
+for i in range(5):
+   print(i, end=" ")
+
+print("\n")  # Nueva línea
+
+# Iteración sobre una lista
+frutas = ["manzana", "banana", "cereza"]
+for fruta in frutas:
+   print(f"Me gusta la {fruta}")
+
+# Iteración con índices usando enumerate
+for indice, fruta in enumerate(frutas):
+   print(f"Índice {indice}: {fruta}")</code></pre>
+            
+            <div class="output">0 1 2 3 4 <br><br>
+                Me gusta la manzana<br>
+                Me gusta la banana<br>
+                Me gusta la cereza<br>
+                Índice 0: manzana<br>
+                Índice 1: banana<br>
+                Índice 2: cereza</div>
+            
+            <p>También puedes iterar sobre diccionarios de varias maneras:</p>
+            
+            <pre><code class="language-python"># Iteración sobre diccionarios
+persona = {"nombre": "Ana", "edad": 28, "ciudad": "Madrid"}
+
+# Iterar sobre las claves
+for clave in persona:
+   print(clave)
+
+# Iterar sobre los valores
+for valor in persona.values():
+   print(valor)
+
+# Iterar sobre pares clave-valor
+for clave, valor in persona.items():
+   print(f"{clave}: {valor}")</code></pre>
+            
+            <div class="output">nombre<br>
+                edad<br>
+                ciudad<br>
+                Ana<br>
+                28<br>
+                Madrid<br>
+                nombre: Ana<br>
+                edad: 28<br>
+                ciudad: Madrid</div>
+            
+            <h2 id="ciclos-while">Ciclos while</h2>
+            
+            <p>Los ciclos <code>while</code> ejecutan un bloque de código mientras una condición específica sea verdadera. Son útiles cuando no sabes de antemano cuántas iteraciones necesitarás.</p>
+            
+            <pre><code class="language-python"># Ciclo while básico
+contador = 0
+while contador < 5:
+   print(contador, end=" ")
+   contador += 1
+
+print("\n")  # Nueva línea
+
+# Uso de while para validar entrada
+"""
+# Este código solicitaría entrada al usuario en un entorno interactivo
+numero = -1
+while numero < 0:
+   try:
+       numero = int(input("Ingrese un número positivo: "))
+       if numero < 0:
+           print("El número debe ser positivo.")
+   except ValueError:
+       print("Por favor, ingrese un número válido.")
+"""
+
+# Ejemplo alternativo sin input
+numero = -1
+intentos = 0
+valores = ["-5", "texto", "10"]  # Simulación de entradas
+
+while numero < 0 and intentos < len(valores):
+   try:
+       numero = int(valores[intentos])
+       if numero < 0:
+           print(f"El número {numero} debe ser positivo.")
+   except ValueError:
+       print(f"'{valores[intentos]}' no es un número válido.")
+   intentos += 1
+
+if numero >= 0:
+   print(f"Número válido: {numero}")
+else:
+   print("No se pudo obtener un número válido")</code></pre>
+            
+            <div class="output">0 1 2 3 4<br><br>
+                El número -5 debe ser positivo.<br>
+                'texto' no es un número válido.<br>
+                Número válido: 10</div>
+            
+            <div class="warning">
+                Ten cuidado con los ciclos <code>while</code>, ya que pueden generar bucles infinitos si la condición nunca se vuelve falsa. Asegúrate de que algo dentro del bucle modifique eventualmente la condición.
+            </div>
+            
+            <h2 id="control-ciclos">Control de ciclos: break y continue</h2>
+            
+            <p>Python proporciona dos instrucciones especiales para controlar el flujo dentro de los ciclos: <code>break</code> y <code>continue</code>. Estas te permiten alterar el comportamiento normal de un ciclo según ciertas condiciones.</p>
+            
+            <h3>break</h3>
+            
+            <p>La instrucción <code>break</code> termina el ciclo actual por completo y transfiere la ejecución a la siguiente instrucción después del ciclo.</p>
+            
+            <pre><code class="language-python"># Uso de break en un ciclo for
+print("Ejemplo de break con for:")
+for i in range(10):
+   if i == 5:
+       print("¡Encontramos el 5! Saliendo del ciclo.")
+       break
+   print(i, end=" ")
+
+print("\n")  # Nueva línea
+
+# Uso de break en un ciclo while
+print("Ejemplo de break con while:")
+contador = 0
+while True:  # Ciclo infinito potencial
+   print(contador, end=" ")
+   contador += 1
+   if contador >= 5:
+       print("\nLlegamos a 5. Saliendo del ciclo infinito.")
+       break</code></pre>
+            
+            <div class="output">Ejemplo de break con for:<br>
+                0 1 2 3 4 ¡Encontramos el 5! Saliendo del ciclo.<br><br>
+                Ejemplo de break con while:<br>
+                0 1 2 3 4 <br>
+                Llegamos a 5. Saliendo del ciclo infinito.</div>
+            
+            <h3>continue</h3>
+            
+            <p>La instrucción <code>continue</code> salta el resto del código en la iteración actual y avanza a la siguiente iteración del ciclo.</p>
+            
+            <pre><code class="language-python"># Uso de continue en un ciclo for
+print("Ejemplo de continue con for:")
+for i in range(10):
+   if i % 2 == 0:  # Si i es par
+       continue
+   print(i, end=" ")
+
+print("\n")  # Nueva línea
+
+# Uso de continue en un ciclo while
+print("Ejemplo de continue con while:")
+contador = 0
+while contador < 10:
+   contador += 1
+   if contador % 2 == 0:  # Si contador es par
+       continue
+   print(contador, end=" ")</code></pre>
+            
+            <div class="output">Ejemplo de continue con for:<br>
+                1 3 5 7 9 <br><br>
+
+                Ejemplo de continue con while:<br>
+                1 3 5 7 9 </div>
+            
+            <div class="tip">
+                <code>break</code> es útil cuando encuentras lo que estabas buscando y no necesitas seguir iterando, mientras que <code>continue</code> es útil cuando quieres omitir ciertos elementos en tu procesamiento.
+            </div>
+            
+            <h2 id="list-comprehension">List Comprehension</h2>
+            
+            <p>Las comprensiones de listas (list comprehensions) son una característica poderosa y concisa de Python que te permite crear nuevas listas aplicando una expresión a cada elemento de una secuencia existente, opcionalmente filtrando elementos con una condición.</p>
+            
+            <pre><code class="language-python"># Forma básica de list comprehension
+numeros = [1, 2, 3, 4, 5]
+
+# Crear una lista con el cuadrado de cada número
+cuadrados = [x**2 for x in numeros]
+print(cuadrados)
+
+# List comprehension con condición (filtro)
+pares = [x for x in numeros if x % 2 == 0]
+print(pares)
+
+# Equivalente usando un ciclo for tradicional
+cuadrados_tradicional = []
+for x in numeros:
+   cuadrados_tradicional.append(x**2)
+print(cuadrados_tradicional)
+
+# List comprehension con múltiples condiciones
+numeros = list(range(1, 11))
+filtrados = [x for x in numeros if x % 2 == 0 if x % 3 != 0]
+print(filtrados)  # Números pares que no son divisibles por 3
+
+# List comprehension con expresión if-else
+clasificados = ["par" if x % 2 == 0 else "impar" for x in numeros]
+print(clasificados)</code></pre>
+            
+            <div class="output">[1, 4, 9, 16, 25]<br>
+                [2, 4]<br>
+                [1, 4, 9, 16, 25]<br>
+                [2, 4, 8, 10]<br>
+                ['impar', 'par', 'impar', 'par', 'impar', 'par', 'impar', 'par', 'impar', 'par']</div>
+            
+            <div class="tip">
+                Las list comprehensions son más eficientes y elegantes que los bucles for tradicionales para crear listas. Sin embargo, para operaciones muy complejas, a veces un bucle for puede ser más legible.
+            </div>
+            
+            <p>También puedes utilizar list comprehensions para aplanar estructuras de datos anidadas, convirtiendo una lista de listas en una sola lista:</p>
+
+            <pre><code class="language-python"># Aplanar listas anidadas con list comprehension
+canastas = [
+   ["manzana", "pera", "uva"],           # Frutas
+   ["zanahoria", "apio", "lechuga"],     # Vegetales
+   ["naranja", "mandarina", "limón"]     # Cítricos
+]
+
+# Convertir múltiples canastas en una sola lista de alimentos
+todos_alimentos = [alimento for canasta in canastas for alimento in canasta]
+print(todos_alimentos)
+
+# Equivalente usando bucles for tradicionales
+lista_tradicional = []
+for canasta in canastas:
+   for alimento in canasta:
+       lista_tradicional.append(alimento)
+print(lista_tradicional)</code></pre>
+
+            <div class="output">['manzana', 'pera', 'uva', 'zanahoria', 'apio', 'lechuga', 'naranja', 'mandarina', 'limón']<br>['manzana', 'pera', 'uva', 'zanahoria', 'apio', 'lechuga', 'naranja', 'mandarina', 'limón']</div>
+
+            <div class="tip">
+                Al aplanar listas con comprehensions, el orden de los bucles <code>for</code> es importante: el bucle externo va primero, seguido por el bucle interno. Esto puede parecer contraintuitivo al principio, pero reflexiona sobre cómo escribirías los bucles for anidados normales.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 id="funciones-python">Funciones en Python</h2>
+            
+            <p>Las funciones son bloques de código reutilizables diseñados para realizar una tarea específica. Son fundamentales en programación por varias razones:</p>
+            
+            <ul>
+                <li><strong>Reutilización de código:</strong> Escribes el código una vez y puedes usarlo múltiples veces.</li>
+                <li><strong>Modularidad:</strong> Dividen un programa grande en componentes más pequeños y manejables.</li>
+                <li><strong>Abstracción:</strong> Ocultan la complejidad interna, permitiéndote enfocarte en lo que hace la función, no en cómo lo hace.</li>
+                <li><strong>Mantenimiento:</strong> Facilitan la corrección de errores y la actualización del código.</li>
+            </ul>
+            
+            <p>En ciencia de datos, las funciones son especialmente importantes para crear procesos analíticos reproducibles y para manipular conjuntos de datos de manera consistente.</p>
+            
+            <h2 id="creacion-funciones">Crear Funciones en Python</h2>
+            
+            <p>Las funciones en Python se definen usando la palabra clave <code>def</code>, seguida del nombre de la función y paréntesis que pueden contener parámetros. El bloque de código de la función se indenta después de dos puntos.</p>
+            
+            <pre><code class="language-python"># Función básica sin parámetros
+def saludar():
+   print("¡Hola, bienvenido a Python!")
+
+# Llamada a la función
+saludar()</code></pre>
+   
+            <div class="output">¡Hola, bienvenido a Python!</div>
+            
+            <p>Las funciones pueden recibir parámetros (datos de entrada) y devolver valores utilizando la palabra clave <code>return</code>:</p>
+            
+            <pre><code class="language-python"># Función con parámetros y valor de retorno
+def cuadrado(numero):
+   return numero ** 2
+
+# Llamada a la función con un argumento
+resultado = cuadrado(5)
+print(f"El cuadrado de 5 es: {resultado}")
+
+# Función para sumar todos los elementos de una lista
+def suma_lista(numeros):
+   total = 0
+   for num in numeros:
+       total += num
+   return total
+
+# Probar la función
+mi_lista = [1, 2, 3, 4, 5]
+print(f"La suma de {mi_lista} es: {suma_lista(mi_lista)}")</code></pre>
+            
+            <div class="output">El cuadrado de 5 es: 25<br>La suma de [1, 2, 3, 4, 5] es: 15</div>
+            
+            <div class="note">
+                Una función puede no tener parámetros, tener parámetros obligatorios, opcionales (con valores predeterminados), o incluso un número variable de parámetros.
+            </div>
+            
+            <p>Puedes establecer valores predeterminados para los parámetros, lo que los hace opcionales:</p>
+            
+            <pre><code class="language-python"># Función con parámetros predeterminados
+def potencia(base, exponente=2):
+   return base ** exponente
+
+# Llamadas a la función
+print(potencia(3))      # Usa el exponente predeterminado (2)
+print(potencia(3, 4))   # Especifica un exponente diferente</code></pre>
+            
+            <div class="output">9<br>81</div>
+            
+            <div class="tip">
+                En Python, las funciones son "ciudadanos de primera clase", lo que significa que pueden asignarse a variables, pasarse como argumentos a otras funciones y devolverse como resultados.
+            </div>
+            
+            <h2 id="builtin-functions">Funciones Básicas de Python (Built-in Functions)</h2>
+            
+            <p>Python incluye numerosas funciones incorporadas (built-in) que están disponibles sin necesidad de importar módulos. Estas funciones proporcionan funcionalidades esenciales para el manejo de datos y operaciones comunes.</p>
+            
+            <div class="table-container">
+                <h4>Lista de funciones incorporadas en Python</h4>
+                <table class="builtin-functions">
+                    <tr>
+                        <td><code>abs()</code></td>
+                        <td><code>dict()</code></td>
+                        <td><code>help()</code></td>
+                        <td><code>min()</code></td>
+                        <td><code>setattr()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>all()</code></td>
+                        <td><code>dir()</code></td>
+                        <td><code>hex()</code></td>
+                        <td><code>next()</code></td>
+                        <td><code>slice()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>any()</code></td>
+                        <td><code>divmod()</code></td>
+                        <td><code>id()</code></td>
+                        <td><code>object()</code></td>
+                        <td><code>sorted()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>ascii()</code></td>
+                        <td><code>enumerate()</code></td>
+                        <td><code>input()</code></td>
+                        <td><code>oct()</code></td>
+                        <td><code>staticmethod()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>bin()</code></td>
+                        <td><code>eval()</code></td>
+                        <td><code>int()</code></td>
+                        <td><code>open()</code></td>
+                        <td><code>str()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>bool()</code></td>
+                        <td><code>exec()</code></td>
+                        <td><code>isinstance()</code></td>
+                        <td><code>ord()</code></td>
+                        <td><code>sum()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>bytearray()</code></td>
+                        <td><code>filter()</code></td>
+                        <td><code>issubclass()</code></td>
+                        <td><code>pow()</code></td>
+                        <td><code>super()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>bytes()</code></td>
+                        <td><code>float()</code></td>
+                        <td><code>iter()</code></td>
+                        <td><code>print()</code></td>
+                        <td><code>tuple()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>callable()</code></td>
+                        <td><code>format()</code></td>
+                        <td><code>len()</code></td>
+                        <td><code>property()</code></td>
+                        <td><code>type()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>chr()</code></td>
+                        <td><code>frozenset()</code></td>
+                        <td><code>list()</code></td>
+                        <td><code>range()</code></td>
+                        <td><code>vars()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>classmethod()</code></td>
+                        <td><code>getattr()</code></td>
+                        <td><code>locals()</code></td>
+                        <td><code>repr()</code></td>
+                        <td><code>zip()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>compile()</code></td>
+                        <td><code>globals()</code></td>
+                        <td><code>map()</code></td>
+                        <td><code>reversed()</code></td>
+                        <td><code>import()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>complex()</code></td>
+                        <td><code>hasattr()</code></td>
+                        <td><code>max()</code></td>
+                        <td><code>round()</code></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3>len()</h3>
+            
+            <p>La función <code>len()</code> devuelve el número de elementos en un objeto. Funciona con cadenas, listas, tuplas, diccionarios y otros objetos iterables.</p>
+            
+            <pre><code class="language-python"># Ejemplos de uso de len()
+print(len("Python"))              # Longitud de una cadena
+print(len([1, 2, 3, 4, 5]))       # Número de elementos en una lista
+print(len({"a": 1, "b": 2}))      # Número de pares clave-valor en un diccionario
+print(len(range(0, 10, 2)))       # Número de elementos en un rango</code></pre>
+            
+            <div class="output">6<br>5<br>2<br>5</div>
+            
+            <h3>help()</h3>
+            
+            <p>La función <code>help()</code> proporciona documentación integrada sobre objetos, funciones, módulos y tipos de datos en Python. Es una herramienta invaluable para aprender sobre las funcionalidades disponibles.</p>
+            
+            <pre><code class="language-python"># Ejemplo de uso de help()
+# help(print)  # Muestra ayuda sobre la función print
+
+# Ejemplo de la salida de help para len
+print("La función len() devuelve la longitud (número de elementos) de un objeto.")
+print("Sintaxis: len(objeto)")
+print("Parámetros: objeto - una secuencia (string, lista, tupla, etc.) o colección (diccionario, set, etc.)")
+print("Retorna: un entero que representa el número de elementos")</code></pre>
+            
+            <div class="output">La función len() devuelve la longitud (número de elementos) de un objeto.<br>Sintaxis: len(objeto)<br>Parámetros: objeto - una secuencia (string, lista, tupla, etc.) o colección (diccionario, set, etc.)<br>Retorna: un entero que representa el número de elementos</div>
+            
+            <div class="tip">
+                Puedes usar <code>help()</code> sin argumentos para iniciar una sesión de ayuda interactiva, o proporcionar un objeto específico como argumento para ver su documentación.
+            </div>
+            
+            <h3>range()</h3>
+            
+            <p>La función <code>range()</code> genera una secuencia de números. Es especialmente útil en bucles <code>for</code> y para crear listas de números.</p>
+            
+            <pre><code class="language-python"># Ejemplos de uso de range()
+ 
+# range con un solo argumento (fin, exclusivo)
+print(list(range(5)))        # 0 a 4
+
+# range con dos argumentos (inicio, fin)
+print(list(range(2, 8)))     # 2 a 7
+
+# range con tres argumentos (inicio, fin, paso)
+print(list(range(1, 10, 2))) # Números impares del 1 al 9
+print(list(range(10, 0, -1))) # Cuenta regresiva de 10 a 1</code></pre>
+            
+            <div class="output">[0, 1, 2, 3, 4]<br>[2, 3, 4, 5, 6, 7]<br>[1, 3, 5, 7, 9]<br>[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]</div>
+            
+            <div class="note">
+                <code>range()</code> en Python 3 devuelve un objeto iterable, no una lista. Para ver los valores, necesitas convertirlo a una lista usando <code>list()</code> o iterarlo en un bucle.
+            </div>
+            
+            <h3>enumerate()</h3>
+            
+            <p>La función <code>enumerate()</code> añade un contador a un iterable y devuelve un objeto enumerate que genera pares (índice, valor). Es ideal cuando necesitas tanto el índice como el valor durante la iteración.</p>
+            
+            <pre><code class="language-python"># Ejemplos de uso de enumerate()
+frutas = ["manzana", "banana", "cereza"]
+
+# Iteración básica con enumerate
+for i, fruta in enumerate(frutas):
+   print(f"Índice {i}: {fruta}")
+
+# Usando enumerate con un valor inicial para el contador
+for i, fruta in enumerate(frutas, start=1):
+   print(f"Fruta #{i}: {fruta}")
+
+# Convertir enumerate a una lista de tuplas
+print(list(enumerate(frutas)))</code></pre>
+            
+            <div class="output">Índice 0: manzana<br>Índice 1: banana<br>Índice 2: cereza<br>Fruta #1: manzana<br>Fruta #2: banana<br>Fruta #3: cereza<br>[(0, 'manzana'), (1, 'banana'), (2, 'cereza')]</div>
+            
+            <h2 id="metodos">Métodos en Python</h2>
+            
+            <p>Los métodos son funciones que pertenecen a objetos específicos. A diferencia de las funciones independientes, los métodos están asociados a un tipo de dato particular y se invocan usando la notación de punto: <code>objeto.metodo()</code>.</p>
+            
+            <h3>Métodos en Strings</h3>
+            
+            <p>Los strings en Python tienen numerosos métodos para manipular texto. Estos métodos se pueden categorizar en grupos según su funcionalidad.</p>
+            
+            <h4>Métodos de Formato</h4>
+            
+            <pre><code class="language-python"># Métodos de formato para strings
+texto = "python es genial"
+
+# Cambios de capitalización
+print(texto.upper())         # Convierte a mayúsculas
+print(texto.lower())         # Convierte a minúsculas
+print(texto.capitalize())    # Primera letra en mayúscula
+print(texto.title())         # Primera letra de cada palabra en mayúscula
+
+# Alineación y relleno
+print(texto.center(30, '-')) # Centra el texto en un espacio de 30 caracteres
+print(texto.ljust(25, '*'))  # Alinea a la izquierda en un espacio de 25
+print(texto.rjust(25, '*'))  # Alinea a la derecha en un espacio de 25</code></pre>
+            
+            <div class="output">PYTHON ES GENIAL<br>python es genial<br>Python es genial<br>Python Es Genial<br>-------python es genial-------<br>python es genial**********<br>**********python es genial</div>
+            
+            <h4>Métodos de Búsqueda</h4>
+            
+            <pre><code class="language-python"># Métodos de búsqueda para strings
+texto = "Python es un lenguaje de programación versatil y poderoso"
+
+# Verificar contenido
+print(texto.startswith("Python"))  # ¿Comienza con 'Python'?
+print(texto.endswith("poderoso"))  # ¿Termina con 'poderoso'?
+print("lenguaje" in texto)         # ¿Contiene 'lenguaje'?
+
+# Encontrar posiciones
+print(texto.find("lenguaje"))      # Posición de 'lenguaje'
+print(texto.find("Java"))          # -1 si no se encuentra
+print(texto.count("o"))            # Cuenta ocurrencias de 'o'</code></pre>
+            
+            <div class="output">True<br>True<br>True<br>13<br>-1<br>5</div>
+            
+            <h4>Métodos de Sustitución</h4>
+            
+            <pre><code class="language-python"># Métodos de sustitución para strings
+texto = "Python es genial, Python es poderoso"
+
+# Reemplazar texto
+print(texto.replace("Python", "JavaScript"))  # Reemplaza todas las ocurrencias
+print(texto.replace("Python", "Java", 1))     # Reemplaza solo la primera ocurrencia
+
+# Eliminar espacios en blanco
+texto_con_espacios = "   Python   "
+print(texto_con_espacios.strip())             # Elimina espacios al inicio y final
+print(texto_con_espacios.lstrip())            # Elimina espacios al inicio
+print(texto_con_espacios.rstrip())            # Elimina espacios al final</code></pre>
+            
+            <div class="output">JavaScript es genial, JavaScript es poderoso<br>Java es genial, Python es poderoso<br>Python<br>Python&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;Python</div>
+            
+            <h4>Métodos de Unión y División</h4>
+            
+            <pre><code class="language-python"># Métodos de unión y división para strings
+palabras = ["Python", "es", "genial"]
+
+# Unir strings
+print(" ".join(palabras))           # Une con espacios
+print("-".join(palabras))           # Une con guiones
+
+# Dividir strings
+texto = "Python,Java,C++,JavaScript"
+print(texto.split(","))             # Divide por comas
+print(texto.split(",", 2))          # Limita a 2 divisiones
+
+# Partir líneas
+texto_multilinea = """Línea 1
+Línea 2
+Línea 3"""
+print(texto_multilinea.splitlines()) # Divide por saltos de línea</code></pre>
+            
+            <div class="output">Python es genial<br>Python-es-genial<br>['Python', 'Java', 'C++', 'JavaScript']<br>['Python', 'Java', 'C++,JavaScript']<br>['Línea 1', 'Línea 2', 'Línea 3']</div>
+            
+            <div class="tip">
+                Los strings en Python son inmutables, lo que significa que los métodos como <code>replace()</code>, <code>upper()</code>, etc., no modifican el string original, sino que devuelven una nueva copia modificada.
+            </div>
+            
+            <h3>Métodos en Listas</h3>
+            
+            <p>Las listas en Python tienen métodos que permiten modificar su contenido, reorganizar elementos y obtener información sobre ellos.</p>
+            
+            <h4>.append(x)</h4>
+            
+            <p>Añade un elemento al final de la lista.</p>
+            
+            <pre><code class="language-python"># Método append()
+frutas = ["manzana", "banana"]
+frutas.append("cereza")
+print(frutas)</code></pre>
+            
+            <div class="output">['manzana', 'banana', 'cereza']</div>
+            
+            <h4>.pop([i])</h4>
+            
+            <p>Elimina y devuelve el elemento en la posición especificada. Si no se proporciona un índice, elimina y devuelve el último elemento.</p>
+            
+            <pre><code class="language-python"># Método pop()
+numeros = [10, 20, 30, 40, 50]
+
+# Eliminar y obtener el último elemento
+ultimo = numeros.pop()
+print(f"Elemento eliminado: {ultimo}")
+print(f"Lista actualizada: {numeros}")
+
+# Eliminar y obtener un elemento específico
+segundo = numeros.pop(1)
+print(f"Segundo elemento: {segundo}")
+print(f"Lista actualizada: {numeros}")</code></pre>
+            
+            <div class="output">Elemento eliminado: 50<br>Lista actualizada: [10, 20, 30, 40]<br>Segundo elemento: 20<br>Lista actualizada: [10, 30, 40]</div>
+            
+            <h4>.copy()</h4>
+            
+            <p>Crea una copia superficial de la lista.</p>
+            
+            <pre><code class="language-python"># Método copy()
+original = [1, 2, 3]
+
+# Crear una copia de la lista
+copia = original.copy()
+print(f"Original: {original}, Copia: {copia}")
+
+# Modificar la copia no afecta al original
+copia.append(4)
+print(f"Original después de modificar la copia: {original}")
+print(f"Copia modificada: {copia}")</code></pre>
+            
+            <div class="output">Original: [1, 2, 3], Copia: [1, 2, 3]<br>Original después de modificar la copia: [1, 2, 3]<br>Copia modificada: [1, 2, 3, 4]</div>
+            
+            <div class="warning">
+                <code>copy()</code> crea una copia superficial, lo que significa que los objetos anidados (como listas dentro de listas) siguen siendo referencias compartidas. Para una copia profunda, usa el módulo <code>copy</code> y su función <code>deepcopy()</code>.
+            </div>
+            
+            <h4>.sort(reverse=False)</h4>
+            
+            <p>Ordena los elementos de la lista in-place (modifica la lista original).</p>
+            
+            <pre><code class="language-python"># Método sort()
+numeros = [3, 1, 4, 1, 5, 9, 2]
+
+# Ordenar de menor a mayor
+numeros.sort()
+print(f"Ordenados ascendente: {numeros}")
+
+# Ordenar de mayor a menor
+numeros.sort(reverse=True)
+print(f"Ordenados descendente: {numeros}")
+
+# Ordenar cadenas (alfabéticamente)
+nombres = ["Zoe", "Ana", "Carlos", "Berta"]
+nombres.sort()
+print(f"Nombres ordenados: {nombres}")
+
+# Ordenar por longitud de cadena
+nombres.sort(key=len)
+print(f"Nombres ordenados por longitud: {nombres}")</code></pre>
+            
+            <div class="output">Ordenados ascendente: [1, 1, 2, 3, 4, 5, 9]<br>Ordenados descendente: [9, 5, 4, 3, 2, 1, 1]<br>Nombres ordenados: ['Ana', 'Berta', 'Carlos', 'Zoe']<br>Nombres ordenados por longitud: ['Ana', 'Zoe', 'Berta', 'Carlos']</div>
+            
+            <h4>Identificar Elementos en la Lista</h4>
+            
+            <pre><code class="language-python"># Métodos para identificar elementos
+frutas = ["manzana", "banana", "cereza", "banana", "durazno"]
+
+# Contar ocurrencias
+print(f"Número de bananas: {frutas.count('banana')}")
+
+# Encontrar la posición de un elemento
+print(f"Posición de cereza: {frutas.index('cereza')}")
+
+# Verificar si un elemento existe
+print(f"¿Hay manzanas? {'manzana' in frutas}")
+print(f"¿Hay uvas? {'uva' in frutas}")
+
+# Encontrar la primera ocurrencia en un rango
+print(f"Posición de banana desde el índice 2: {frutas.index('banana', 2)}")</code></pre>
+            
+            <div class="output">Número de bananas: 2<br>Posición de cereza: 2<br>¿Hay manzanas? True<br>¿Hay uvas? False<br>Posición de banana desde el índice 2: 3</div>
+            
+            <h2 id="instalar-paquetes">Instalar Paquetes o Librerías</h2>
+            
+            <p>Python tiene un rico ecosistema de paquetes y librerías que extienden sus capacidades. Para utilizar estas librerías, necesitas instalarlas en tu entorno. Hay diferentes formas de hacerlo, dependiendo de tu entorno de trabajo.</p>
+            
+            <h3>Instalación en Línea de Comando</h3>
+            
+            <h4>PIP</h4>
+            
+            <p>PIP (Package Installer for Python) es el gestor de paquetes estándar para Python. Permite instalar, actualizar y eliminar paquetes de PyPI (Python Package Index).</p>
+            
+            <pre><code class="language-bash"># Instalar un paquete
+pip install numpy
+
+# Instalar una versión específica
+pip install pandas==1.3.0
+
+# Actualizar un paquete
+pip install --upgrade matplotlib
+
+# Instalar múltiples paquetes
+pip install numpy pandas matplotlib seaborn
+
+# Ver los paquetes instalados
+pip list
+
+# Desinstalar un paquete
+pip uninstall scipy</code></pre>
+            
+            <div class="tip">
+                Para instalar paquetes en un entorno específico, asegúrate de que ese entorno esté activado antes de ejecutar los comandos pip.
+            </div>
+            
+            <h3>Instalación en Jupyter Notebook</h3>
+            
+            <h4>PIP</h4>
+            
+            <p>También puedes instalar paquetes directamente desde un notebook de Jupyter utilizando el comando mágico <code>!</code> seguido del comando pip.</p>
+            
+            <pre><code class="language-python"># Instalar un paquete desde Jupyter Notebook
+!pip install numpy
+
+# O usar el comando system
+import sys
+!{sys.executable} -m pip install pandas
+
+# Verificar la instalación
+import numpy as np
+print(f"NumPy versión: {np.__version__}")
+
+import pandas as pd
+print(f"Pandas versión: {pd.__version__}")</code></pre>
+            
+            <div class="output">NumPy versión: 1.24.3<br>Pandas versión: 2.0.2</div>
+            
+            <div class="warning">
+                Después de instalar nuevos paquetes en un notebook de Jupyter, es posible que necesites reiniciar el kernel para poder utilizarlos.
+            </div>
+            
+            <h2 id="ejemplos">Ejemplos Prácticos</h2>
+            
+            <p>A continuación, se presentan algunos ejemplos que combinan funciones, métodos y paquetes para realizar tareas comunes en ciencia de datos.</p>
+            
+            <pre><code class="language-python"># Ejemplo 1: Análisis básico de una lista de números
+numeros = [4, 2, 7, 1, 8, 3, 5, 6]
+
+def analizar_lista(lista):
+   """Realiza un análisis básico de una lista de números."""
+   resultados = {
+       "cantidad": len(lista),
+       "suma": sum(lista),
+       "promedio": sum(lista) / len(lista) if lista else 0,
+       "minimo": min(lista) if lista else None,
+       "maximo": max(lista) if lista else None,
+       "ordenados": sorted(lista)
+   }
+   return resultados
+
+# Usar la función
+analisis = analizar_lista(numeros)
+for clave, valor in analisis.items():
+   print(f"{clave.capitalize()}: {valor}")
+
+# Ejemplo 2: Procesamiento de texto
+texto = "Python es un lenguaje de programación versátil, poderoso y fácil de aprender."
+
+def analizar_texto(texto):
+   """Realiza un análisis básico de un texto."""
+   palabras = texto.lower().replace(".", "").replace(",", "").split()
+   
+   resultados = {
+       "num_caracteres": len(texto),
+       "num_palabras": len(palabras),
+       "palabras_unicas": len(set(palabras)),
+       "palabra_mas_larga": max(palabras, key=len)
+   }
+   return resultados
+
+# Usar la función
+analisis_texto = analizar_texto(texto)
+for clave, valor in analisis_texto.items():
+   print(f"{clave.replace('_', ' ').capitalize()}: {valor}")</code></pre>
+            
+            <div class="output">Cantidad: 8<br>Suma: 36<br>Promedio: 4.5<br>Minimo: 1<br>Maximo: 8<br>Ordenados: [1, 2, 3, 4, 5, 6, 7, 8]<br>Num caracteres: 76<br>Num palabras: 13<br>Palabras unicas: 12<br>Palabra mas larga: programación</div>
+            
+            <h2 id="material-consulta">Material de Consulta y Profundización</h2>
+
+            <p>Si deseas ampliar tus conocimientos sobre Python, aquí tienes algunos recursos recomendados:</p>
+
+            <ul class="resources-list">
+                <li><strong><a href="https://nbviewer.org/github/ehmatthes/intro_programming/blob/master/notebooks/index.ipynb" target="_blank">Introduction to Programming (using Python)</a></strong>, un curso introductorio completo de Python escrito por Eric Matthes. Este post explica el contexto educativo en una escuela secundaria de Alaska donde Eric es profesor.</li>
+
+                <li><strong><a href="http://ricardoduarte.github.io/python-for-developers" target="_blank">Python for Developers</a></strong>, un libro completo sobre programación en Python por Ricardo Duarte. El libro también existe en portugués, con el sitio web traducido al inglés.</li>
+
+                <li><strong><a href="http://mbakker7.github.io/exploratory_computing_with_python/" target="_blank">Exploratory Computing with Python</a></strong>, un conjunto de 15 Notebooks que cubren computación exploratoria, análisis de datos y visualización. No se requieren conocimientos previos de programación. Cada Notebook incluye varios ejercicios (con respuestas) que deberían tomar menos de 4 horas en completarse. Desarrollado por Mark Bakker para estudiantes de ingeniería de pregrado en la Universidad Tecnológica de Delft.</li>
+            
+                <li><strong><a href="https://github.com/donnemartin/data-science-ipython-notebooks" target="_blank">Data Science IPython Notebooks</a></strong>, una colección completa de notebooks Jupyter que cubren temas esenciales de ciencia de datos, aprendizaje automático y big data. Incluye ejemplos prácticos de Python en áreas como TensorFlow, scikit-learn, Pandas, NumPy, Matplotlib y más. Desarrollado por Donne Martin, este repositorio es un recurso valioso tanto para principiantes como para profesionales en el campo de la ciencia de datos.</li>
+            </ul>
+            
+            <h2 id="referencias">Referencias</h2>
+
+            <p>Para aprender más sobre Python y su aplicación en ciencia de datos, recomendamos consultar estos recursos oficiales:</p>
+
+            <ul class="resources-list">
+                <li><strong><a href="https://docs.python.org/es/3.10/tutorial/" target="_blank">Tutorial Python en español</a></strong>, la documentación oficial de Python traducida al español, una guía esencial para aprender el lenguaje desde sus fundamentos.</li>
+
+                <li><strong><a href="https://docs.hektorprofe.net/python/" target="_blank">Curso Python en Español</a></strong>, un recurso completo desarrollado por Héctor Profe que cubre desde los conceptos básicos hasta temas avanzados de Python con ejemplos prácticos y ejercicios.</li>
+
+                <li><strong><a href="https://s3.amazonaws.com/assets.datacamp.com/blog_assets/PythonForDataScience.pdf" target="_blank">Python for Data Science Cheatsheet</a></strong>, una hoja de referencia rápida creada por DataCamp que resume las funciones y sintaxis más importantes de las bibliotecas de ciencia de datos en Python.</li>
+
+                <li><strong><a href="https://jakevdp.github.io/PythonDataScienceHandbook/" target="_blank">Python Data Science Handbook</a></strong>, un libro completo disponible gratuitamente en línea por Jake VanderPlas que cubre las herramientas esenciales para hacer ciencia de datos con Python, incluyendo IPython, NumPy, Pandas, Matplotlib y Scikit-Learn.</li>
+
+                <li><strong><a href="https://greenteapress.com/wp/think-python-3rd-edition/" target="_blank">Think Python 3rd Edition</a></strong>, escrito por Allen B. Downey, este libro ofrece una introducción a la programación y ciencia computacional usando Python, con un enfoque en resolución de problemas y pensamiento computacional.</li>
+            </ul>
+            
+            <div class="note">
+                Recuerda que la mejor manera de aprender Python es practicando constantemente. Los recursos listados aquí son solo el punto de partida en tu viaje de aprendizaje. Te animamos a experimentar con el código, modificarlo, romperlo y arreglarlo. Cada error es una oportunidad para aprender algo nuevo. A medida que avances, encontrarás que la comunidad de Python es extremadamente acogedora y dispuesta a ayudar, así que no dudes en unirte a foros, grupos de estudio o contribuir a proyectos de código abierto para seguir desarrollando tus habilidades.
+            </div>
+
+            <div class="feedback-section">
+                <h3>¿Te ha resultado útil esta página?</h3>
+                <div class="feedback-buttons">
+                    <button class="btn feedback-btn feedback-yes">
+                        <span class="feedback-icon">😊</span> Sí
+                    </button>
+                    <button class="btn feedback-btn feedback-no">
+                        <span class="feedback-icon">🤔</span> No
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Python para Ciencia de Datos - Ph.D. Antonio Escamilla P.</p>
+
+            <div class="license-icons">
+                <a href="https://creativecommons.org/licenses/by-nc-nd/4.0" target="_blank" class="license-link" title="Creative Commons BY-NC-ND 4.0">
+                    <!-- Ícono CC -->
+                    <span class="icon-tooltip" data-tooltip="Creative Commons">
+                        <svg class="license-icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="11" fill="var(--primary-medium)"/>
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="var(--accent-green)" stroke-width="1"/>
+                            <text x="12" y="14" font-family="Arial, sans-serif" font-size="8" font-weight="bold" text-anchor="middle" fill="var(--accent-green)">CC</text>
+                        </svg>
+                    </span>
+                    
+                    <!-- Ícono BY (Atribución) -->
+                    <span class="icon-tooltip" data-tooltip="Atribución">
+                        <svg class="license-icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="11" fill="var(--primary-medium)"/>
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="var(--accent-green)" stroke-width="1"/>
+                            <circle cx="12" cy="8" r="2.5" fill="var(--accent-green)"/>
+                            <path d="M8,16 L16,16 L16,13 C16,11.5 14,11 12,11 C10,11 8,11.5 8,13 L8,16 Z" fill="var(--accent-green)"/>
+                        </svg>
+                    </span>
+                    
+                    <!-- Ícono NC (No Comercial) -->
+                    <span class="icon-tooltip" data-tooltip="No Comercial">
+                        <svg class="license-icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="11" fill="var(--primary-medium)"/>
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="var(--accent-green)" stroke-width="1"/>
+                            <text x="12" y="15" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="var(--accent-green)">$</text>
+                            <line x1="6" y1="6" x2="18" y2="18" stroke="var(--accent-green)" stroke-width="2"/>
+                        </svg>
+                    </span>
+                    
+                    <!-- Ícono ND (Sin Derivadas) -->
+                    <span class="icon-tooltip" data-tooltip="Sin Derivadas">
+                        <svg class="license-icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="11" fill="var(--primary-medium)"/>
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="var(--accent-green)" stroke-width="1"/>
+                            <rect x="7" y="10" width="10" height="1.5" fill="var(--accent-green)"/>
+                            <rect x="7" y="13" width="10" height="1.5" fill="var(--accent-green)"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+    
+    <script>
+        window.addEventListener('load', function() {
+            // Aplicar resaltado a todos los bloques de código
+            document.querySelectorAll('pre code').forEach(function(block) {
+                hljs.highlightElement(block);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
+            const hamburgerButton = document.querySelector('.hamburger-button');
+            
+            // Alternar menú al hacer clic en el botón
+            hamburgerButton.addEventListener('click', function() {
+                hamburgerMenu.classList.toggle('active');
+            });
+
+            // Cerrar menú al hacer clic en un enlace
+            const menuLinks = document.querySelectorAll('.menu-content a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburgerMenu.classList.remove('active');
+                });
+            });
+
+            // Cerrar menú al hacer clic fuera de él
+            document.addEventListener('click', function(event) {
+                if (!hamburgerMenu.contains(event.target)) {
+                    hamburgerMenu.classList.remove('active');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
