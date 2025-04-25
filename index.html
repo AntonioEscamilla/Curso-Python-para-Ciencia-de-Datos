@@ -687,6 +687,68 @@
             transform: translateY(-10px) rotate(-45deg);
         }
 
+        /* Estilos para navegación entre capítulos */
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            background-color: var(--primary-medium);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn:hover {
+            background-color: var(--accent-green);
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-icon {
+            font-size: 0.9rem;
+            margin: 0 0.5rem;
+        }
+
+        .nav-prev .nav-icon {
+            margin-right: 0.5rem;
+            margin-left: 0;
+        }
+
+        .nav-next .nav-icon {
+            margin-left: 0.5rem;
+            margin-right: 0;
+        }
+
+        /* Para páginas con un solo botón de navegación (como la primera) */
+        .chapter-navigation.single-button {
+            justify-content: flex-end; /* Alinea el contenido al extremo derecho */
+        }
+
+        /* En pantallas pequeñas, ajustar la navegación para mejor visualización */
+        @media (max-width: 768px) {
+            .chapter-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-btn {
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -2299,7 +2361,9 @@ for clave, valor in analisis_texto.items():
             <div class="note">
                 Recuerda que la mejor manera de aprender Python es practicando constantemente. Los recursos listados aquí son solo el punto de partida en tu viaje de aprendizaje. Te animamos a experimentar con el código, modificarlo, romperlo y arreglarlo. Cada error es una oportunidad para aprender algo nuevo. A medida que avances, encontrarás que la comunidad de Python es extremadamente acogedora y dispuesta a ayudar, así que no dudes en unirte a foros, grupos de estudio o contribuir a proyectos de código abierto para seguir desarrollando tus habilidades.
             </div>
+        </div>
 
+        <div class="content-section">
             <div class="feedback-section">
                 <h3>¿Te ha resultado útil esta página?</h3>
                 <div class="feedback-buttons">
@@ -2312,6 +2376,12 @@ for clave, valor in analisis_texto.items():
                 </div>
             </div>
 
+            <!-- Nueva sección de navegación entre capítulos -->
+            <div class="chapter-navigation single-button">
+                <a href="numpy.html" class="nav-btn nav-next">
+                    Capítulo Siguiente <span class="nav-icon">▶</span>
+                </a>
+            </div>
         </div>
 
         <div class="footer">
