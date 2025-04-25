@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NumPy para Ciencia de Datos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <style>
+        :root {
+            --primary-dark: #04142b;
+            --primary-medium: #142a45;
+            --accent-green: #00ff85;
+            --text-light: #e6e8ea;
+            --text-grey: #a3a8ae;
+            --progress-bg: #1f3754;
+            --code-bg: #1e1e1e;
+            --output-border: #b07ff3;
+            
+            /* Colores para los recuadros informativos */
+            --note-bg: #c5e0ff;
+            --note-border: #0d47a1;
+            --warning-bg: #ffe082;
+            --warning-border: #e65100;
+            --tip-bg: #b9f6ca;
+            --tip-border: #1b5e20;
+            --info-text: #222222;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: var(--text-light);
+            background-color: var(--primary-dark);
+        }
+        
+        .course-header {
+            background-color: var(--primary-dark);
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .course-label {
+            color: var(--text-grey);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .course-title {
+            color: var(--text-light);
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        .course-author {
+            color: var(--text-grey);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1.5rem 0;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 6px;
+            background-color: var(--progress-bg);
+            border-radius: 3px;
+            margin-right: 15px;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent-green);
+            border-radius: 3px;
+        }
+        
+        .progress-info {
+            display: flex;
+            align-items: center;
+            color: var(--text-grey);
+            font-size: 0.9rem;
+        }
+        
+        .progress-info i {
+            margin-right: 5px;
+        }
+        
+        .btn {
+            background-color: var(--accent-green);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 6px;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .btn-practice {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 1.2rem;
+        }
+        
+        .btn-practice i {
+            margin-right: 8px;
+            color: #ff8a00;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        nav {
+            background-color: var(--primary-medium);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        nav a {
+            color: var(--text-grey);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        nav a:hover, nav a.active {
+            color: var(--text-light);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        nav a.active {
+            border-left: 3px solid var(--accent-green);
+        }
+        
+        .content-section {
+            background-color: var(--primary-medium);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        h1, h2, h3 {
+            color: var(--text-light);
+            font-weight: 700;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-green);
+        }
+        
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            color: #e6e6e6;
+        }
+        
+        /* Para código dentro de los bloques de información con texto oscuro */
+        .note code, .warning code, .tip code {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: var(--info-text);
+            font-weight: 500;
+        }
+        
+        /* Estilos para bloques de código */
+        pre {
+            background-color: var(--code-bg) !important;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            position: relative;
+            border-left: 3px solid var(--accent-green);
+            line-height: 1.5;
+        }
+        
+        pre code,
+        pre code.hljs,
+        .hljs {
+            background-color: var(--code-bg) !important;
+            padding: 0;
+            color: #d4d4d4;
+        }
+        
+        /* Forzar que no haya ningún fondo en los elementos dentro del código */
+        pre *, pre code *, pre code.hljs * {
+            background-color: transparent !important;
+        }
+        
+        /* Mantener colores de sintaxis */
+        .hljs-comment {
+            color: #6a9955 !important;
+            background-color: transparent !important;
+        }
+        
+        .hljs-keyword, .hljs-built_in, .hljs-literal {
+            color: #ff7b72 !important;
+            background-color: transparent !important;
+        }
+        
+        .hljs-string {
+            color: #ce9178 !important;
+            background-color: transparent !important;
+        }
+        
+        .hljs-number {
+            color: #b5cea8 !important;
+            background-color: transparent !important;
+        }
+        
+        .hljs-function, .hljs-title.function_ {
+            color: #dcdcaa !important;
+            background-color: transparent !important;
+        }
+        
+        .hljs-variable {
+            color: #9cdcfe !important;
+            background-color: transparent !important;
+        }
+        
+        .output {
+            background-color: #000000;
+            border-left: 4px solid var(--output-border);
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #f1f1f1;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            border-radius: 0 8px 8px 0;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+        
+        /* Estilos para recuadros informativos */
+        .note, .warning, .tip {
+            border-radius: 6px;
+            padding: 0.8rem 1.2rem;
+            margin: 1.5rem 0;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            border-left-width: 6px;
+            border-left-style: solid;
+            color: var(--info-text);
+        }
+        
+        /* Estilo para NOTA - azul */
+        .note {
+            background-color: var(--note-bg);
+            border-left-color: var(--note-border);
+        }
+        
+        .note::before {
+            content: "Nota:";
+            font-weight: 700;
+            color: var(--note-border);
+            margin-right: 0.3rem;
+        }
+        
+        /* Estilo para ADVERTENCIA - amarillo/naranja */
+        .warning {
+            background-color: var(--warning-bg);
+            border-left-color: var(--warning-border);
+        }
+        
+        .warning::before {
+            content: "Advertencia:";
+            font-weight: 700;
+            color: var(--warning-border);
+            margin-right: 0.3rem;
+        }
+        
+        /* Estilo para TIP - verde */
+        .tip {
+            background-color: var(--tip-bg);
+            border-left-color: var(--tip-border);
+        }
+        
+        .tip::before {
+            content: "Tip:";
+            font-weight: 700;
+            color: var(--tip-border);
+            margin-right: 0.3rem;
+        }
+        
+        .welcome-message {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            color: var(--text-grey);
+        }
+        
+        .highlight {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+        
+        .icon-clock:before {
+            content: "⏱️";
+            margin-right: 5px;
+        }
+        
+        .icon-dumbbell:before {
+            content: "🏋️";
+            margin-right: 5px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1rem;
+            color: var(--text-grey);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Estilos para imágenes */
+        .img-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .img-container img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .caption {
+            color: var(--text-grey);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .course-title {
+                font-size: 1.6rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+        }
+
+        .table-container {
+            margin: 2rem auto;
+            max-width: 800px; /* Ancho máximo para centrar */
+        }
+
+        .builtin-functions {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--primary-medium);
+            color: var(--text-light);
+            margin: 0 auto; /* Centrar la tabla */
+        }
+
+        .builtin-functions tr:nth-child(odd) {
+            background-color: var(--primary-medium); /* Primer tono de azul */
+        }
+
+        .builtin-functions tr:nth-child(even) {
+            background-color: rgba(30, 60, 100, 0.6); /* Segundo tono de azul más claro */
+        }
+
+        .builtin-functions td {
+            padding: 10px 15px;
+            text-align: left;
+            border: none; /* Eliminar bordes laterales */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Línea horizontal blanca */
+        }
+
+        /* Doble línea en la parte superior de la primera fila */
+        .builtin-functions tr:first-child td {
+            border-top: 3px double rgba(255, 255, 255, 0.4);
+        }
+
+        .builtin-functions code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            color: var(--accent-green);
+        }
+
+        .builtin-functions tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .resources-list {
+            margin: 1.5rem 0;
+        }
+
+        .resources-list li {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .resources-list strong {
+            color: var(--accent-green);
+        }
+
+        .resources-list {
+            margin: 1.5rem 0;
+        }
+        
+        .resources-list li {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .resources-list strong {
+            color: var(--accent-green);
+        }
+        
+        .resources-list a {
+            color: var(--accent-green) !important; /* Forzar color verde */
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .resources-list a:hover {
+            text-decoration: underline;
+            opacity: 0.9; /* Ligero cambio de opacidad al pasar el cursor */
+        }
+
+        .feedback-section {
+            background-color: var(--primary-medium);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .feedback-section h3 {
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+        }
+
+        .feedback-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .feedback-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .feedback-yes {
+            background-color: rgba(0, 255, 133, 0.2);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .feedback-no {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-light);
+        }
+
+        .feedback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .feedback-icon {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .license-icons {
+            display: inline-flex;
+            gap: 0.5rem;
+            margin-left: 1rem;
+            align-items: center;
+        }
+
+        .license-link {
+            display: flex;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .license-icon {
+            width: 28px;
+            height: 28px;
+            transition: transform 0.2s ease;
+        }
+
+        .icon-tooltip {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .icon-tooltip:hover .license-icon {
+            transform: scale(1.1);
+        }
+
+        .icon-tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .icon-tooltip:hover::after {
+            opacity: 1;
+        }
+
+        .hamburger-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .hamburger-button {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 40px;
+            height: 35px;
+            background-color: var(--primary-medium);
+            border: none;
+            border-radius: 5px;
+            padding: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .bar {
+            height: 3px;
+            width: 100%;
+            background-color: var(--accent-green);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-content {
+            position: absolute;
+            right: 0;
+            top: 50px;
+            width: 250px;
+            background-color: var(--primary-medium);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            transform: scale(0.95);
+            transform-origin: top right;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .menu-content h3 {
+            color: var(--accent-green);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .menu-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-content li {
+            margin-bottom: 0.7rem;
+        }
+
+        .menu-content a {
+            color: var(--text-light);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-content a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--accent-green);
+        }
+
+        /* Clase para mostrar/ocultar el menú */
+        .hamburger-menu.active .menu-content {
+            transform: scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Animación de las barras cuando está activo */
+        .hamburger-menu.active .bar:nth-child(1) {
+            transform: translateY(10px) rotate(45deg);
+        }
+
+        .hamburger-menu.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active .bar:nth-child(3) {
+            transform: translateY(-10px) rotate(-45deg);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hamburger-menu">
+        <button class="hamburger-button" aria-label="Abrir menú de navegación">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        
+        <div class="menu-content">
+            <h3>Secciones</h3>
+            <ul>
+                <li><a href="#intro-numpy">Introducción a NumPy</a></li>
+                <li><a href="#instalacion-numpy">Instalación</a></li>
+                <li><a href="#arrays-numpy">Arrays en NumPy</a></li>
+                <li><a href="#indexacion-numpy">Indexación y Slicing</a></li>
+                <li><a href="#operaciones-numpy">Operaciones Vectorizadas</a></li>
+                <li><a href="#funciones-numpy">Funciones Universales</a></li>
+                <li><a href="#estadisticas-numpy">Estadísticas con NumPy</a></li>
+                <li><a href="#material-practica">Material de Práctica</a></li>
+                <li><a href="#referencias">Referencias</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="course-header">
+        <div class="container">
+            <div class="course-label">CURSO</div>
+            <h1 class="course-title">Python para Ciencia de Datos</h1>
+            <div class="course-author">Ph.D. Antonio Escamilla P.</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 12.5%;"></div>
+                </div>
+                <div class="progress-info">
+                    <span class="icon-clock"></span>
+                    8 hours to go
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between;">
+                <button class="btn btn-practice" onclick="document.getElementById('material-practica').scrollIntoView({behavior: 'smooth'})">
+                    <span class="icon-dumbbell"></span>
+                    Practica
+                </button>
+                <button class="btn" onclick="window.location.href='pandas.html'">Continuar</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="index.html">1. Introducción a Python</a></li>
+                <li><a href="numpy.html" class="active">2. NumPy</a></li>
+                <li><a href="pandas.html">3. Pandas</a></li>
+                <li><a href="polars.html">4. Polars</a></li>
+                <li><a href="visualization.html">5. Visualización</a></li>
+                <li><a href="machine_learning.html">6. Machine Learning</a></li>
+                <li><a href="regression.html">7. Regresión</a></li>
+                <li><a href="classification.html">8. Clasificación</a></li>
+                <li><a href="clustering.html">9. Clustering</a></li>
+            </ul>
+        </nav>
+        
+        <div class="content-section">
+            <h1 id="intro-numpy">Capítulo 2: NumPy - La Base del Análisis Numérico en Python</h1>
+            
+            <h2 id="que-es-numpy">¿Qué es NumPy?</h2>
+            
+            <p>NumPy (Numerical Python) es la biblioteca fundamental para la computación científica en Python. Proporciona soporte para arrays y matrices multidimensionales, junto con una colección de funciones matemáticas de alto nivel para operar con estos arrays de manera eficiente.</p>
+            
+            <h3>¿Por qué NumPy es esencial para la ciencia de datos?</h3>
+            
+            <ul>
+                <li><strong>Eficiencia computacional</strong>: NumPy implementa algoritmos optimizados en C que ejecutan operaciones mucho más rápido que el código Python puro, especialmente para grandes conjuntos de datos.</li>
+                
+                <li><strong>Manipulación de arrays</strong>: Ofrece estructuras de datos potentes y funciones para manipular datos numéricos, facilitando operaciones que serían complejas con las estructuras de datos nativas de Python.</li>
+                
+                <li><strong>Algebra lineal</strong>: Proporciona funciones para operaciones matriciales, factorizaciones, descomposiciones y más, esenciales para muchos algoritmos de machine learning.</li>
+                
+                <li><strong>Integración del ecosistema</strong>: NumPy es la base sobre la cual se construyen muchas otras bibliotecas para ciencia de datos como Pandas, SciPy, Matplotlib y scikit-learn.</li>
+                
+                <li><strong>Operaciones vectorizadas</strong>: Permite realizar operaciones en arrays completos sin necesidad de bucles explícitos, lo que hace el código más limpio y mucho más rápido.</li>
+            </ul>
+            
+            <p>En este capítulo, exploraremos los fundamentos de NumPy y aprenderemos a utilizar sus capacidades para manipular datos numéricos de manera eficiente.</p>
+
+            <div class="img-container">
+                <img src="https://numpy.org/doc/stable/_static/numpylogo.svg" alt="Logo de NumPy">
+                <div class="caption">El ecosistema de NumPy forma la base de la ciencia de datos en Python</div>
+            </div>
+            
+            <h2 id="instalacion-numpy">Instalación y Primeros Pasos con NumPy</h2>
+            
+            <p>Antes de comenzar a trabajar con NumPy, necesitamos instalarlo. La forma más común es utilizar pip, el administrador de paquetes de Python:</p>
+            
+            <pre><code class="language-bash"># Instalar NumPy
+pip install numpy</code></pre>
+            
+            <p>Si estás utilizando Anaconda, NumPy ya viene incluido. Para verificar la versión instalada, puedes ejecutar:</p>
+
+            <pre><code class="language-python">import numpy as np
+print(np.__version__)</code></pre>
+            
+            <div class="output">1.24.3</div>
+            
+            <div class="tip">
+                Por convención, NumPy se importa con el alias <code>np</code>. Esto hace que el código sea más legible y consistente con la comunidad de ciencia de datos.
+            </div>
+            
+            <h3>Tu primer array de NumPy</h3>
+            
+            <p>Comencemos creando nuestro primer array de NumPy:</p>
+            
+            <pre><code class="language-python"># Importar NumPy
+import numpy as np
+
+# Crear un array simple
+arr = np.array([1, 2, 3, 4, 5])
+print(arr)
+print(type(arr))</code></pre>
+            
+            <div class="output">[1 2 3 4 5]
+&lt;class 'numpy.ndarray'&gt;</div>
+            
+            <p>A diferencia de las listas de Python, los arrays de NumPy son homogéneos, lo que significa que todos los elementos deben ser del mismo tipo. Esto permite optimizaciones que hacen a NumPy mucho más rápido para operaciones numéricas.</p>
+            
+            <h2 id="arrays-numpy">Arrays en NumPy</h2>
+            
+            <p>Los arrays son la estructura de datos principal en NumPy. Podemos pensar en ellos como colecciones de elementos del mismo tipo organizados en una estructura de filas y columnas.</p>
+            
+            <h3>Creando Arrays</h3>
+            
+            <p>Existen múltiples formas de crear arrays en NumPy:</p>
+            
+            <pre><code class="language-python"># Desde una lista
+arr1 = np.array([1, 2, 3, 4])
+print(f"Desde lista: {arr1}")
+
+# Crear un array con ceros
+arr2 = np.zeros(5)  # Array unidimensional con 5 ceros
+print(f"Array de ceros: {arr2}")
+
+# Crear un array con unos
+arr3 = np.ones((2, 3))  # Array 2x3 de unos
+print(f"Array de unos:\n{arr3}")
+
+# Crear array con valores secuenciales
+arr4 = np.arange(0, 10, 2)  # Valores de 0 a 10 (exclusivo) con paso 2
+print(f"Array con arange: {arr4}")
+
+# Crear array con valores espaciados linealmente
+arr5 = np.linspace(0, 1, 5)  # 5 valores entre 0 y 1, espaciados uniformemente
+print(f"Array con linspace: {arr5}")
+
+# Crear array con valores aleatorios
+arr6 = np.random.random((2, 2))  # Array 2x2 con valores aleatorios entre 0 y 1
+print(f"Array aleatorio:\n{arr6}")
+
+# Crear matriz identidad
+arr7 = np.eye(3)  # Matriz identidad 3x3
+print(f"Matriz identidad:\n{arr7}")</code></pre>
+            
+            <div class="output">Desde lista: [1 2 3 4]
+Array de ceros: [0. 0. 0. 0. 0.]
+Array de unos:
+[[1. 1. 1.]
+ [1. 1. 1.]]
+Array con arange: [0 2 4 6 8]
+Array con linspace: [0.   0.25 0.5  0.75 1.  ]
+Array aleatorio:
+[[0.23651224 0.82170757]
+ [0.43459951 0.0494728 ]]
+Matriz identidad:
+[[1. 0. 0.]
+ [0. 1. 0.]
+ [0. 0. 1.]]</div>
+            
+            <h3>Dimensiones y Forma de Arrays</h3>
+            
+            <p>Los arrays de NumPy pueden tener múltiples dimensiones. Veamos cómo trabajar con ellas:</p>
+            
+            <pre><code class="language-python"># Array unidimensional (vector)
+vector = np.array([1, 2, 3, 4])
+print(f"Vector: {vector}")
+print(f"Dimensión: {vector.ndim}")
+print(f"Forma: {vector.shape}")
+print(f"Tamaño: {vector.size}")
+
+# Array bidimensional (matriz)
+matriz = np.array([[1, 2, 3], [4, 5, 6]])
+print(f"\nMatriz:\n{matriz}")
+print(f"Dimensión: {matriz.ndim}")
+print(f"Forma: {matriz.shape}")  # (filas, columnas)
+print(f"Tamaño: {matriz.size}")
+
+# Array tridimensional (cubo)
+cubo = np.array([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+print(f"\nCubo:\n{cubo}")
+print(f"Dimensión: {cubo.ndim}")
+print(f"Forma: {cubo.shape}")  # (planos, filas, columnas)
+print(f"Tamaño: {cubo.size}")</code></pre>
+            
+            <div class="output">Vector: [1 2 3 4]
+Dimensión: 1
+Forma: (4,)
+Tamaño: 4
+
+Matriz:
+[[1 2 3]
+ [4 5 6]]
+Dimensión: 2
+Forma: (2, 3)
+Tamaño: 6
+
+Cubo:
+[[[1 2]
+  [3 4]]
+
+ [[5 6]
+  [7 8]]]
+Dimensión: 3
+Forma: (2, 2, 2)
+Tamaño: 8</div>
+            
+            <div class="note">
+                La forma (<code>shape</code>) de un array es una tupla que indica el tamaño de cada dimensión. Por ejemplo, una forma de <code>(2, 3)</code> indica una matriz con 2 filas y 3 columnas.
+            </div>
+            
+            <h3>Tipos de Datos en NumPy</h3>
+            
+            <p>NumPy admite diferentes tipos de datos numéricos, lo que permite optimizar el uso de memoria y mejorar el rendimiento:</p>
+            
+            <pre><code class="language-python"># Tipos de datos en NumPy
+arr_int = np.array([1, 2, 3], dtype=np.int32)
+print(f"Array de enteros: {arr_int}, tipo: {arr_int.dtype}")
+
+arr_float = np.array([1.0, 2.5, 3.7], dtype=np.float64)
+print(f"Array de flotantes: {arr_float}, tipo: {arr_float.dtype}")
+
+arr_bool = np.array([True, False, True])
+print(f"Array de booleanos: {arr_bool}, tipo: {arr_bool.dtype}")
+
+# Cambiar el tipo de datos (conversión)
+arr_to_float = np.array([1, 2, 3], dtype=np.float32)
+print(f"Enteros a flotantes: {arr_to_float}, tipo: {arr_to_float.dtype}")
+
+arr_to_int = np.array([1.9, 2.8, 3.1], dtype=np.int64)
+print(f"Flotantes a enteros: {arr_to_int}, tipo: {arr_to_int.dtype}")  # Nótese el truncamiento</code></pre>
+            
+            <div class="output">Array de enteros: [1 2 3], tipo: int32
+Array de flotantes: [1.  2.5 3.7], tipo: float64
+Array de booleanos: [ True False  True], tipo: bool
+Enteros a flotantes: [1. 2. 3.], tipo: float32
+Flotantes a enteros: [1 2 3], tipo: int64</div>
+            
+            <div class="warning">
+                Al convertir de flotantes a enteros, NumPy trunca los valores (elimina la parte decimal) en lugar de redondearlos. Si necesitas redondear, usa funciones como <code>np.round()</code> antes de la conversión.
+            </div>
+            
+            <h3>Cambiar la forma de un Array</h3>
+            
+            <p>NumPy proporciona varias formas de cambiar la estructura de un array sin modificar sus datos:</p>
+            
+            <pre><code class="language-python"># Cambiar forma con reshape
+arr = np.arange(12)  # Array de 0 a 11
+print(f"Array original: {arr}")
+
+# Cambiar a matriz 3x4
+matriz = arr.reshape(3, 4)
+print(f"Matriz 3x4:\n{matriz}")
+
+# Cambiar a matriz 2x2x3
+cubo = arr.reshape(2, 2, 3)
+print(f"Cubo 2x2x3:\n{cubo}")
+
+# Dimensión desconocida (NumPy la calcula)
+matriz_auto = arr.reshape(3, -1)  # 3 filas, columnas calculadas automáticamente
+print(f"Matriz 3x?:\n{matriz_auto}")
+
+# Aplanar un array multidimensional
+arr_3d = np.array([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+arr_flat = arr_3d.flatten()  # Crea una copia
+print(f"Array aplanado: {arr_flat}")
+
+# Alternativa a flatten (vista, no copia)
+arr_ravel = arr_3d.ravel()
+print(f"Array con ravel: {arr_ravel}")</code></pre>
+            
+            <div class="output">Array original: [ 0  1  2  3  4  5  6  7  8  9 10 11]
+Matriz 3x4:
+[[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]]
+Cubo 2x2x3:
+[[[ 0  1  2]
+  [ 3  4  5]]
+
+ [[ 6  7  8]
+  [ 9 10 11]]]
+Matriz 3x?:
+[[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]]
+Array aplanado: [1 2 3 4 5 6 7 8]
+Array con ravel: [1 2 3 4 5 6 7 8]</div>
+            
+            <div class="tip">
+                <code>reshape</code> reorganiza los elementos de un array sin cambiar su contenido. La cantidad total de elementos debe permanecer igual antes y después del cambio de forma.
+            </div>
+            
+            <h2 id="indexacion-numpy">Indexación y Slicing en NumPy</h2>
+            
+            <p>Similar a las listas de Python, los arrays de NumPy admiten indexación y slicing, pero con capacidades avanzadas para trabajar con arrays multidimensionales.</p>
+            
+            <h3>Indexación Básica</h3>
+            
+            <pre><code class="language-python"># Array unidimensional
+arr = np.array([10, 20, 30, 40, 50])
+
+# Acceso a elementos individuales
+print(f"Primer elemento: {arr[0]}")
+print(f"Último elemento: {arr[-1]}")
+
+# Array bidimensional
+matriz = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+print(f"\nMatriz:\n{matriz}")
+
+# Acceso a elementos en matriz
+print(f"Elemento en fila 1, columna 2: {matriz[1, 2]}")  # Equivalente a matriz[1][2]
+print(f"Última fila: {matriz[-1]}")  # Fila completa</code></pre>
+            
+            <div class="output">Primer elemento: 10
+Último elemento: 50
+
+Matriz:
+[[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+Elemento en fila 1, columna 2: 6
+Última fila: [7 8 9]</div>
+            
+            <h3>Slicing en Arrays</h3>
+            
+            <p>El slicing en NumPy sigue la sintaxis <code>inicio:fin:paso</code> y funciona en todas las dimensiones:</p>
+            
+            <pre><code class="language-python"># Slicing en array unidimensional
+arr = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+# Sintaxis: array[inicio:fin:paso]
+print(f"Elementos del 2 al 5: {arr[2:6]}")
+print(f"Elementos hasta el 4: {arr[:5]}")
+print(f"Elementos desde el 6: {arr[6:]}")
+print(f"Elementos con paso 2: {arr[1:8:2]}")
+print(f"Array invertido: {arr[::-1]}")
+
+# Slicing en array bidimensional
+matriz = np.array([[1, 2, 3, 4],
+                   [5, 6, 7, 8],
+                   [9, 10, 11, 12]])
+
+# Seleccionar submatriz (filas 0-1, columnas 1-3)
+submatriz = matriz[:2, 1:3]
+print(f"\nSubmatriz:\n{submatriz}")
+
+# Seleccionar filas completas
+filas_02 = matriz[[0, 2]]  # Filas 0 y 2
+print(f"\nFilas 0 y 2:\n{filas_02}")
+
+# Seleccionar columnas específicas
+columna_1 = matriz[:, 1]  # Toda la columna 1
+print(f"\nColumna 1: {columna_1}")
+
+# Seleccionar diagonales
+diagonal = np.diag(matriz)  # Diagonal principal
+print(f"\nDiagonal principal: {diagonal}")</code></pre>
+            
+            <div class="output">Elementos del 2 al 5: [2 3 4 5]
+Elementos hasta el 4: [0 1 2 3 4]
+Elementos desde el 6: [6 7 8 9]
+Elementos con paso 2: [1 3 5 7]
+Array invertido: [9 8 7 6 5 4 3 2 1 0]
+
+Submatriz:
+[[2 3]
+ [6 7]]
+
+Filas 0 y 2:
+[[ 1  2  3  4]
+ [ 9 10 11 12]]
+
+Columna 1: [ 2  6 10]
+
+Diagonal principal: [1 6 11]</div>
+            
+            <div class="warning">
+                A diferencia de las listas de Python, cuando haces slicing en arrays de NumPy, obtienes vistas en lugar de copias. Esto significa que modificar la vista modificará el array original. Si necesitas una copia independiente, usa el método <code>copy()</code>.
+            </div>
+            
+            <h3>Indexación Avanzada</h3>
+            
+            <p>NumPy permite formas sofisticadas de seleccionar elementos:</p>
+            
+            <pre><code class="language-python"># Indexación con arrays de índices
+arr = np.array([10, 20, 30, 40, 50])
+indices = np.array([0, 2, 4])
+print(f"Elementos en posiciones {indices}: {arr[indices]}")
+
+# Indexación condicional (boolean masking)
+arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+mask = arr > 5  # Crear una máscara booleana
+print(f"Máscara booleana: {mask}")
+print(f"Elementos mayores que 5: {arr[mask]}")
+
+# Forma más compacta
+print(f"Elementos pares: {arr[arr % 2 == 0]}")
+
+# Indexación con arrays booleanos en matrices
+matriz = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+print(f"\nMatriz:\n{matriz}")
+
+# Seleccionar elementos mayores que 5
+print(f"Elementos > 5: {matriz[matriz > 5]}")
+
+# Reemplazar valores con condiciones
+matriz_copia = matriz.copy()
+matriz_copia[matriz_copia % 2 == 0] = 0  # Reemplazar pares con 0
+print(f"\nMatriz con pares reemplazados:\n{matriz_copia}")</code></pre>
+            
+            <div class="output">Elementos en posiciones [0 2 4]: [10 30 50]
+Máscara booleana: [False False False False False  True  True  True  True  True]
+Elementos mayores que 5: [ 6  7  8  9 10]
+Elementos pares: [ 2  4  6  8 10]
+
+Matriz:
+[[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+Elementos > 5: [6 7 8 9]
+
+Matriz con pares reemplazados:
+[[1 0 3]
+ [0 5 0]
+ [7 0 9]]</div>
+            
+            <h2 id="operaciones-numpy">Operaciones Vectorizadas con NumPy</h2>
+            
+            <p>Una de las principales ventajas de NumPy es su capacidad para realizar operaciones vectorizadas, que son mucho más rápidas que los bucles explícitos en Python.</p>
+            
+            <h3>Operaciones Aritméticas</h3>
+            
+            <pre><code class="language-python"># Operaciones aritméticas con arrays
+a = np.array([1, 2, 3, 4])
+b = np.array([5, 6, 7, 8])
+
+# Operaciones elemento a elemento
+print(f"a + b = {a + b}")  # Suma
+print(f"a - b = {a - b}")  # Resta
+print(f"a * b = {a * b}")  # Multiplicación elemento a elemento
+print(f"a / b = {a / b}")  # División
+print(f"a ** 2 = {a ** 2}")  # Potencia
+print(f"a % 2 = {a % 2}")  # Módulo
+
+# Operaciones con escalares
+print(f"\na + 2 = {a + 2}")  # Suma con escalar
+print(f"a * 3 = {a * 3}")  # Multiplicación por escalar
+
+# Comparaciones
+print(f"\na > 2: {a > 2}")
+print(f"a == 2: {a == 2}")
+print(f"a < b: {a < b}")
+
+# Funciones trigonométricas, logarítmicas, etc.
+angulos = np.array([0, np.pi/4, np.pi/2, np.pi])
+print(f"\nsen(angulos) = {np.sin(angulos)}")
+print(f"cos(angulos) = {np.cos(angulos)}")
+
+valores = np.array([1, 10, 100, 1000])
+print(f"log10(valores) = {np.log10(valores)}")</code></pre>
+            
+            <div class="output">a + b = [ 6  8 10 12]
+a - b = [-4 -4 -4 -4]
+a * b = [ 5 12 21 32]
+a / b = [0.2        0.33333333 0.42857143 0.5       ]
+a ** 2 = [ 1  4  9 16]
+a % 2 = [1 0 1 0]
+
+a + 2 = [3 4 5 6]
+a * 3 = [ 3  6  9 12]
+
+a > 2: [False False  True  True]
+a == 2: [False  True False False]
+a < b: [ True  True  True  True]
+
+sen(angulos) = [0.         0.70710678 1.         0.        ]
+cos(angulos) = [ 1.00000000e+00  7.07106781e-01  6.12323400e-17 -1.00000000e+00]
+log10(valores) = [0. 1. 2. 3.]</div>
+            
+            <h3>Operaciones Estadísticas</h3>
+            
+            <pre><code class="language-python"># Operaciones estadísticas
+arr = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+
+# Estadísticas básicas
+print(f"Suma total: {np.sum(arr)}")
+print(f"Media: {np.mean(arr)}")
+print(f"Desviación estándar: {np.std(arr)}")
+print(f"Mínimo: {np.min(arr)}")
+print(f"Máximo: {np.max(arr)}")
+
+# Estadísticas por eje
+print(f"\nSuma por filas: {np.sum(arr, axis=1)}")
+print(f"Media por columnas: {np.mean(arr, axis=0)}")
+print(f"Mínimo por filas: {np.min(arr, axis=1)}")
+print(f"Máximo por columnas: {np.max(arr, axis=0)}")
+
+# Posición del mínimo y máximo
+print(f"\nPosición del mínimo: {np.argmin(arr)}")
+print(f"Posición del máximo: {np.argmax(arr)}")
+
+# Acumulativas
+print(f"\nSuma acumulativa: {np.cumsum(arr.ravel())}")
+print(f"Producto acumulativo: {np.cumprod(arr[:, 0])}")  # Solo primera columna</code></pre>
+            
+            <div class="output">Suma total: 45
+Media: 5.0
+Desviación estándar: 2.581988897471611
+Mínimo: 1
+Máximo: 9
+
+Suma por filas: [ 6 15 24]
+Media por columnas: [4. 5. 6.]
+Mínimo por filas: [1 4 7]
+Máximo por columnas: [7 8 9]
+
+Posición del mínimo: 0
+Posición del máximo: 8
+
+Suma acumulativa: [ 1  3  6 10 15 21 28 36 45]
+Producto acumulativo: [ 1  4 28]</div>
+            
+            <h3>Operaciones con Matrices</h3>
+            
+            <pre><code class="language-python"># Operaciones matriciales
+a = np.array([[1, 2], [3, 4]])
+b = np.array([[5, 6], [7, 8]])
+
+# Multiplicación matricial (producto punto)
+c1 = np.dot(a, b)
+print(f"Producto punto (dot):\n{c1}")
+
+# Sintaxis alternativa para producto matricial
+c2 = a @ b  # Disponible desde Python 3.5
+print(f"\nProducto matricial (@):\n{c2}")
+
+# Producto elemento a elemento
+c3 = a * b
+print(f"\nProducto elemento a elemento (*):\n{c3}")
+
+# Determinante
+det_a = np.linalg.det(a)
+print(f"\nDeterminante de a: {det_a}")
+
+# Inversa
+inv_a = np.linalg.inv(a)
+print(f"\nInversa de a:\n{inv_a}")
+
+# Verificación de la inversa (debería ser cercana a la identidad)
+identity = np.dot(a, inv_a)
+print(f"\nA × A⁻¹ (debería ser la identidad):\n{identity}")
+
+# Resolver sistema de ecuaciones lineales: Ax = b
+b_vec = np.array([1, 2])
+x = np.linalg.solve(a, b_vec)
+print(f"\nSolución a Ax = b: {x}")
+print(f"Verificación: {np.dot(a, x)}")</code></pre>
+            
+            <div class="output">Producto punto (dot):
+[[19 22]
+ [43 50]]
+
+Producto matricial (@):
+[[19 22]
+ [43 50]]
+
+Producto elemento a elemento (*):
+[[ 5 12]
+ [21 32]]
+
+Determinante de a: -2.0000000000000004
+
+Inversa de a:
+[[-2.   1. ]
+ [ 1.5 -0.5]]
+
+A × A⁻¹ (debería ser la identidad):
+[[1.00000000e+00 0.00000000e+00]
+ [8.88178420e-16 1.00000000e+00]]
+
+Solución a Ax = b: [0. 0.5]
+Verificación: [1. 2.]</div>
+            
+            <div class="note">
+                NumPy tiene muchas más funciones para álgebra lineal, incluyendo descomposiciones (SVD, LU, QR), autovalores y autovectores. Estas operaciones son esenciales en machine learning y análisis de datos avanzado.
+            </div>
+            
+            <h2 id="funciones-numpy">Funciones Universales (ufuncs) en NumPy</h2>
+            
+            <p>Las funciones universales (ufuncs) son funciones que operan elemento a elemento en arrays de NumPy. Están optimizadas para el rendimiento y son mucho más rápidas que las funciones equivalentes escritas en Python puro.</p>
+            
+            <h3>Funciones Matemáticas</h3>
+            
+            <pre><code class="language-python"># Funciones universales matemáticas
+arr = np.array([-3, -2, -1, 0, 1, 2, 3])
+
+# Valor absoluto
+print(f"Valor absoluto: {np.abs(arr)}")
+
+# Raíz cuadrada (genera advertencia con números negativos)
+with np.errstate(invalid='ignore'):  # Ignorar advertencias
+    print(f"Raíz cuadrada: {np.sqrt(np.abs(arr))}")
+
+# Exponencial (e^x)
+print(f"Exponencial: {np.exp(arr)}")
+
+# Signo (-1 para negativo, 0 para cero, 1 para positivo)
+print(f"Signo: {np.sign(arr)}")
+
+# Funciones de redondeo
+decimales = np.array([1.25, 1.5, 1.75, 2.1, 2.5, 2.9])
+print(f"\nRedondeo (round): {np.round(decimales)}")
+print(f"Truncamiento (floor): {np.floor(decimales)}")
+print(f"Techo (ceil): {np.ceil(decimales)}")
+
+# Potencias y logaritmos
+base = np.array([1, 2, 3, 4])
+print(f"\n2^x: {np.power(2, base)}")
+print(f"x^2: {np.power(base, 2)}")
+print(f"log(x): {np.log(base)}")  # Logaritmo natural
+print(f"log10(x): {np.log10(base)}")  # Logaritmo base 10
+print(f"log2(x): {np.log2(base)}")  # Logaritmo base 2</code></pre>
+            
+            <div class="output">Valor absoluto: [3 2 1 0 1 2 3]
+Raíz cuadrada: [1.73205081 1.41421356 1.         0.         1.         1.41421356 1.73205081]
+Exponencial: [4.97870684e-02 1.35335283e-01 3.67879441e-01 1.00000000e+00 2.71828183e+00 7.38905610e+00 2.00855369e+01]
+Signo: [-1 -1 -1  0  1  1  1]
+
+Redondeo (round): [1. 2. 2. 2. 2. 3.]
+Truncamiento (floor): [1. 1. 1. 2. 2. 2.]
+Techo (ceil): [2. 2. 2. 3. 3. 3.]
+
+2^x: [ 2  4  8 16]
+x^2: [ 1  4  9 16]
+log(x): [0.         0.69314718 1.09861229 1.38629436]
+log10(x): [0.         0.30103    0.47712125 0.60205999]
+log2(x): [0.        1.        1.5849625 2.       ]</div>
+            
+            <h3>Funciones de Reducción</h3>
+            
+            <p>Las funciones de reducción aplican operaciones a lo largo de un eje y devuelven un resultado con una dimensión menos:</p>
+            
+            <pre><code class="language-python"># Funciones de reducción
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+
+# Reducción en todos los elementos
+print(f"Suma total: {np.sum(arr)}")
+print(f"Producto total: {np.prod(arr)}")
+print(f"Valor mínimo: {np.min(arr)}")
+print(f"Valor máximo: {np.max(arr)}")
+
+# Reducción a lo largo del eje 0 (columnas)
+print(f"\nSuma
