@@ -873,11 +873,13 @@ arr = np.array([1, 2, 3, 4, 5])
 print(arr)
 print(type(arr))</code></pre>
             
-            <div class="output">[1 2 3 4 5]
+            <div class="output">[1 2 3 4 5]<br>
 &lt;class 'numpy.ndarray'&gt;</div>
             
-            <p>A diferencia de las listas de Python, los arrays de NumPy son homogéneos, lo que significa que todos los elementos deben ser del mismo tipo. Esto permite optimizaciones que hacen a NumPy mucho más rápido para operaciones numéricas.</p>
-            
+            <p>A diferencia de las listas de Python, los arrays de NumPy son homogéneos, lo que significa que todos los elementos deben ser del mismo tipo. Esto permite optimizaciones que hacen a NumPy mucho más rápido para operaciones numéricas.</p>  
+        </div>
+
+        <div class="content-section">
             <h2 id="arrays-numpy">Arrays en NumPy</h2>
             
             <p>Los arrays son la estructura de datos principal en NumPy. Podemos pensar en ellos como colecciones de elementos del mismo tipo organizados en una estructura de filas y columnas.</p>
@@ -914,20 +916,20 @@ print(f"Array aleatorio:\n{arr6}")
 arr7 = np.eye(3)  # Matriz identidad 3x3
 print(f"Matriz identidad:\n{arr7}")</code></pre>
             
-            <div class="output">Desde lista: [1 2 3 4]
-Array de ceros: [0. 0. 0. 0. 0.]
-Array de unos:
-[[1. 1. 1.]
- [1. 1. 1.]]
-Array con arange: [0 2 4 6 8]
-Array con linspace: [0.   0.25 0.5  0.75 1.  ]
-Array aleatorio:
-[[0.23651224 0.82170757]
- [0.43459951 0.0494728 ]]
-Matriz identidad:
-[[1. 0. 0.]
- [0. 1. 0.]
- [0. 0. 1.]]</div>
+            <div class="output">Desde lista: [1 2 3 4]<br>
+                Array de ceros: [0. 0. 0. 0. 0.]<br>
+                Array de unos:<br>
+                [[1. 1. 1.]<br>
+                 [1. 1. 1.]]<br>
+                Array con arange: [0 2 4 6 8]<br>
+                Array con linspace: [0.   0.25 0.5  0.75 1.  ]<br>
+                Array aleatorio:<br>
+                [[0.23651224 0.82170757]<br>
+                 [0.43459951 0.0494728 ]]<br>
+                Matriz identidad:<br>
+                [[1. 0. 0.]<br>
+                 [0. 1. 0.]<br>
+                 [0. 0. 1.]]</div>
             
             <h3>Dimensiones y Forma de Arrays</h3>
             
@@ -954,27 +956,27 @@ print(f"Dimensión: {cubo.ndim}")
 print(f"Forma: {cubo.shape}")  # (planos, filas, columnas)
 print(f"Tamaño: {cubo.size}")</code></pre>
             
-            <div class="output">Vector: [1 2 3 4]
-Dimensión: 1
-Forma: (4,)
-Tamaño: 4
+            <div class="output">Vector: [1 2 3 4]<br>
+                Dimensión: 1<br>
+                Forma: (4,)<br>
+                Tamaño: 4<br><br>
 
-Matriz:
-[[1 2 3]
- [4 5 6]]
-Dimensión: 2
-Forma: (2, 3)
-Tamaño: 6
+                Matriz:<br>
+                [[1 2 3]<br>
+                 [4 5 6]]<br>
+                Dimensión: 2<br>
+                Forma: (2, 3)<br>
+                Tamaño: 6<br><br>
 
-Cubo:
-[[[1 2]
-  [3 4]]
+                Cubo:<br>
+                [[[1 2]<br>
+                  [3 4]]<br><br>
 
- [[5 6]
-  [7 8]]]
-Dimensión: 3
-Forma: (2, 2, 2)
-Tamaño: 8</div>
+                 [[5 6]<br>
+                  [7 8]]]<br>
+                Dimensión: 3<br>
+                Forma: (2, 2, 2)<br>
+                Tamaño: 8</div>
             
             <div class="note">
                 La forma (<code>shape</code>) de un array es una tupla que indica el tamaño de cada dimensión. Por ejemplo, una forma de <code>(2, 3)</code> indica una matriz con 2 filas y 3 columnas.
@@ -1001,11 +1003,11 @@ print(f"Enteros a flotantes: {arr_to_float}, tipo: {arr_to_float.dtype}")
 arr_to_int = np.array([1.9, 2.8, 3.1], dtype=np.int64)
 print(f"Flotantes a enteros: {arr_to_int}, tipo: {arr_to_int.dtype}")  # Nótese el truncamiento</code></pre>
             
-            <div class="output">Array de enteros: [1 2 3], tipo: int32
-Array de flotantes: [1.  2.5 3.7], tipo: float64
-Array de booleanos: [ True False  True], tipo: bool
-Enteros a flotantes: [1. 2. 3.], tipo: float32
-Flotantes a enteros: [1 2 3], tipo: int64</div>
+            <div class="output">Array de enteros: [1 2 3], tipo: int32<br>
+                Array de flotantes: [1.  2.5 3.7], tipo: float64<br>
+                Array de booleanos: [ True False  True], tipo: bool<br>
+                Enteros a flotantes: [1. 2. 3.], tipo: float32<br>
+                Flotantes a enteros: [1 2 3], tipo: int64</div>
             
             <div class="warning">
                 Al convertir de flotantes a enteros, NumPy trunca los valores (elimina la parte decimal) en lugar de redondearlos. Si necesitas redondear, usa funciones como <code>np.round()</code> antes de la conversión.
@@ -1040,33 +1042,44 @@ print(f"Array aplanado: {arr_flat}")
 arr_ravel = arr_3d.ravel()
 print(f"Array con ravel: {arr_ravel}")</code></pre>
             
-            <div class="output">Array original: [ 0  1  2  3  4  5  6  7  8  9 10 11]
-Matriz 3x4:
-[[ 0  1  2  3]
- [ 4  5  6  7]
- [ 8  9 10 11]]
-Cubo 2x2x3:
-[[[ 0  1  2]
-  [ 3  4  5]]
+            <div class="output">Array original: [ 0  1  2  3  4  5  6  7  8  9 10 11]<br>
+                Matriz 3x4:<br>
+                [[ 0  1  2  3]<br>
+                 [ 4  5  6  7]<br>
+                 [ 8  9 10 11]]<br>
+                Cubo 2x2x3:<br>
+                [[[ 0  1  2]<br>
+                  [ 3  4  5]]<br><br>
 
- [[ 6  7  8]
-  [ 9 10 11]]]
-Matriz 3x?:
-[[ 0  1  2  3]
- [ 4  5  6  7]
- [ 8  9 10 11]]
-Array aplanado: [1 2 3 4 5 6 7 8]
-Array con ravel: [1 2 3 4 5 6 7 8]</div>
+                 [[ 6  7  8]<br>
+                  [ 9 10 11]]]<br>
+                Matriz 3x?:<br>
+                [[ 0  1  2  3]<br>
+                 [ 4  5  6  7]<br>
+                 [ 8  9 10 11]]<br>
+                Array aplanado: [1 2 3 4 5 6 7 8]<br>
+                Array con ravel: [1 2 3 4 5 6 7 8]</div>
             
             <div class="tip">
                 <code>reshape</code> reorganiza los elementos de un array sin cambiar su contenido. La cantidad total de elementos debe permanecer igual antes y después del cambio de forma.
             </div>
-            
+        </div>
+
+        <div class="content-section">
             <h2 id="indexacion-numpy">Indexación y Slicing en NumPy</h2>
             
             <p>Similar a las listas de Python, los arrays de NumPy admiten indexación y slicing, pero con capacidades avanzadas para trabajar con arrays multidimensionales.</p>
             
             <h3>Indexación Básica</h3>
+
+            <p>En NumPy, la indexación y el slicing son herramientas poderosas para acceder y manipular subconjuntos de datos. La siguiente imagen ilustra diferentes operaciones de slicing en un array multidimensional, donde cada color representa un tipo diferente de selección:</p>
+
+            <div class="img-container">
+                <img src="https://i.pinimg.com/originals/af/00/31/af0031e07738e01a1dd4413c08f08e3f.png" 
+                     alt="Ejemplos de slicing en NumPy" 
+                     style="max-width: 80%; background-color: white; padding: 15px; border-radius: 8px;">
+                <div class="caption">Visualización de diferentes operaciones de slicing en arrays multidimensionales de NumPy</div>
+            </div>
             
             <pre><code class="language-python"># Array unidimensional
 arr = np.array([10, 20, 30, 40, 50])
@@ -1083,15 +1096,15 @@ print(f"\nMatriz:\n{matriz}")
 print(f"Elemento en fila 1, columna 2: {matriz[1, 2]}")  # Equivalente a matriz[1][2]
 print(f"Última fila: {matriz[-1]}")  # Fila completa</code></pre>
             
-            <div class="output">Primer elemento: 10
-Último elemento: 50
+            <div class="output">Primer elemento: 10<br>
+                Último elemento: 50<br><br>
 
-Matriz:
-[[1 2 3]
- [4 5 6]
- [7 8 9]]
-Elemento en fila 1, columna 2: 6
-Última fila: [7 8 9]</div>
+                Matriz:<br>
+                [[1 2 3]<br>
+                 [4 5 6]<br>
+                 [7 8 9]]<br>
+                Elemento en fila 1, columna 2: 6<br>
+                Última fila: [7 8 9]</div>
             
             <h3>Slicing en Arrays</h3>
             
@@ -1128,23 +1141,23 @@ print(f"\nColumna 1: {columna_1}")
 diagonal = np.diag(matriz)  # Diagonal principal
 print(f"\nDiagonal principal: {diagonal}")</code></pre>
             
-            <div class="output">Elementos del 2 al 5: [2 3 4 5]
-Elementos hasta el 4: [0 1 2 3 4]
-Elementos desde el 6: [6 7 8 9]
-Elementos con paso 2: [1 3 5 7]
-Array invertido: [9 8 7 6 5 4 3 2 1 0]
+            <div class="output">Elementos del 2 al 5: [2 3 4 5]<br>
+                Elementos hasta el 4: [0 1 2 3 4]<br>
+                Elementos desde el 6: [6 7 8 9]<br>
+                Elementos con paso 2: [1 3 5 7]<br>
+                Array invertido: [9 8 7 6 5 4 3 2 1 0]<br><br>
 
-Submatriz:
-[[2 3]
- [6 7]]
+                Submatriz:<br>
+                [[2 3]<br>
+                 [6 7]]<br><br>
 
-Filas 0 y 2:
-[[ 1  2  3  4]
- [ 9 10 11 12]]
+                Filas 0 y 2:<br>
+                [[ 1  2  3  4]<br>
+                 [ 9 10 11 12]]<br><br>
 
-Columna 1: [ 2  6 10]
+                Columna 1: [ 2  6 10]<br><br>
 
-Diagonal principal: [1 6 11]</div>
+                Diagonal principal: [1 6 11]</div>
             
             <div class="warning">
                 A diferencia de las listas de Python, cuando haces slicing en arrays de NumPy, obtienes vistas en lugar de copias. Esto significa que modificar la vista modificará el array original. Si necesitas una copia independiente, usa el método <code>copy()</code>.
@@ -1180,21 +1193,24 @@ matriz_copia = matriz.copy()
 matriz_copia[matriz_copia % 2 == 0] = 0  # Reemplazar pares con 0
 print(f"\nMatriz con pares reemplazados:\n{matriz_copia}")</code></pre>
             
-            <div class="output">Elementos en posiciones [0 2 4]: [10 30 50]
-Máscara booleana: [False False False False False  True  True  True  True  True]
-Elementos mayores que 5: [ 6  7  8  9 10]
-Elementos pares: [ 2  4  6  8 10]
+            <div class="output">Elementos en posiciones [0 2 4]: [10 30 50]<br>
+                Máscara booleana: [False False False False False  True  True  True  True  True]<br>
+                Elementos mayores que 5: [ 6  7  8  9 10]<br>
+                Elementos pares: [ 2  4  6  8 10]<br><br>
 
-Matriz:
-[[1 2 3]
- [4 5 6]
- [7 8 9]]
-Elementos > 5: [6 7 8 9]
+                Matriz:<br>
+                [[1 2 3]<br>
+                 [4 5 6]<br>
+                 [7 8 9]]<br>
+                Elementos > 5: [6 7 8 9]<br><br>
 
-Matriz con pares reemplazados:
-[[1 0 3]
- [0 5 0]
- [7 0 9]]</div>
+                Matriz con pares reemplazados:<br>
+                [[1 0 3]<br>
+                 [0 5 0]<br>
+                 [7 0 9]]</div>
+        </div>
+
+        <div class="content-section">
             
             <h2 id="operaciones-numpy">Operaciones Vectorizadas con NumPy</h2>
             
@@ -1231,23 +1247,23 @@ print(f"cos(angulos) = {np.cos(angulos)}")
 valores = np.array([1, 10, 100, 1000])
 print(f"log10(valores) = {np.log10(valores)}")</code></pre>
             
-            <div class="output">a + b = [ 6  8 10 12]
-a - b = [-4 -4 -4 -4]
-a * b = [ 5 12 21 32]
-a / b = [0.2        0.33333333 0.42857143 0.5       ]
-a ** 2 = [ 1  4  9 16]
-a % 2 = [1 0 1 0]
+            <div class="output">a + b = [ 6  8 10 12]<br>
+                a - b = [-4 -4 -4 -4]<br>
+                a * b = [ 5 12 21 32]<br>
+                a / b = [0.2        0.33333333 0.42857143 0.5       ]<br>
+                a ** 2 = [ 1  4  9 16]<br>
+                a % 2 = [1 0 1 0]<br><br>
 
-a + 2 = [3 4 5 6]
-a * 3 = [ 3  6  9 12]
+                a + 2 = [3 4 5 6]<br>
+                a * 3 = [ 3  6  9 12]<br><br>
 
-a > 2: [False False  True  True]
-a == 2: [False  True False False]
-a < b: [ True  True  True  True]
+                a > 2: [False False  True  True]<br>
+                a == 2: [False  True False False]<br>
+                a < b: [ True  True  True  True]<br><br>
 
-sen(angulos) = [0.         0.70710678 1.         0.        ]
-cos(angulos) = [ 1.00000000e+00  7.07106781e-01  6.12323400e-17 -1.00000000e+00]
-log10(valores) = [0. 1. 2. 3.]</div>
+                sen(angulos) = [0.         0.70710678 1.         0.        ]<br>
+                cos(angulos) = [ 1.00000000e+00  7.07106781e-01  6.12323400e-17 -1.00000000e+00]<br>
+                log10(valores) = [0. 1. 2. 3.]</div>
             
             <h3>Operaciones Estadísticas</h3>
             
@@ -1275,22 +1291,22 @@ print(f"Posición del máximo: {np.argmax(arr)}")
 print(f"\nSuma acumulativa: {np.cumsum(arr.ravel())}")
 print(f"Producto acumulativo: {np.cumprod(arr[:, 0])}")  # Solo primera columna</code></pre>
             
-            <div class="output">Suma total: 45
-Media: 5.0
-Desviación estándar: 2.581988897471611
-Mínimo: 1
-Máximo: 9
+            <div class="output">Suma total: 45<br>
+                Media: 5.0<br>
+                Desviación estándar: 2.581988897471611<br>
+                Mínimo: 1<br>
+                Máximo: 9<br><br>
 
-Suma por filas: [ 6 15 24]
-Media por columnas: [4. 5. 6.]
-Mínimo por filas: [1 4 7]
-Máximo por columnas: [7 8 9]
+                Suma por filas: [ 6 15 24]<br>
+                Media por columnas: [4. 5. 6.]<br>
+                Mínimo por filas: [1 4 7]<br>
+                Máximo por columnas: [7 8 9]<br><br>
 
-Posición del mínimo: 0
-Posición del máximo: 8
+                Posición del mínimo: 0<br>
+                Posición del máximo: 8<br><br>
 
-Suma acumulativa: [ 1  3  6 10 15 21 28 36 45]
-Producto acumulativo: [ 1  4 28]</div>
+                Suma acumulativa: [ 1  3  6 10 15 21 28 36 45]<br>
+                Producto acumulativo: [ 1  4 28]</div>
             
             <h3>Operaciones con Matrices</h3>
             
@@ -1328,85 +1344,264 @@ x = np.linalg.solve(a, b_vec)
 print(f"\nSolución a Ax = b: {x}")
 print(f"Verificación: {np.dot(a, x)}")</code></pre>
             
-            <div class="output">Producto punto (dot):
-[[19 22]
- [43 50]]
+            <div class="output">Producto punto (dot):<br>
+                [[19 22]<br>
+                 [43 50]]<br><br>
 
-Producto matricial (@):
-[[19 22]
- [43 50]]
+                Producto matricial (@):<br>
+                [[19 22]<br>
+                 [43 50]]<br><br>
 
-Producto elemento a elemento (*):
-[[ 5 12]
- [21 32]]
+                Producto elemento a elemento (*):<br>
+                [[ 5 12]<br>
+                 [21 32]]<br><br>
 
-Determinante de a: -2.0000000000000004
+                Determinante de a: -2.0000000000000004<br><br>
 
-Inversa de a:
-[[-2.   1. ]
- [ 1.5 -0.5]]
+                Inversa de a:<br>
+                [[-2.   1. ]<br>
+                 [ 1.5 -0.5]]<br><br>
 
-A × A⁻¹ (debería ser la identidad):
-[[1.00000000e+00 0.00000000e+00]
- [8.88178420e-16 1.00000000e+00]]
+                A × A⁻¹ (debería ser la identidad):<br>
+                [[1.00000000e+00 0.00000000e+00]<br>
+                 [8.88178420e-16 1.00000000e+00]]<br><br>
 
-Solución a Ax = b: [0. 0.5]
-Verificación: [1. 2.]</div>
+                Solución a Ax = b: [0. 0.5]<br>
+                Verificación: [1. 2.]</div>
             
             <div class="note">
                 NumPy tiene muchas más funciones para álgebra lineal, incluyendo descomposiciones (SVD, LU, QR), autovalores y autovectores. Estas operaciones son esenciales en machine learning y análisis de datos avanzado.
             </div>
-            
+        </div>
+
+        <div class="content-section">
             <h2 id="funciones-numpy">Funciones Universales (ufuncs) en NumPy</h2>
             
-            <p>Las funciones universales (ufuncs) son funciones que operan elemento a elemento en arrays de NumPy. Están optimizadas para el rendimiento y son mucho más rápidas que las funciones equivalentes escritas en Python puro.</p>
+            <p>NumPy tiene integradas muchas funciones universales (ufuncs), que son esencialmente operaciones matemáticas que se pueden aplicar a todo el array de manera vectorizada. Estas funciones operan elemento por elemento y son extremadamente eficientes.</p>
+            
+            <p>Las categorías principales de funciones universales incluyen:</p>
+            
+            <ul>
+                <li><strong>Matemáticas</strong>: sqrt, exp, log, power, etc.</li>
+                <li><strong>Trigonometría</strong>: sin, cos, tan, etc.</li>
+                <li><strong>Funciones de comparación</strong>: equal, greater_than, less_than, etc.</li>
+                <li><strong>Funciones de punto flotante</strong>: isnan, isinf, etc.</li>
+            </ul>
+            
+            <p>Veamos algunos ejemplos de estas funciones universales en acción:</p>
             
             <h3>Funciones Matemáticas</h3>
             
-            <pre><code class="language-python"># Funciones universales matemáticas
-arr = np.array([-3, -2, -1, 0, 1, 2, 3])
+            <pre><code class="language-python"># Crear un array de ejemplo
+arr = np.arange(10)  # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-# Valor absoluto
-print(f"Valor absoluto: {np.abs(arr)}")
-
-# Raíz cuadrada (genera advertencia con números negativos)
-with np.errstate(invalid='ignore'):  # Ignorar advertencias
-    print(f"Raíz cuadrada: {np.sqrt(np.abs(arr))}")
-
-# Exponencial (e^x)
-print(f"Exponencial: {np.exp(arr)}")
-
-# Signo (-1 para negativo, 0 para cero, 1 para positivo)
-print(f"Signo: {np.sign(arr)}")
-
-# Funciones de redondeo
-decimales = np.array([1.25, 1.5, 1.75, 2.1, 2.5, 2.9])
-print(f"\nRedondeo (round): {np.round(decimales)}")
-print(f"Truncamiento (floor): {np.floor(decimales)}")
-print(f"Techo (ceil): {np.ceil(decimales)}")
-
-# Potencias y logaritmos
-base = np.array([1, 2, 3, 4])
-print(f"\n2^x: {np.power(2, base)}")
-print(f"x^2: {np.power(base, 2)}")
-print(f"log(x): {np.log(base)}")  # Logaritmo natural
-print(f"log10(x): {np.log10(base)}")  # Logaritmo base 10
-print(f"log2(x): {np.log2(base)}")  # Logaritmo base 2</code></pre>
+# Calcular la raiz cuadrada de cada elemento
+np.sqrt(arr)</code></pre>
             
-            <div class="output">Valor absoluto: [3 2 1 0 1 2 3]
-Raíz cuadrada: [1.73205081 1.41421356 1.         0.         1.         1.41421356 1.73205081]
-Exponencial: [4.97870684e-02 1.35335283e-01 3.67879441e-01 1.00000000e+00 2.71828183e+00 7.38905610e+00 2.00855369e+01]
-Signo: [-1 -1 -1  0  1  1  1]
+            <div class="output">array([0.        , 1.        , 1.41421356, 1.73205081, 2.        ,
+               2.23606798, 2.44948974, 2.64575131, 2.82842712, 3.        ])</div>
+            
+            <pre><code class="language-python"># Calcular el exponencial (e^) de cada elemento
+np.exp(arr)</code></pre>
+            
+            <div class="output">array([1.00000000e+00, 2.71828183e+00, 7.38905610e+00, 2.00855369e+01,
+               5.45981500e+01, 1.48413159e+02, 4.03428793e+02, 1.09663316e+03,
+               2.98095799e+03, 8.10308393e+03])</div>
+            
+            <pre><code class="language-python"># Obtener el valor máximo como una función
+np.max(arr)  # lo mismo arr.max()</code></pre>
+            
+            <div class="output">9</div>
+            
+            <h3>Funciones Trigonométricas</h3>
+            
+            <pre><code class="language-python"># Calcular el seno de cada elemento
+np.sin(arr)</code></pre>
+            
+            <div class="output">array([ 0.        ,  0.84147098,  0.90929743,  0.14112001, -0.7568025 ,
+               -0.95892427, -0.2794155 ,  0.6569866 ,  0.98935825,  0.41211849])</div>
+            
+            <h3>Funciones Logarítmicas</h3>
+            
+            <pre><code class="language-python"># Calcular el logaritmo natural de cada elemento
+np.log(arr)</code></pre>
+            
+            <div class="output">/tmp/ipykernel_38414/1102247883.py:2: RuntimeWarning: divide by zero encountered in log np.log(arr)<br><br>
+        
+                array([      -inf, 0.        , 0.69314718, 1.09861229, 1.38629436, 1.60943791, 1.79175947, 1.94591015, 2.07944154, 2.19722458])</div>
+            
+            <div class="warning">
+                Cuando se aplican ciertas funciones como <code>log</code> a valores no válidos (como 0), NumPy genera advertencias y produce resultados especiales como <code>-inf</code> (infinito negativo).
+            </div>
+            
+            <h3>Funciones de Valor Absoluto</h3>
+            
+            <pre><code class="language-python"># Calcular el valor absoluto
+np.abs(arr)</code></pre>
+            
+            <div class="output">array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])</div>
+            
+            <div class="note">
+                Las funciones universales de NumPy son altamente optimizadas y operan mucho más rápido que los bucles equivalentes en Python puro. Siempre que sea posible, utiliza estas funciones para operaciones elemento a elemento en tus arrays.
+            </div>
+        </div>
 
-Redondeo (round): [1. 2. 2. 2. 2. 3.]
-Truncamiento (floor): [1. 1. 1. 2. 2. 2.]
-Techo (ceil): [2. 2. 2. 3. 3. 3.]
+        <div class="content-section">
+            <h2 id="estadisticas-numpy">Estadísticas con NumPy</h2>
+            
+            <p>NumPy proporciona un conjunto robusto de funciones estadísticas que van más allá de las operaciones básicas como suma o media. Estas funciones son esenciales para el análisis exploratorio de datos y la comprensión de las distribuciones.</p>
+            
+            <h3>Medidas de Tendencia Central y Dispersión</h3>
+            
+            <pre><code class="language-python"># Crear datos de ejemplo
+datos = np.array([23, 45, 12, 67, 34, 89, 24, 56, 78, 45, 34, 23])
 
-2^x: [ 2  4  8 16]
-x^2: [ 1  4  9 16]
-log(x): [0.         0.69314718 1.09861229 1.38629436]
-log10(x): [0.         0.30103    0.47712125 0.60205999]
-log2(x): [0.        1.        1.5849625 2.       ]</div>
+# Medidas de tendencia central
+print(f"Media: {np.mean(datos)}")
+print(f"Mediana: {np.median(datos)}")
+print(f"Percentil 25%: {np.percentile(datos, 25)}")
+print(f"Percentil 75%: {np.percentile(datos, 75)}")
+
+# Medidas de dispersión
+print(f"\nDesviación estándar: {np.std(datos)}")
+print(f"Varianza: {np.var(datos)}")
+print(f"Rango: {np.ptp(datos)}")  # Peak to peak (max - min)</code></pre>
+    
+            <div class="output">Media: 44.16666666666667<br>
+                Mediana: 39.5<br>
+                Percentil 25%: 23.75<br>
+                Percentil 75%: 61.5<br><br>
+
+                Desviación estándar: 23.30635734475076<br>
+                Varianza: 543.1861111111112<br>
+                Rango: 77</div>
+            
+            <h3>Correlación y Covarianza</h3>
+            
+            <pre><code class="language-python"># Crear dos conjuntos de datos
+x = np.array([1, 2, 3, 4, 5])
+y = np.array([5, 4, 2, 4, 5])
+
+# Calcular coeficiente de correlación
+correlacion = np.corrcoef(x, y)
+print(f"Matriz de correlación:\n{correlacion}")
+print(f"Coeficiente de correlación entre x e y: {correlacion[0, 1]}")
+
+# Calcular covarianza
+covarianza = np.cov(x, y)
+print(f"\nMatriz de covarianza:\n{covarianza}")
+print(f"Covarianza entre x e y: {covarianza[0, 1]}")</code></pre>
+            
+            <div class="output">Matriz de correlación:<br>
+                [[ 1.         -0.15430335]<br>
+                 [-0.15430335  1.        ]]<br>
+                Coeficiente de correlación entre x e y: -0.15430334996209192<br><br>
+
+                Matriz de covarianza:<br>
+                [[2.5  -0.5 ]<br>
+                 [-0.5   1.7 ]]<br>
+                Covarianza entre x e y: -0.5</div>
+            
+            <h3>Histogramas y Análisis de Frecuencias</h3>
+            
+            <pre><code class="language-python"># Generar datos aleatorios
+datos_aleatorios = np.random.normal(loc=50, scale=10, size=1000)
+
+# Crear un histograma
+histograma, bins = np.histogram(datos_aleatorios, bins=10)
+
+print("Histograma:")
+print(f"Frecuencias: {histograma}")
+print(f"Límites de bins: {bins}")
+
+# Funciones auxiliares para análisis de frecuencias
+valores_unicos, conteos = np.unique(np.round(datos_aleatorios), return_counts=True)
+print(f"\nValores más frecuentes:")
+# Mostrar los 5 valores más frecuentes
+indices_ordenados = np.argsort(-conteos)[:5]
+for i in indices_ordenados:
+    print(f"Valor {valores_unicos[i]}: aparece {conteos[i]} veces")</code></pre>
+            
+            <div class="output">Histograma:<br>
+                Frecuencias: [ 20  55 117 178 223 195 129  57  18   8]<br>
+                Límites de bins: [24.66393496 31.55754824 38.45116153 45.34477481 52.23838809 59.13200138<br>
+                 66.02561466 72.91922794 79.81284123 86.70645451 93.59977522]<br><br>
+
+                Valores más frecuentes:<br>
+                Valor 50.0: aparece 55 veces<br>
+                Valor 51.0: aparece 54 veces<br>
+                Valor 49.0: aparece 53 veces<br>
+                Valor 53.0: aparece 49 veces<br>
+                Valor 44.0: aparece 46 veces</div>
+
+            <h3>Estadísticas a lo largo de Ejes Específicos</h3>
+            
+            <pre><code class="language-python"># Crear matriz de ejemplo
+matriz = np.array([[1, 5, 9], 
+                   [2, 6, 10], 
+                   [3, 7, 11],
+                   [4, 8, 12]])
+
+print(f"Matriz original:\n{matriz}")
+
+# Estadísticas por filas (axis=1)
+print(f"\nMedia por filas: {np.mean(matriz, axis=1)}")
+print(f"Desviación estándar por filas: {np.std(matriz, axis=1)}")
+
+# Estadísticas por columnas (axis=0)
+print(f"\nMedia por columnas: {np.mean(matriz, axis=0)}")
+print(f"Desviación estándar por columnas: {np.std(matriz, axis=0)}")
+
+# Valores acumulativos
+print(f"\nSuma acumulativa a lo largo de las filas:\n{np.cumsum(matriz, axis=1)}")
+print(f"Suma acumulativa a lo largo de las columnas:\n{np.cumsum(matriz, axis=0)}")</code></pre>
+            
+            <div class="output">Matriz original:<br>
+                [[ 1  5  9]<br>
+                 [ 2  6 10]<br>
+                 [ 3  7 11]<br>
+                 [ 4  8 12]]<br><br>
+
+                Media por filas: [5. 6. 7. 8.]<br>
+                Desviación estándar por filas: [3.26598632 3.26598632 3.26598632 3.26598632]<br><br>
+
+                Media por columnas: [2.5 6.5 10.5]<br>
+                Desviación estándar por columnas: [1.11803399 1.11803399 1.11803399]<br><br>
+
+                Suma acumulativa a lo largo de las filas:<br>
+                [[ 1  6 15]<br>
+                 [ 2  8 18]<br>
+                 [ 3 10 21]<br>
+                 [ 4 12 24]]<br>
+                Suma acumulativa a lo largo de las columnas:<br>
+                [[ 1  5  9]<br>
+                 [ 3 11 19]<br>
+                 [ 6 18 30]<br>
+                 [10 26 42]]</div>
+            
+            <div class="tip">
+                Las funciones estadísticas de NumPy pueden aplicarse a todo el array o a lo largo de ejes específicos usando el parámetro <code>axis</code>. Esto es particularmente útil para análisis de datos tabulares, donde las filas pueden representar observaciones y las columnas variables.
+            </div>
+        </div>
+
+        <div class="content-section">    
+            <h2 id="material-practica">Ejercicios Prácticos</h2>
+
+            <p>Notebooks interactivos en Google Colab donde podrás practicar los conceptos básicos de Python para ciencia de datos. Ideal para consolidar lo aprendido en este capítulo con ejercicios prácticos y ejemplos ejecutables</p>
+
+            <ul class="resources-list">
+                <li><strong><a href="https://colab.research.google.com/drive/1VHuFyjzF8CMEXNbS8ap2brHMS19mkI8q" target="_blank">Conceptos basicos y listas </a></strong></li>
+                <li><strong><a href="https://colab.research.google.com/drive/1x1eCilXPu1zYV0EwlKyaPyM1Re9ohNf7" target="_blank">Funciones y paquetes </a></strong></li>
+            </ul>
+
+            <h2 id="referencias">Referencias</h2>
+
+            <p>Para aprender más sobre Numpy, recomendamos consultar estos recursos oficiales:</p>
+
+            <ul class="resources-list">
+                <li><strong><a href="https://docs.python.org/es/3.10/tutorial/" target="_blank">Tutorial Python en español</a></strong>, la documentación oficial de Python traducida al español, una guía esencial para aprender el lenguaje desde sus fundamentos.</li>
+                <li><strong><a href="https://docs.hektorprofe.net/python/" target="_blank">Curso Python en Español</a></strong>, un recurso completo desarrollado por Héctor Profe que cubre desde los conceptos básicos hasta temas avanzados de Python con ejemplos prácticos y ejercicios.</li>
+            </ul>
 
         </div>
 
