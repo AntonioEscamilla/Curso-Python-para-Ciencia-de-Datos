@@ -279,16 +279,26 @@
             background-color: transparent !important;
         }
         
-        .output {
-            background-color: #000000;
-            border-left: 4px solid var(--output-border);
+        pre.output {
+            background-color: #000000 !important; /* Fondo negro */
             padding: 1rem;
             margin: 1rem 0;
-            color: #f1f1f1;
+            border-radius: 0 8px 8px 0;
+            border-left: 4px solid var(--output-border);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+
+        pre.output code {
+            background-color: transparent !important;
+            color: #f1f1f1; /* Color de texto claro para contrastar con el fondo negro */
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.9rem;
-            border-radius: 0 8px 8px 0;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Asegura que el resaltado de sintaxis no afecte al fondo */
+        pre.output code.language-shell,
+        pre.output code.language-shell * {
+            background-color: transparent !important;
         }
         
         /* Estilos para recuadros informativos */
@@ -764,8 +774,6 @@
                 <li><a href="#intro-polars">Introducción a Polars</a></li>
                 <li><a href="#ventajas-polars">Ventajas de Polars</a></li>
                 <li><a href="#dataframes-series">DataFrames y Series</a></li>
-                <li><a href="#operaciones-basicas">Operaciones Básicas</a></li>
-                <li><a href="#exprs-lazyframe">Expresiones y LazyFrames</a></li>
                 <li><a href="#material-practica">Material de Práctica</a></li>
                 <li><a href="#referencias">Referencias</a></li>
             </ul>
@@ -872,39 +880,39 @@
             <p>Polars tiene dos estructuras de datos principales, similares a las de Pandas:</p>
             
             <pre><code class="language-python"># Crear una Series
-    serie = pl.Series("numeros", [1, 2, 3, 4, 5])
-    print(serie)
-    
-    # Crear un DataFrame desde un diccionario
-    df = pl.DataFrame({
-        "enteros": [1, 2, 3, 4, 5],
-        "flotantes": [1.1, 2.2, 3.3, 4.4, 5.5],
-        "cadenas": ["uno", "dos", "tres", "cuatro", "cinco"]
-    })
-    print(df)</code></pre>
+serie = pl.Series("numeros", [1, 2, 3, 4, 5])
+print(serie)
+
+# Crear un DataFrame desde un diccionario
+df = pl.DataFrame({
+    "enteros": [1, 2, 3, 4, 5],
+    "flotantes": [1.1, 2.2, 3.3, 4.4, 5.5],
+    "cadenas": ["uno", "dos", "tres", "cuatro", "cinco"]
+})
+print(df)</code></pre>
             
-            <div class="output">shape: (5,)
-    Series: 'numeros' [i64]
-    [
-        1
-        2
-        3
-        4
-        5
-    ]
-    
-    shape: (5, 3)
-    ┌─────────┬──────────┬─────────┐
-    │ enteros ┆ flotantes ┆ cadenas │
-    │ ---     ┆ ---      ┆ ---     │
-    │ i64     ┆ f64      ┆ str     │
-    ╞═════════╪══════════╪═════════╡
-    │ 1       ┆ 1.1      ┆ uno     │
-    │ 2       ┆ 2.2      ┆ dos     │
-    │ 3       ┆ 3.3      ┆ tres    │
-    │ 4       ┆ 4.4      ┆ cuatro  │
-    │ 5       ┆ 5.5      ┆ cinco   │
-    └─────────┴──────────┴─────────┘</div>
+            <pre class="output"><code class="language-shell">shape: (5,)
+Series: 'numeros' [i64]
+[
+    1
+    2
+    3
+    4
+    5
+]
+
+shape: (5, 3)
+┌─────────┬──────────┬─────────┐
+│ enteros ┆ flotantes┆ cadenas │
+│ ---     ┆ ---      ┆ ---     │
+│ i64     ┆ f64      ┆ str     │
+╞═════════╪══════════╪═════════╡
+│ 1       ┆ 1.1      ┆ uno     │
+│ 2       ┆ 2.2      ┆ dos     │
+│ 3       ┆ 3.3      ┆ tres    │
+│ 4       ┆ 4.4      ┆ cuatro  │
+│ 5       ┆ 5.5      ┆ cinco   │
+└─────────┴──────────┴─────────┘</code></pre>
             
             <div class="note">
                 Una diferencia notoria es que Polars muestra el tipo de datos de cada columna directamente en la salida del DataFrame, lo que facilita entender la estructura de los datos.

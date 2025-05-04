@@ -279,16 +279,26 @@
             background-color: transparent !important;
         }
         
-        .output {
-            background-color: #000000;
-            border-left: 4px solid var(--output-border);
+        pre.output {
+            background-color: #000000 !important; /* Fondo negro */
             padding: 1rem;
             margin: 1rem 0;
-            color: #f1f1f1;
+            border-radius: 0 8px 8px 0;
+            border-left: 4px solid var(--output-border);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+
+        pre.output code {
+            background-color: transparent !important;
+            color: #f1f1f1; /* Color de texto claro para contrastar con el fondo negro */
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.9rem;
-            border-radius: 0 8px 8px 0;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Asegura que el resaltado de sintaxis no afecte al fondo */
+        pre.output code.language-shell,
+        pre.output code.language-shell * {
+            background-color: transparent !important;
         }
         
         /* Estilos para recuadros informativos */
@@ -766,8 +776,13 @@
                 <li><a href="#series-dataframes">Series y DataFrames</a></li>
                 <li><a href="#lectura-datos">Lectura de Datos</a></li>
                 <li><a href="#indexacion-seleccion">Indexación y Selección</a></li>
-                <li><a href="#manipulacion-datos">Manipulación de Datos</a></li>
-                <li><a href="#agregacion-datos">Agregación de Datos</a></li>
+                <li><a href="#seleccion-condicional">Selección Condicional o Filtros</a></li>
+                <li><a href="#datos-categoricos">Datos Categóricos</a></li>
+                <li><a href="#correccion-tipos">Corrección de tipos de datos (Casting)</a></li>
+                <li><a href="#datos-faltantes">Datos Faltantes (Missing data)</a></li>
+                <li><a href="#datos-unicos">Datos Únicos (Unique Values)</a></li>
+                <li><a href="#datos-duplicados">Datos Duplicados</a></li>
+                <li><a href="#conversion-categoricas">Conversión de Variables Categóricas a Numéricas</a></li>
                 <li><a href="#material-practica">Material de Práctica</a></li>
                 <li><a href="#referencias">Referencias</a></li>
             </ul>
@@ -858,7 +873,7 @@ import pandas as pd
 # Verificar la versión instalada
 print(pd.__version__)</code></pre>
             
-            <div class="output">2.0.3</div>
+            <pre class="output"><code class="language-shell">2.0.3</code></pre>
             
             <div class="tip">
                 Por convención, Pandas se importa con el alias <code>pd</code>. Esto hace que el código sea más limpio y sigue los estándares de la comunidad de ciencia de datos.
@@ -890,7 +905,7 @@ serie_dict = pd.Series(diccionario)
 print("\nSeries desde diccionario:")
 print(serie_dict)</code></pre>
             
-            <div class="output">0    10
+            <pre class="output"><code class="language-shell">0    10
 1    20
 2    30
 3    40
@@ -907,7 +922,7 @@ Series desde diccionario:
 a    100
 b    200
 c    300
-dtype: int64</div>
+dtype: int64</code></pre>
 
             <h3>DataFrames</h3>
             
@@ -934,14 +949,14 @@ df_array = pd.DataFrame(array, columns=['A', 'B', 'C'])
 print("\nDataFrame desde array NumPy:")
 print(df_array)</code></pre>
             
-            <div class="output">   Nombre  Edad     Ciudad
+            <pre class="output"><code class="language-shell">   Nombre  Edad     Ciudad
 0    Juan    28     Madrid
 1     Ana    34  Barcelona
 2  Carlos    22    Sevilla
 3   María    45   Valencia
 
 DataFrame con índices personalizados:
-     Nombre  Edad     Ciudad
+    Nombre  Edad     Ciudad
 p1    Juan    28     Madrid
 p2     Ana    34  Barcelona
 p3  Carlos    22    Sevilla
@@ -951,39 +966,1577 @@ DataFrame desde array NumPy:
           A         B         C
 0  0.439735  0.891726  0.963872
 1  0.107345  0.974340  0.413908
-2  0.499526  0.333006  0.266909</div>
+2  0.499526  0.333006  0.266909</code></pre>
 
             <div class="note">
                 Los DataFrames son ideales para representar datos tabulares y ofrecen muchas funcionalidades para manipularlos. Puedes pensar en ellos como una colección de Series que comparten un mismo índice.
             </div>
-            
-            <h2 id="lectura-datos">Lectura y Escritura de Datos</h2>
-            
-            <p>Una de las grandes fortalezas de Pandas es su capacidad para leer y escribir datos en diferentes formatos. Veamos algunos ejemplos:</p>
-            
-            <h3>Lectura desde CSV</h3>
-            
-            <pre><code class="language-python"># Leer un archivo CSV
-# df = pd.read_csv('datos.csv')
 
-# Ejemplo con datos integrados (para demostracion)
-from io import StringIO
-csv_data = """
-id,nombre,edad,salario
-1,Juan,28,35000
-2,Ana,34,42000
-3,Carlos,22,28000
-4,María,45,51000
-"""
-df = pd.read_csv(StringIO(csv_data))
+            <h2 id="lectura-datos">Lectura y Escritura de Datos</h2>
+				
+			<p>Pandas ofrece métodos simples y eficientes para leer y escribir datos en formatos CSV y Excel. Estas funcionalidades son esenciales para trabajar con datos en el mundo real.</p>
+				
+			<h3>Lectura desde CSV</h3>
+				
+			<pre><code class="language-python"># Leer un archivo CSV
+df = pd.read_csv('datos.csv')
+
+# Ejemplo con datos integrados (para demostración)
+# from io import StringIO
+# csv_data = """
+# id,nombre,edad,salario
+# 1,Juan,28,35000
+# 2,Ana,34,42000
+# 3,Carlos,22,28000
+# 4,María,45,51000
+# """
+# df = pd.read_csv(StringIO(csv_data))
+
 print(df)</code></pre>
-            
-            <div class="output">   id  nombre  edad  salario
+				
+			<pre class="output"><code class="language-shell">   id  nombre  edad  salario
 0   1    Juan    28    35000
 1   2     Ana    34    42000
 2   3  Carlos    22    28000
-3   4   María    45    51000</div>
+3   4   María    45    51000</code></pre>
+
+			<h3>Escritura a CSV</h3>
+			
+			<pre><code class="language-python"># Crear un DataFrame para guardar
+data = {
+    'nombre': ['Ana', 'Carlos', 'Diana', 'Eduardo'],
+    'edad': [28, 34, 29, 42],
+    'salario': [45000, 55000, 40000, 60000]
+}
+df_save = pd.DataFrame(data)
+
+# Guardar a CSV
+df_save.to_csv('empleados.csv', index=False)</code></pre>
+			
+			<pre class="output"><code class="language-shell">Contenido del CSV guardado:
+nombre,edad,salario
+Ana,28,45000
+Carlos,34,55000
+Diana,29,40000
+Eduardo,42,60000
+</code></pre>
+			
+			<h3>Lectura desde Excel</h3>
+			
+			<pre><code class="language-python"># Para archivos Excel, necesitamos instalar openpyxl
+!pip install openpyxl
+
+# Leer un archivo Excel
+df_excel = pd.read_excel('datos.xlsx', sheet_name='Hoja1')
+
+# Simulación de lectura Excel (para demostración)
+print("DataFrame que se leería de Excel:")
+print(df_excel)  # Usamos el DataFrame anterior como ejemplo</code></pre>
+			
+			<pre class="output"><code class="language-shell">Simulación de lectura de archivo Excel:
+DataFrame que se leería de Excel:
+    nombre  edad  salario
+0      Ana    28    45000
+1   Carlos    34    55000
+2    Diana    29    40000
+3  Eduardo    42    60000</code></pre>
+			
+			<h3>Escritura a Excel</h3>
+			
+			<pre><code class="language-python"># Escribir un DataFrame a Excel
+df_save.to_excel('empleados.xlsx', sheet_name='Empleados', index=False)
+
+# Escribir múltiples hojas a un mismo archivo Excel
+"""
+with pd.ExcelWriter('empresa.xlsx') as writer:
+    df_save.to_excel(writer, sheet_name='Empleados', index=False)
+"""
+
+print("El DataFrame se guardaría en un archivo Excel")</code></pre>
+			
+			<pre class="output"><code class="language-shell">El DataFrame se guardaría en un archivo Excel</code></pre>
+			
+			<div class="tip">
+				Para archivos CSV grandes o con formato complejo, Pandas ofrece opciones adicionales como <code>chunksize</code> para leer el archivo en fragmentos, <code>skiprows</code> para saltar filas específicas, y <code>parse_dates</code> para convertir automáticamente columnas a formato fecha/hora. Estas opciones pueden mejorar significativamente el rendimiento y la precisión de la importación de datos.
+			</div>
+
         </div>
+
+      <div class="content-section">
+         <h2 id="descripcion-dataframe">Descripción general del DataFrame</h2>
+         
+         <p>Antes de realizar cualquier análisis, es importante entender la estructura y características de nuestros datos. Pandas proporciona varios métodos útiles para explorar y comprender nuestros DataFrames:</p>
+         
+         <pre><code class="language-python"># Importar bibliotecas necesarias
+import pandas as pd
+import numpy as np
+
+# Crear un DataFrame de ejemplo
+data = {
+    'nombre': ['Ana', 'Carlos', 'Diana', 'Eduardo', 'Fernanda'],
+    'edad': [28, 34, 29, 42, 36],
+    'ciudad': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Madrid'],
+    'puntuacion': [85, 92, 78, 96, 89],
+    'activo': [True, True, False, True, True]
+}
+
+# Crear el DataFrame
+df = pd.DataFrame(data)
+
+# Visualizar el DataFrame completo
+print("DataFrame completo:")
+print(df)</code></pre>
+         
+         <pre class="output"><code class="language-shell">DataFrame completo:
+      nombre  edad     ciudad  puntuacion  activo
+0       Ana    28     Madrid          85    True
+1    Carlos    34  Barcelona          92    True
+2     Diana    29   Valencia          78   False
+3   Eduardo    42    Sevilla          96    True
+4  Fernanda    36     Madrid          89    True</code></pre>
+         
+         <h3>Número de Filas y Columnas</h3>
+         
+         <pre><code class="language-python"># Obtener la forma (filas, columnas) del DataFrame
+print(f"Forma del DataFrame: {df.shape}")
+
+# Número de filas
+print(f"Número de filas: {len(df)}")
+
+# Número de columnas
+print(f"Número de columnas: {len(df.columns)}")</code></pre>
+         
+         <pre class="output"><code class="language-shell">Forma del DataFrame: (5, 5)
+Número de filas: 5
+Número de columnas: 5</code></pre>
+         
+         <h3>Información General de los datos</h3>
+         
+         <p>El método <code>info()</code> proporciona un resumen conciso del DataFrame, incluyendo el tipo de datos de cada columna y la cantidad de valores no nulos.</p>
+         
+         <pre><code class="language-python"># Obtener información general del DataFrame
+df.info()</code></pre>
+         
+         <pre class="output"><code class="language-shell">&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 5 columns):
+ #   Column      Non-Null Count  Dtype 
+---  ------      --------------  ----- 
+ 0   nombre      5 non-null      object
+ 1   edad        5 non-null      int64 
+ 2   ciudad      5 non-null      object
+ 3   puntuacion  5 non-null      int64 
+ 4   activo      5 non-null      bool  
+dtypes: bool(1), int64(2), object(2)
+memory usage: 316.0+ bytes</code></pre>
+         
+         <div class="tip">
+            El método <code>info()</code> es especialmente útil para identificar valores faltantes (cuando "Non-Null Count" es menor que el número total de filas) y para verificar los tipos de datos de cada columna.
+         </div>
+         
+         <h3>Resumen de estadística descriptiva General</h3>
+         
+         <p>El método <code>describe()</code> genera estadísticas descriptivas para las columnas numéricas, como la media, desviación estándar, mínimo, máximo, y percentiles.</p>
+         
+         <pre><code class="language-python"># Obtener estadísticas descriptivas
+df.describe()</code></pre>
+         
+         <pre class="output"><code class="language-shell">             edad  puntuacion
+count   5.000000    5.000000
+mean   33.800000   88.000000
+std     5.630275    7.036011
+min    28.000000   78.000000
+25%    29.000000   85.000000
+50%    34.000000   89.000000
+75%    36.000000   92.000000
+max    42.000000   96.000000</code></pre>
+         
+         <pre><code class="language-python"># Para incluir columnas no numéricas
+df.describe(include='all')</code></pre>
+         
+         <pre class="output"><code class="language-shell">        nombre        edad      ciudad puntuacion activo
+count        5    5.000000           5   5.000000      5
+unique       5         NaN           3        NaN      2
+top        Ana         NaN      Madrid        NaN   True
+freq         1         NaN           2        NaN      4
+mean       NaN   33.800000         NaN  88.000000    NaN
+std        NaN    5.630275         NaN   7.036011    NaN
+min        NaN   28.000000         NaN  78.000000    NaN
+25%        NaN   29.000000         NaN  85.000000    NaN
+50%        NaN   34.000000         NaN  89.000000    NaN
+75%        NaN   36.000000         NaN  92.000000    NaN
+max        NaN   42.000000         NaN  96.000000    NaN</code></pre>
+         
+         <div class="note">
+            Para las columnas categóricas, <code>describe()</code> con el parámetro <code>include='all'</code> muestra información como el número de valores únicos, el valor más frecuente (top), y cuántas veces aparece (freq).
+         </div>
+         
+         <h3>Ver Primeros elementos del DataFrame</h3>
+         
+         <pre><code class="language-python"># Ver las primeras 3 filas del DataFrame
+df.head(3)</code></pre>
+         
+         <pre class="output"><code class="language-shell">   nombre  edad     ciudad  puntuacion  activo
+0     Ana    28     Madrid          85    True
+1  Carlos    34  Barcelona          92    True
+2   Diana    29   Valencia          78   False</code></pre>
+         
+         <h3>Ver Últimos elementos del DataFrame</h3>
+         
+         <pre><code class="language-python"># Ver las últimas 2 filas del DataFrame
+df.tail(2)</code></pre>
+         
+         <pre class="output"><code class="language-shell">      nombre  edad  ciudad  puntuacion  activo
+3   Eduardo    42  Sevilla          96    True
+4  Fernanda    36   Madrid          89    True</code></pre>
+         
+         <h3>Ver elementos aleatorios del DataFrame</h3>
+         
+         <pre><code class="language-python"># Ver filas aleatorias del DataFrame
+df.sample(2)</code></pre>
+         
+         <pre class="output"><code class="language-shell">     nombre  edad     ciudad  puntuacion  activo
+1    Carlos    34  Barcelona          92    True
+4  Fernanda    36     Madrid          89    True</code></pre>
+         
+         <div class="tip">
+            El método <code>sample()</code> es útil para inspeccionar muestras aleatorias de datos, especialmente cuando trabajamos con DataFrames muy grandes. Puede ayudar a identificar patrones o problemas que podrían no ser evidentes al examinar solo las primeras o últimas filas.
+         </div>
+      </div>  
+      
+      <div class="content-section">
+        <h2 id="indexacion-seleccion">Selección e Indexación</h2>
+        
+        <p>Pandas ofrece múltiples formas de seleccionar y acceder a datos dentro de un DataFrame. Estas operaciones son fundamentales para el análisis y la manipulación de datos.</p>
+        
+        <pre><code class="language-python"># Seleccionar una columna (devuelve una Series)
+print(df['nombre'])
+
+# Seleccionar múltiples columnas (devuelve un DataFrame)
+print("\nSeleccionando múltiples columnas:")
+print(df[['nombre', 'edad']])</code></pre>
+        
+        <pre class="output"><code class="language-shell">0         Ana
+1      Carlos
+2       Diana
+3     Eduardo
+4    Fernanda
+Name: nombre, dtype: object
+
+Seleccionando múltiples columnas:
+     nombre  edad
+0       Ana    28
+1    Carlos    34
+2     Diana    29
+3   Eduardo    42
+4  Fernanda    36</code></pre>
+        
+        <h3>Creando una Nueva Columna</h3>
+        
+        <pre><code class="language-python"># Crear una nueva columna
+df['año_nacimiento'] = 2025 - df['edad']
+
+# Crear una columna calculada
+df['puntuacion_ajustada'] = df['puntuacion'] * (1 + df['edad'] / 100)
+
+print(df)</code></pre>
+        
+        <pre class="output"><code class="language-shell">      nombre  edad     ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+0       Ana    28     Madrid          85    True            1997             108.80
+1    Carlos    34  Barcelona          92    True            1991             123.28
+2     Diana    29   Valencia          78   False            1996             100.62
+3   Eduardo    42    Sevilla          96    True            1983             136.32
+4  Fernanda    36     Madrid          89    True            1989             121.04</code></pre>
+        
+        <h3>Eliminando Columnas</h3>
+        
+        <pre><code class="language-python"># Eliminar una columna
+df_reducido = df.drop('puntuacion_ajustada', axis=1)
+print(df_reducido)
+
+# Eliminar múltiples columnas
+df_reducido = df.drop(['puntuacion_ajustada', 'año_nacimiento'], axis=1)
+print("\nDF con múltiples columnas eliminadas:")
+print(df_reducido)</code></pre>
+        
+        <pre class="output"><code class="language-shell">      nombre  edad     ciudad  puntuacion  activo  año_nacimiento
+0       Ana    28     Madrid          85    True            1997
+1    Carlos    34  Barcelona          92    True            1991
+2     Diana    29   Valencia          78   False            1996
+3   Eduardo    42    Sevilla          96    True            1983
+4  Fernanda    36     Madrid          89    True            1989
+
+DF con múltiples columnas eliminadas:
+     nombre  edad     ciudad  puntuacion  activo
+0       Ana    28     Madrid          85    True
+1    Carlos    34  Barcelona          92    True
+2     Diana    29   Valencia          78   False
+3   Eduardo    42    Sevilla          96    True
+4  Fernanda    36     Madrid          89    True</code></pre>
+        
+        <div class="warning">
+           Por defecto, el método <code>drop()</code> devuelve un nuevo DataFrame sin modificar el original. Si quieres modificar el DataFrame original, utiliza <code>inplace=True</code>: <code>df.drop('columna', axis=1, inplace=True)</code>.
+        </div>
+        
+        <h3>Obtener los nombres de las columnas y los índices (index)</h3>
+        
+        <pre><code class="language-python"># Obtener nombres de columnas
+print(f"Nombres de columnas: {df.columns.tolist()}")
+
+# Obtener índices
+print(f"Índices: {df.index.tolist()}")</code></pre>
+        
+        <pre class="output"><code class="language-shell">Nombres de columnas: ['nombre', 'edad', 'ciudad', 'puntuacion', 'activo', 'año_nacimiento', 'puntuacion_ajustada']
+Índices: [0, 1, 2, 3, 4]</code></pre>
+        
+        <h3>Seleccionando Filas y Columnas</h3>
+        
+        <p>Pandas ofrece varios métodos para seleccionar datos, incluyendo <code>loc</code> (por etiqueta) y <code>iloc</code> (por posición):</p>
+        
+        <pre><code class="language-python"># Seleccionar por posición con iloc
+# Sintaxis: df.iloc[filas, columnas]
+print("Selección por posición (iloc):")
+print("Primera fila, todas las columnas:")
+print(df.iloc[0, :])
+
+print("\nTercera fila, columnas 1 y 3:")
+print(df.iloc[2, [1, 3]])
+
+print("\nPrimeras tres filas, primeras dos columnas:")
+print(df.iloc[0:3, 0:2])</code></pre>
+        
+        <pre class="output"><code class="language-shell">Selección por posición (iloc):
+Primera fila, todas las columnas:
+nombre                      Ana
+edad                         28
+ciudad                   Madrid
+puntuacion                   85
+activo                     True
+año_nacimiento             1997
+puntuacion_ajustada       108.8
+Name: 0, dtype: object
+
+Tercera fila, columnas 1 y 3:
+edad           29
+puntuacion     78
+Name: 2, dtype: object
+
+Primeras tres filas, primeras dos columnas:
+   nombre  edad
+0     Ana    28
+1  Carlos    34
+2   Diana    29</code></pre>
+        
+        <pre><code class="language-python"># Seleccionar por etiqueta con loc
+# Sintaxis: df.loc[etiquetas_filas, etiquetas_columnas]
+print("Selección por etiqueta (loc):")
+print("Fila con índice 1, columnas 'nombre' y 'ciudad':")
+print(df.loc[1, ['nombre', 'ciudad']])
+
+print("\nFilas 2 a 4, columnas 'nombre' a 'puntuacion':")
+print(df.loc[2:4, 'nombre':'puntuacion'])</code></pre>
+        
+        <pre class="output"><code class="language-shell">Selección por etiqueta (loc):
+Fila con índice 1, columnas 'nombre' y 'ciudad':
+nombre       Carlos
+ciudad    Barcelona
+Name: 1, dtype: object
+
+Filas 2 a 4, columnas 'nombre' a 'puntuacion':
+     nombre  edad    ciudad  puntuacion
+2     Diana    29  Valencia          78
+3   Eduardo    42   Sevilla          96
+4  Fernanda    36    Madrid          89</code></pre>
+        
+        <div class="note">
+           La diferencia clave entre <code>loc</code> e <code>iloc</code> es que <code>loc</code> utiliza etiquetas (nombres de filas y columnas) mientras que <code>iloc</code> utiliza índices numéricos basados en posición (0, 1, 2, ...). Además, con <code>loc</code> el último índice es inclusivo, mientras que con <code>iloc</code> es exclusivo.
+        </div>
+        
+        <h3>Seleccionar un subconjunto de filas y columnas</h3>
+        
+        <pre><code class="language-python"># Diferentes métodos para seleccionar datos
+# 1. Usando notación de corchetes
+print("Selección de filas por índice:")
+print(df[1:3])  # Filas 1 y 2
+
+# 2. Usando métodos especiales
+print("\nSelección de filas donde edad > 30:")
+print(df[df['edad'] > 30])  # Filas que cumplen la condición</code></pre>
+        
+        <pre class="output"><code class="language-shell">Selección de filas por índice:
+    nombre  edad     ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+1   Carlos    34  Barcelona          92    True            1991             123.28
+2    Diana    29   Valencia          78   False            1996             100.62
+
+Selección de filas donde edad > 30:
+     nombre  edad     ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+1    Carlos    34  Barcelona          92    True            1991             123.28
+3   Eduardo    42    Sevilla          96    True            1983             136.32
+4  Fernanda    36     Madrid          89    True            1989             121.04</code></pre>
+        
+        <div class="tip">
+           Cuando utilizas la notación de corchetes <code>df[1:3]</code> para seleccionar filas, el comportamiento es similar al slicing de listas en Python (el límite superior es exclusivo). Sin embargo, cuando usas <code>loc</code>, ambos límites son inclusivos: <code>df.loc[1:3]</code> incluye las filas 1, 2 y 3.
+        </div>
+     </div>
+
+     <div class="content-section">
+        <h2 id="seleccion-condicional">Selección Condicional o Filtros</h2>
+        
+        <p>Podemos usar condiciones para filtrar los datos que queremos ver. Estas condiciones generan máscaras booleanas que se aplican al DataFrame:</p>
+        
+        <pre><code class="language-python"># Filtrar por una condición
+mayores_30 = df['edad'] > 30
+print("Máscara booleana (mayores de 30):")
+print(mayores_30)
+
+print("\nPersonas mayores de 30 años:")
+print(df[mayores_30])
+
+# Filtrar por múltiples condiciones
+print("\nPersonas mayores de 30 años que viven en Madrid:")
+print(df[(df['edad'] > 30) & (df['ciudad'] == 'Madrid')])
+
+# Personas que viven en Madrid o Barcelona
+print("\nPersonas que viven en Madrid o Barcelona:")
+print(df[df['ciudad'].isin(['Madrid', 'Barcelona'])])</code></pre>
+        
+        <pre class="output"><code class="language-shell">Máscara booleana (mayores de 30):
+0    False
+1     True
+2    False
+3     True
+4     True
+Name: edad, dtype: bool
+
+Personas mayores de 30 años:
+     nombre  edad     ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+1    Carlos    34  Barcelona          92    True            1991             123.28
+3   Eduardo    42    Sevilla          96    True            1983             136.32
+4  Fernanda    36     Madrid          89    True            1989             121.04
+
+Personas mayores de 30 años que viven en Madrid:
+     nombre  edad ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+4  Fernanda    36 Madrid          89    True            1989             121.04
+
+Personas que viven en Madrid o Barcelona:
+     nombre  edad     ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+0       Ana    28     Madrid          85    True            1997             108.80
+1    Carlos    34  Barcelona          92    True            1991             123.28
+4  Fernanda    36     Madrid          89    True            1989             121.04</code></pre>
+        
+        <div class="tip">
+           Usa el operador <code>&</code> para condiciones AND (y) y el operador <code>|</code> para condiciones OR (o). Asegúrate de encerrar cada condición entre paréntesis cuando las combines para evitar problemas de precedencia de operadores.
+        </div>
+        
+        <h3>.query() Búsqueda condicional</h3>
+        
+        <p>El método <code>query()</code> proporciona una forma más legible de filtrar datos mediante una cadena de texto:</p>
+        
+        <pre><code class="language-python"># Usar query para filtrar datos
+print("Personas menores de 35 años:")
+print(df.query('edad < 35'))
+
+print("\nPersonas activas que viven en Madrid:")
+print(df.query('ciudad == "Madrid" and activo == True'))
+
+print("\nPersonas con puntuación superior a 90 o menores de 30 años:")
+print(df.query('puntuacion > 90 or edad < 30'))</code></pre>
+        
+        <pre class="output"><code class="language-shell">Personas menores de 35 años:
+  nombre  edad     ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+0     Ana    28     Madrid          85    True            1997             108.80
+2   Diana    29   Valencia          78   False            1996             100.62
+
+Personas activas que viven en Madrid:
+     nombre  edad ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+0       Ana    28 Madrid          85    True            1997              108.80
+4  Fernanda    36 Madrid          89    True            1989              121.04
+
+Personas con puntuación superior a 90 o menores de 30 años:
+     nombre  edad     ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+0       Ana    28     Madrid          85    True            1997             108.80
+1    Carlos    34  Barcelona          92    True            1991             123.28
+2     Diana    29   Valencia          78   False            1996             100.62
+3   Eduardo    42    Sevilla          96    True            1983             136.32</code></pre>
+        
+        <div class="note">
+           <code>query()</code> ofrece una sintaxis más concisa y legible que utilizar filtros con corchetes, especialmente para condiciones complejas. La expresión se escribe como una cadena que se evalúa en el contexto del DataFrame.
+        </div>
+     </div>
+
+     <div class="content-section">
+        <h2 id="cambio-indexacion">Cambio de columna de Indexación</h2>
+        
+        <p>Podemos establecer una o más columnas como índice del DataFrame, lo que facilita ciertas operaciones de selección y agrupación:</p>
+        
+        <pre><code class="language-python"># Establecer 'nombre' como índice
+df_por_nombre = df.set_index('nombre')
+print("DataFrame indexado por nombre:")
+print(df_por_nombre)
+
+# Acceder a una fila por su índice
+print("\nDatos de Diana:")
+print(df_por_nombre.loc['Diana'])
+
+# Establecer múltiples columnas como índice
+df_multi = df.set_index(['ciudad', 'nombre'])
+print("\nDataFrame con índice múltiple (ciudad, nombre):")
+print(df_multi)
+
+# Acceder a elementos con índice múltiple
+print("\nDatos de personas en Madrid:")
+print(df_multi.loc['Madrid'])
+
+print("\nDatos de Eduardo en Sevilla:")
+print(df_multi.loc[('Sevilla', 'Eduardo')])</code></pre>
+        
+        <pre class="output"><code class="language-shell">DataFrame indexado por nombre:
+        edad     ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+nombre                                                                           
+Ana       28     Madrid          85    True            1997              108.80
+Carlos    34  Barcelona          92    True            1991              123.28
+Diana     29   Valencia          78   False            1996              100.62
+Eduardo   42    Sevilla          96    True            1983              136.32
+Fernanda  36     Madrid          89    True            1989              121.04
+
+Datos de Diana:
+edad                       29
+ciudad               Valencia
+puntuacion                 78
+activo                  False
+año_nacimiento           1996
+puntuacion_ajustada    100.62
+Name: Diana, dtype: object
+
+DataFrame con índice múltiple (ciudad, nombre):
+                    edad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+ciudad    nombre                                                               
+Madrid    Ana         28          85    True            1997              108.80
+          Fernanda    36          89    True            1989              121.04
+Barcelona Carlos      34          92    True            1991              123.28
+Valencia  Diana       29          78   False            1996              100.62
+Sevilla   Eduardo     42          96    True            1983              136.32
+
+Datos de personas en Madrid:
+          edad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+nombre                                                                   
+Ana          28          85    True            1997              108.80
+Fernanda     36          89    True            1989              121.04
+
+Datos de Eduardo en Sevilla:
+edad                       42
+puntuacion                 96
+activo                   True
+año_nacimiento           1983
+puntuacion_ajustada    136.32
+Name: (Sevilla, Eduardo), dtype: object</code></pre>
+        
+        <div class="tip">
+           Establecer un índice adecuado puede mejorar significativamente el rendimiento de ciertas operaciones, especialmente para DataFrames grandes. También facilita la selección y el agrupamiento de datos. Si necesitas restablecer el índice original, puedes usar el método <code>reset_index()</code>.
+        </div>
+        
+        <pre><code class="language-python"># Restablecer el índice
+df_reset = df_por_nombre.reset_index()
+print("DataFrame con índice restablecido:")
+print(df_reset)
+
+# Restablecer índice múltiple
+df_reset_multi = df_multi.reset_index()
+print("\nDataFrame con índice múltiple restablecido:")
+print(df_reset_multi)</code></pre>
+        
+        <pre class="output"><code class="language-shell">DataFrame con índice restablecido:
+     nombre  edad     ciudad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+0       Ana    28     Madrid          85    True            1997              108.80
+1    Carlos    34  Barcelona          92    True            1991              123.28
+2     Diana    29   Valencia          78   False            1996              100.62
+3   Eduardo    42    Sevilla          96    True            1983              136.32
+4  Fernanda    36     Madrid          89    True            1989              121.04
+
+DataFrame con índice múltiple restablecido:
+      ciudad    nombre  edad  puntuacion  activo  año_nacimiento  puntuacion_ajustada
+0     Madrid       Ana    28          85    True            1997              108.80
+1     Madrid  Fernanda    36          89    True            1989              121.04
+2  Barcelona    Carlos    34          92    True            1991              123.28
+3   Valencia     Diana    29          78   False            1996              100.62
+4    Sevilla   Eduardo    42          96    True            1983              136.32</code></pre>
+        
+        <div class="note">
+           Cuando restableces un índice múltiple, las columnas utilizadas como índices se añaden al inicio del DataFrame en el mismo orden en que se establecieron como índices.
+        </div>
+     </div>
+
+     <div class="content-section">
+        <h2 id="datos-categoricos">Datos Categóricos</h2>
+        
+        <p>Los datos categóricos representan valores que pertenecen a un conjunto finito de categorías. Pandas proporciona el tipo de datos <code>Categorical</code> que es especialmente eficiente para representar este tipo de variables.</p>
+        
+        <pre><code class="language-python"># Crear un DataFrame con datos categóricos
+datos = {
+   'nombre': ['Ana', 'Carlos', 'Diana', 'Eduardo', 'Fernanda'],
+   'genero': ['F', 'M', 'F', 'M', 'F'],
+   'nivel_educativo': ['Universitario', 'Posgrado', 'Secundario', 'Universitario', 'Posgrado'],
+   'region': ['Norte', 'Sur', 'Norte', 'Centro', 'Sur']
+}
+
+df_cat = pd.DataFrame(datos)
+print(df_cat)</code></pre>
+        
+        <pre class="output"><code class="language-shell">      nombre genero nivel_educativo region
+0       Ana      F    Universitario  Norte
+1    Carlos      M         Posgrado    Sur
+2     Diana      F       Secundario  Norte
+3   Eduardo      M    Universitario Centro
+4  Fernanda      F         Posgrado    Sur</code></pre>
+        
+        <pre><code class="language-python"># Convertir columna a tipo categórico
+df_cat['genero'] = df_cat['genero'].astype('category')
+df_cat['region'] = df_cat['region'].astype('category')
+
+# Verificar los tipos de datos
+print(df_cat.dtypes)
+
+# Ver las categorías
+print("\nCategorías de género:")
+print(df_cat['genero'].cat.categories)
+
+print("\nCategorías de región:")
+print(df_cat['region'].cat.categories)</code></pre>
+        
+        <pre class="output"><code class="language-shell">nombre                object
+genero              category
+nivel_educativo       object
+region              category
+dtype: object
+
+Categorías de género:
+Index(['F', 'M'], dtype='object')
+
+Categorías de región:
+Index(['Centro', 'Norte', 'Sur'], dtype='object')</code></pre>
+        
+        <div class="tip">
+           El tipo de datos <code>category</code> consume menos memoria que los tipos <code>object</code> o <code>string</code>, lo que puede ser significativo para conjuntos de datos grandes con valores repetidos.
+        </div>
+        
+        <h3>Categorías Ordinales</h3>
+        
+        <p>Las categorías ordinales son aquellas que tienen un orden natural o jerarquía. Pandas permite definir este orden al crear variables categóricas ordinales.</p>
+        
+        <pre><code class="language-python"># Definir categorías ordinales para nivel educativo
+niveles_orden = ['Primario', 'Secundario', 'Universitario', 'Posgrado']
+
+# Convertir a categórica ordinal
+df_cat['nivel_educativo'] = pd.Categorical(df_cat['nivel_educativo'], 
+                                        categories=niveles_orden, 
+                                        ordered=True)
+
+print("Tipo de dato de nivel_educativo:")
+print(df_cat['nivel_educativo'].dtype)
+
+# Comparaciones con categorías ordinales
+print("\nPersonas con nivel educativo mayor que Secundario:")
+print(df_cat[df_cat['nivel_educativo'] > 'Secundario'])
+
+# Obtener valores estadísticos
+print("\nValor mínimo (menor nivel):", df_cat['nivel_educativo'].min())
+print("Valor máximo (mayor nivel):", df_cat['nivel_educativo'].max())</code></pre>
+        
+        <pre class="output"><code class="language-shell">Tipo de dato de nivel_educativo:
+category
+
+Personas con nivel educativo mayor que Secundario:
+     nombre genero nivel_educativo region
+0       Ana      F   Universitario  Norte
+1    Carlos      M        Posgrado    Sur
+3   Eduardo      M   Universitario Centro
+4  Fernanda      F        Posgrado    Sur
+
+Valor mínimo (menor nivel): Secundario
+Valor máximo (mayor nivel): Posgrado</code></pre>
+        
+        <div class="note">
+           Las categorías ordinales permiten operaciones de comparación que no son posibles con categorías nominales (sin orden). Esto es útil para filtrar datos basados en niveles o rangos.
+        </div>
+     </div>
+
+     <div class="content-section">
+        <h2 id="correccion-tipos">Corrección de tipos de datos (Casting)</h2>
+        
+        <p>A menudo, los datos importados no tienen el tipo de datos correcto. El "casting" o conversión de tipos es esencial para asegurar que Pandas interprete correctamente los datos.</p>
+        
+        <pre><code class="language-python"># Crear un DataFrame con datos de diferentes tipos
+datos_mixtos = {
+   'edad': ['28', '34', '29', '42', '36'],  # Números como strings
+   'salario': ['85000.5', '92000.75', '78500.25', '96000.0', '89300.5'],  # Decimales como strings
+   'trabaja_remoto': ['True', 'True', 'False', 'True', 'False'],  # Booleanos como strings
+   'nivel': ['Junior', 'Senior', 'Junior', 'Senior', 'Mid']  # Categorías como strings
+}
+
+df_tipos = pd.DataFrame(datos_mixtos)
+print("DataFrame original con tipos incorrectos:")
+print(df_tipos.dtypes)
+print("\n", df_tipos.head())</code></pre>
+        
+        <pre class="output"><code class="language-shell">DataFrame original con tipos incorrectos:
+edad             object
+salario          object
+trabaja_remoto   object
+nivel            object
+dtype: object
+
+      edad    salario trabaja_remoto  nivel
+0       28    85000.5          True  Junior
+1       34   92000.75          True  Senior
+2       29   78500.25         False  Junior
+3       42    96000.0          True  Senior
+4       36    89300.5         False     Mid</code></pre>
+        
+        <pre><code class="language-python"># Conversión de tipos numéricos
+df_tipos['edad'] = df_tipos['edad'].astype(int)
+df_tipos['salario'] = df_tipos['salario'].astype(float)
+
+print("Después de convertir tipos numéricos:")
+print(df_tipos.dtypes)
+print("\nPrimera fila con valores convertidos:")
+print(df_tipos.iloc[0])</code></pre>
+        
+        <pre class="output"><code class="language-shell">Después de convertir tipos numéricos:
+edad              int64
+salario         float64
+trabaja_remoto   object
+nivel            object
+dtype: object
+
+Primera fila con valores convertidos:
+edad                      28
+salario              85000.5
+trabaja_remoto          True
+nivel                 Junior
+Name: 0, dtype: object</code></pre>
+        
+        <h3>Casting variables Categóricas nominales</h3>
+        
+        <pre><code class="language-python"># Convertir a tipo categórico
+df_tipos['nivel'] = df_tipos['nivel'].astype('category')
+
+print("Tipo de dato de nivel después de la conversión:")
+print(df_tipos['nivel'].dtype)
+
+print("\nCategorías disponibles:")
+print(df_tipos['nivel'].cat.categories)</code></pre>
+        
+        <pre class="output"><code class="language-shell">Tipo de dato de nivel después de la conversión:
+category
+
+Categorías disponibles:
+Index(['Junior', 'Mid', 'Senior'], dtype='object')</code></pre>
+        
+        <h3>Casting variables Categóricas Ordinales</h3>
+        
+        <pre><code class="language-python"># Definir un orden para los niveles
+niveles_jerarquia = ['Junior', 'Mid', 'Senior']
+
+# Convertir a categórica ordinal
+df_tipos['nivel'] = pd.Categorical(df_tipos['nivel'], 
+                                categories=niveles_jerarquia, 
+                                ordered=True)
+
+print("Tipo de dato de nivel como categórica ordinal:")
+print(df_tipos['nivel'].dtype)
+
+# Filtrando usando el orden
+print("\nEmpleados con nivel Mid o superior:")
+print(df_tipos[df_tipos['nivel'] >= 'Mid'])</code></pre>
+        
+        <pre class="output"><code class="language-shell">Tipo de dato de nivel como categórica ordinal:
+category
+
+Empleados con nivel Mid o superior:
+   edad   salario trabaja_remoto  nivel
+1    34  92000.75           True Senior
+3    42  96000.00           True Senior
+4    36  89300.50          False    Mid</code></pre>
+        
+        <h3>Casting variables booleanas</h3>
+        
+        <pre><code class="language-python"># Convertir strings 'True'/'False' a booleanos
+df_tipos['trabaja_remoto'] = df_tipos['trabaja_remoto'].astype(bool)
+
+print("Tipo de dato después de conversión a booleano:")
+print(df_tipos['trabaja_remoto'].dtype)
+
+# Filtrar usando valores booleanos
+print("\nEmpleados que trabajan remotamente:")
+print(df_tipos[df_tipos['trabaja_remoto']])</code></pre>
+        
+        <pre class="output"><code class="language-shell">Tipo de dato después de conversión a booleano:
+bool
+
+Empleados que trabajan remotamente:
+   edad    salario trabaja_remoto  nivel
+0    28   85000.50           True Junior
+1    34   92000.75           True Senior
+3    42   96000.00           True Senior</code></pre>
+        
+        <div class="warning">
+           Al convertir strings a booleanos, cualquier string no vacío se convierte a <code>True</code> y los strings vacíos se convierten a <code>False</code>. Para valores como 'True' y 'False', esto funciona como se espera, pero tenga cuidado con otros strings.
+        </div>
+        
+        <h3>Resultado Casting</h3>
+        
+        <pre><code class="language-python"># Verificar todos los tipos después de la conversión
+print("Tipos de datos finales:")
+print(df_tipos.dtypes)
+
+# Resumen estadístico ahora con los tipos correctos
+print("\nResumen estadístico con tipos corregidos:")
+print(df_tipos.describe(include='all'))</code></pre>
+        
+        <pre class="output"><code class="language-shell">Tipos de datos finales:
+edad              int64
+salario         float64
+trabaja_remoto     bool
+nivel          category
+dtype: object
+
+Resumen estadístico con tipos corregidos:
+            edad        salario trabaja_remoto   nivel
+count   5.000000       5.000000              5       5
+unique       NaN            NaN              2       3
+top          NaN            NaN           True  Junior
+freq         NaN            NaN              3       2
+mean   33.800000   88160.400000            NaN     NaN
+std     5.630275    6676.336308            NaN     NaN
+min    28.000000   78500.250000            NaN  Junior
+25%    29.000000   85000.500000            NaN  Junior
+50%    34.000000   89300.500000            NaN     Mid
+75%    36.000000   92000.750000            NaN  Senior
+max    42.000000   96000.000000            NaN  Senior</code></pre>
+        
+        <div class="tip">
+           La conversión correcta de tipos de datos no solo mejora la semántica de los datos, sino que también optimiza el rendimiento y el uso de memoria. Además, habilita operaciones específicas para cada tipo, como comparaciones para categorías ordinales y operaciones matemáticas para números.
+        </div>
+        
+        <pre><code class="language-python"># Verificar el uso de memoria antes y después del casting
+df_original = pd.DataFrame(datos_mixtos)  # Recrear el DataFrame original
+
+# Usar info() para ver el uso de memoria
+print("Uso de memoria antes de optimizar tipos:")
+df_original.info(memory_usage='deep')
+
+print("\nUso de memoria después de optimizar tipos:")
+df_tipos.info(memory_usage='deep')</code></pre>
+        
+        <pre class="output"><code class="language-shell">Uso de memoria antes de optimizar tipos:
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 4 columns):
+#   Column          Non-Null Count  Dtype 
+---  ------          --------------  ----- 
+0   edad            5 non-null      object
+1   salario         5 non-null      object
+2   trabaja_remoto  5 non-null      object
+3   nivel           5 non-null      object
+dtypes: object(4)
+memory usage: 940.0 bytes
+
+Uso de memoria después de optimizar tipos:
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 4 columns):
+#   Column          Non-Null Count  Dtype   
+---  ------          --------------  -----   
+0   edad            5 non-null      int64   
+1   salario         5 non-null      float64 
+2   trabaja_remoto  5 non-null      bool    
+3   nivel           5 non-null      category
+dtypes: bool(1), category(1), float64(1), int64(1)
+memory usage: 606.0 bytes</code></pre>
+     </div>
+
+     <div class="content-section">
+        <h2 id="datos-faltantes">Datos Faltantes (Missing data)</h2>
+        
+        <p>Los datos faltantes son un problema común en el análisis de datos. Pandas representa los valores faltantes como <code>NaN</code> (Not a Number) para tipos numéricos o <code>None</code> para otros tipos. Estas ausencias de información requieren un tratamiento especial.</p>
+        
+        <pre><code class="language-python"># Crear un DataFrame con datos faltantes
+datos_incompletos = {
+   'nombre': ['Ana', 'Carlos', 'Diana', None, 'Fernanda'],
+   'edad': [28, 34, None, 42, 36],
+   'ciudad': ['Madrid', None, 'Valencia', 'Sevilla', 'Madrid'],
+   'puntuacion': [85, 92, 78, None, 89]
+}
+
+df_na = pd.DataFrame(datos_incompletos)
+print("DataFrame con valores faltantes:")
+print(df_na)</code></pre>
+        
+        <pre class="output"><code class="language-shell">DataFrame con valores faltantes:
+     nombre   edad    ciudad  puntuacion
+0       Ana  28.00    Madrid        85.0
+1    Carlos  34.00      None        92.0
+2     Diana    NaN  Valencia        78.0
+3      None  42.00   Sevilla         NaN
+4  Fernanda  36.00    Madrid        89.0</code></pre>
+        
+        <h3>Detectar si faltan datos</h3>
+        
+        <pre><code class="language-python"># Verificar si hay valores nulos
+print("¿Hay valores nulos en el DataFrame?")
+print(df_na.isnull())
+
+# Verificar si hay valores nulos en alguna columna específica
+print("\n¿Hay valores nulos en la columna 'edad'?")
+print(df_na['edad'].isnull())
+
+# Verificar si alguna fila tiene algún valor nulo
+print("\n¿Cada fila tiene al menos un valor nulo?")
+print(df_na.isnull().any(axis=1))
+
+# Verificar si todas las columnas tienen al menos un valor nulo
+print("\n¿Cada columna tiene al menos un valor nulo?")
+print(df_na.isnull().any())</code></pre>
+        
+        <pre class="output"><code class="language-shell">¿Hay valores nulos en el DataFrame?
+   nombre   edad  ciudad  puntuacion
+0   False  False   False       False
+1   False  False    True       False
+2   False   True   False       False
+3    True  False   False        True
+4   False  False   False       False
+
+¿Hay valores nulos en la columna 'edad'?
+0    False
+1    False
+2     True
+3    False
+4    False
+Name: edad, dtype: bool
+
+¿Cada fila tiene al menos un valor nulo?
+0    False
+1     True
+2     True
+3     True
+4    False
+dtype: bool
+
+¿Cada columna tiene al menos un valor nulo?
+nombre        True
+edad          True
+ciudad        True
+puntuacion    True
+dtype: bool</code></pre>
+        
+        <h3>Número de datos faltantes</h3>
+        
+        <pre><code class="language-python"># Contar el número total de valores nulos en el DataFrame
+print(f"Número total de valores faltantes: {df_na.isnull().sum().sum()}")
+
+# Contar valores nulos por columna
+print("\nValores faltantes por columna:")
+print(df_na.isnull().sum())
+
+# Contar valores nulos por fila
+print("\nNúmero de valores faltantes por fila:")
+print(df_na.isnull().sum(axis=1))
+
+# Porcentaje de valores faltantes por columna
+print("\nPorcentaje de valores faltantes por columna:")
+print((df_na.isnull().sum() / len(df_na)) * 100)</code></pre>
+        
+        <pre class="output"><code class="language-shell">Número total de valores faltantes: 4
+
+Valores faltantes por columna:
+nombre        1
+edad          1
+ciudad        1
+puntuacion    1
+dtype: int64
+
+Número de valores faltantes por fila:
+0    0
+1    1
+2    1
+3    2
+4    0
+dtype: int64
+
+Porcentaje de valores faltantes por columna:
+nombre        20.0
+edad          20.0
+ciudad        20.0
+puntuacion    20.0
+dtype: float64</code></pre>
+        
+        <div class="note">
+           Identificar la cantidad y distribución de los valores faltantes es el primer paso para decidir cómo tratarlos. Si hay demasiados valores faltantes en una columna o fila, podría ser mejor eliminarla en lugar de intentar imputarla.
+        </div>
+        
+        <h3>Eliminar datos faltantes</h3>
+        
+        <pre><code class="language-python"># Eliminar filas con valores nulos
+df_sin_nulos_filas = df_na.dropna()
+print("DataFrame después de eliminar filas con valores nulos:")
+print(df_sin_nulos_filas)
+
+# Eliminar filas donde falten todos los valores
+df_sin_filas_all_na = df_na.dropna(how='all')
+print("\nDataFrame después de eliminar filas donde todos los valores son nulos:")
+print(df_sin_filas_all_na)  # En este caso, no hay filas donde todos los valores sean nulos
+
+# Eliminar filas donde falten más de 2 valores
+df_sin_filas_thresh = df_na.dropna(thresh=3)  # Al menos 3 valores no nulos
+print("\nDataFrame después de eliminar filas con menos de 3 valores no nulos:")
+print(df_sin_filas_thresh)
+
+# Eliminar columnas con valores nulos
+df_sin_nulos_columnas = df_na.dropna(axis=1)
+print("\nDataFrame después de eliminar columnas con valores nulos:")
+print(df_sin_nulos_columnas)  # En este caso, todas las columnas tienen al menos un valor nulo</code></pre>
+        
+        <pre class="output"><code class="language-shell">DataFrame después de eliminar filas con valores nulos:
+     nombre   edad  ciudad  puntuacion
+0       Ana  28.00  Madrid        85.0
+4  Fernanda  36.00  Madrid        89.0
+
+DataFrame después de eliminar filas donde todos los valores son nulos:
+     nombre   edad    ciudad  puntuacion
+0       Ana  28.00    Madrid        85.0
+1    Carlos  34.00      None        92.0
+2     Diana    NaN  Valencia        78.0
+3      None  42.00   Sevilla         NaN
+4  Fernanda  36.00    Madrid        89.0
+
+DataFrame después de eliminar filas con menos de 3 valores no nulos:
+     nombre   edad    ciudad  puntuacion
+0       Ana  28.00    Madrid        85.0
+1    Carlos  34.00      None        92.0
+2     Diana    NaN  Valencia        78.0
+4  Fernanda  36.00    Madrid        89.0
+
+DataFrame después de eliminar columnas con valores nulos:
+Empty DataFrame
+Columns: []
+Index: [0, 1, 2, 3, 4]</code></pre>
+        
+        <div class="warning">
+           La eliminación de filas o columnas con valores faltantes puede reducir significativamente el tamaño de tu conjunto de datos. Antes de aplicar esta técnica, asegúrate de que no estás perdiendo información valiosa. En algunos casos, es mejor reemplazar los valores faltantes en lugar de eliminarlos.
+        </div>
+        
+        <h3>Reemplazar los datos faltantes</h3>
+        
+        <pre><code class="language-python"># Reemplazar valores nulos con un valor fijo
+df_fill_fixed = df_na.copy()
+df_fill_fixed.fillna(0)  # Reemplazar con 0
+print("Reemplazar todos los valores nulos con 0:")
+print(df_fill_fixed.fillna(0))
+
+# Reemplazar valores nulos con diferentes valores por columna
+valores = {
+   'nombre': 'Desconocido',
+   'edad': df_na['edad'].mean(),  # Media de las edades
+   'ciudad': 'Sin especificar',
+   'puntuacion': df_na['puntuacion'].median()  # Mediana de las puntuaciones
+}
+df_fill_dict = df_na.copy()
+print("\nReemplazar valores nulos con valores específicos por columna:")
+print(df_fill_dict.fillna(value=valores))
+
+# Reemplazar valores nulos utilizando el método 'ffill' (forward fill)
+df_ffill = df_na.copy()
+print("\nReemplazar valores nulos con el valor anterior (forward fill):")
+print(df_ffill.fillna(method='ffill'))
+
+# Reemplazar valores nulos utilizando el método 'bfill' (backward fill)
+df_bfill = df_na.copy()
+print("\nReemplazar valores nulos con el valor siguiente (backward fill):")
+print(df_bfill.fillna(method='bfill'))</code></pre>
+        
+        <pre class="output"><code class="language-shell">Reemplazar todos los valores nulos con 0:
+     nombre   edad    ciudad  puntuacion
+0       Ana  28.00    Madrid        85.0
+1    Carlos  34.00         0        92.0
+2     Diana   0.00  Valencia        78.0
+3         0  42.00   Sevilla         0.0
+4  Fernanda  36.00    Madrid        89.0
+
+Reemplazar valores nulos con valores específicos por columna:
+       nombre   edad           ciudad  puntuacion
+0         Ana  28.00           Madrid        85.0
+1      Carlos  34.00  Sin especificar        92.0
+2       Diana  35.00         Valencia        78.0
+3 Desconocido  42.00          Sevilla        86.0
+4    Fernanda  36.00           Madrid        89.0
+
+Reemplazar valores nulos con el valor anterior (forward fill):
+     nombre   edad    ciudad  puntuacion
+0       Ana  28.00    Madrid        85.0
+1    Carlos  34.00    Madrid        92.0
+2     Diana  34.00  Valencia        78.0
+3     Diana  42.00   Sevilla        78.0
+4  Fernanda  36.00    Madrid        89.0
+
+Reemplazar valores nulos con el valor siguiente (backward fill):
+     nombre   edad    ciudad  puntuacion
+0       Ana  28.00    Madrid        85.0
+1    Carlos  34.00  Valencia        92.0
+2     Diana  42.00  Valencia        78.0
+3  Fernanda  42.00   Sevilla        89.0
+4  Fernanda  36.00    Madrid        89.0</code></pre>
+        
+        <div class="tip">
+           La elección del método para reemplazar valores faltantes depende del tipo de datos y del contexto. Por ejemplo, para series temporales, el método de propagación hacia adelante (forward fill) suele ser apropiado, mientras que para datos categóricos, reemplazar con el valor más frecuente puede ser una mejor opción.
+        </div>
+        
+        <pre><code class="language-python"># Imputación mediante interpolación para datos numéricos
+df_interp = df_na.copy()
+# Solo interpolamos columnas numéricas
+cols_num = df_na.select_dtypes(include='number').columns
+df_interp[cols_num] = df_interp[cols_num].interpolate(method='linear')
+print("Valores numéricos interpolados linealmente:")
+print(df_interp)
+
+# Método más avanzado: imputación utilizando la estrategia KNN
+# (Requiere scikit-learn)
+from sklearn.impute import KNNImputer
+import numpy as np
+
+# Crear un DataFrame solo con columnas numéricas para KNN
+df_num = df_na[['edad', 'puntuacion']].copy()
+# Configurar el imputador KNN
+imputer = KNNImputer(n_neighbors=2)
+# Aplicar la imputación
+df_num_imputed = pd.DataFrame(
+   imputer.fit_transform(df_num),
+   columns=df_num.columns,
+   index=df_num.index
+)
+print("\nValores numéricos imputados con KNN:")
+print(df_num_imputed)</code></pre>
+        
+        <pre class="output"><code class="language-shell">Valores numéricos interpolados linealmente:
+     nombre   edad    ciudad  puntuacion
+0       Ana  28.00    Madrid        85.0
+1    Carlos  34.00      None        92.0
+2     Diana  38.00  Valencia        78.0
+3      None  42.00   Sevilla        83.5
+4  Fernanda  36.00    Madrid        89.0
+
+Valores numéricos imputados con KNN:
+    edad  puntuacion
+0  28.00        85.0
+1  34.00        92.0
+2  32.00        78.0
+3  42.00        84.5
+4  36.00        89.0</code></pre>
+        
+        <div class="note">
+           La imputación mediante técnicas más sofisticadas como KNN puede proporcionar mejores estimaciones para los valores faltantes, especialmente cuando hay patrones o correlaciones entre las variables. Sin embargo, estas técnicas también pueden ser más intensivas computacionalmente.
+        </div>
+     </div>
+
+     <div class="content-section">
+        <h2 id="datos-unicos">Datos Únicos (Unique Values)</h2>
+        
+        <p>Identificar los valores únicos en un conjunto de datos es fundamental para comprender la distribución y variabilidad de las variables. Pandas proporciona métodos para obtener y analizar estos valores únicos.</p>
+        
+        <pre><code class="language-python"># Crear un DataFrame de ejemplo
+datos = {
+   'nombre': ['Ana', 'Carlos', 'Diana', 'Eduardo', 'Fernanda', 'Ana'],
+   'departamento': ['Ventas', 'IT', 'Marketing', 'IT', 'Ventas', 'Ventas'],
+   'ciudad': ['Madrid', 'Barcelona', 'Madrid', 'Valencia', 'Madrid', 'Madrid'],
+   'edad': [28, 34, 29, 42, 36, 28]
+}
+
+df = pd.DataFrame(datos)
+print("DataFrame original:")
+print(df)</code></pre>
+        
+        <pre class="output"><code class="language-shell">DataFrame original:
+     nombre departamento    ciudad  edad
+0       Ana       Ventas    Madrid    28
+1    Carlos          IT  Barcelona    34
+2     Diana    Marketing    Madrid    29
+3   Eduardo          IT   Valencia    42
+4  Fernanda       Ventas    Madrid    36
+5       Ana       Ventas    Madrid    28</code></pre>
+        
+        <pre><code class="language-python"># Obtener valores únicos en una columna
+print("Valores únicos en la columna 'departamento':")
+print(df['departamento'].unique())
+
+# Contar el número de valores únicos
+print("\nNúmero de valores únicos por columna:")
+print(df.nunique())
+
+# Contar la frecuencia de cada valor único
+print("\nFrecuencia de cada valor en 'departamento':")
+print(df['departamento'].value_counts())
+
+# Porcentaje de cada valor único
+print("\nPorcentaje de cada valor en 'departamento':")
+print(df['departamento'].value_counts(normalize=True) * 100)
+
+# Valores únicos en todas las columnas
+print("\nLista de valores únicos por columna:")
+for columna in df.columns:
+   valores = df[columna].unique()
+   print(f"{columna}: {valores}")</code></pre>
+        
+        <pre class="output"><code class="language-shell">Valores únicos en la columna 'departamento':
+['Ventas' 'IT' 'Marketing']
+
+Número de valores únicos por columna:
+nombre          5
+departamento    3
+ciudad          3
+edad            4
+dtype: int64
+
+Frecuencia de cada valor en 'departamento':
+Ventas       3
+IT           2
+Marketing    1
+Name: count, dtype: int64
+
+Porcentaje de cada valor en 'departamento':
+Ventas       50.0
+IT           33.333333
+Marketing    16.666667
+Name: count, dtype: float64
+
+Lista de valores únicos por columna:
+nombre: ['Ana' 'Carlos' 'Diana' 'Eduardo' 'Fernanda']
+departamento: ['Ventas' 'IT' 'Marketing']
+ciudad: ['Madrid' 'Barcelona' 'Valencia']
+edad: [28 34 29 42 36]</code></pre>
+        
+        <div class="tip">
+           El método <code>value_counts()</code> es especialmente útil para variables categóricas, ya que permite identificar rápidamente las categorías más frecuentes y detectar posibles desequilibrios en los datos.
+        </div>
+     </div>
+
+     <div class="content-section">
+        <h2 id="datos-duplicados">Datos Duplicados</h2>
+        
+        <p>Los datos duplicados pueden afectar significativamente los resultados del análisis. Pandas ofrece herramientas para identificar y eliminar duplicados en un DataFrame.</p>
+        
+        <pre><code class="language-python"># Crear un DataFrame con filas duplicadas
+datos_dup = {
+   'nombre': ['Ana', 'Carlos', 'Diana', 'Eduardo', 'Ana', 'Carlos'],
+   'departamento': ['Ventas', 'IT', 'Marketing', 'IT', 'Ventas', 'IT'],
+   'ciudad': ['Madrid', 'Barcelona', 'Madrid', 'Valencia', 'Madrid', 'Barcelona']
+}
+
+df_dup = pd.DataFrame(datos_dup)
+print("DataFrame con filas duplicadas:")
+print(df_dup)</code></pre>
+        
+        <pre class="output"><code class="language-shell">DataFrame con filas duplicadas:
+   nombre departamento    ciudad
+0     Ana       Ventas    Madrid
+1  Carlos           IT Barcelona
+2   Diana    Marketing    Madrid
+3 Eduardo           IT  Valencia
+4     Ana       Ventas    Madrid
+5  Carlos           IT Barcelona</code></pre>
+        
+        <pre><code class="language-python"># Identificar filas duplicadas
+print("Máscara de filas duplicadas:")
+print(df_dup.duplicated())
+
+# Mostrar solo las filas duplicadas
+print("\nFilas duplicadas:")
+print(df_dup[df_dup.duplicated()])
+
+# Contar el número de duplicados
+print("\nNúmero de filas duplicadas:", df_dup.duplicated().sum())
+
+# Eliminar duplicados y mantener la primera aparición
+df_sin_dup = df_dup.drop_duplicates()
+print("\nDataFrame sin duplicados (mantiene primera aparición):")
+print(df_sin_dup)
+
+# Eliminar duplicados y mantener la última aparición
+df_sin_dup_last = df_dup.drop_duplicates(keep='last')
+print("\nDataFrame sin duplicados (mantiene última aparición):")
+print(df_sin_dup_last)
+
+# Eliminar todos los duplicados (incluyendo el original)
+df_sin_dup_none = df_dup.drop_duplicates(keep=False)
+print("\nDataFrame sin ninguna fila duplicada (elimina todas las instancias):")
+print(df_sin_dup_none)</code></pre>
+        
+        <pre class="output"><code class="language-shell">Máscara de filas duplicadas:
+0    False
+1    False
+2    False
+3    False
+4     True
+5     True
+dtype: bool
+
+Filas duplicadas:
+   nombre departamento    ciudad
+4     Ana       Ventas    Madrid
+5  Carlos          IT  Barcelona
+
+Número de filas duplicadas: 2
+
+DataFrame sin duplicados (mantiene primera aparición):
+   nombre departamento    ciudad
+0     Ana       Ventas    Madrid
+1  Carlos           IT Barcelona
+2   Diana    Marketing    Madrid
+3 Eduardo           IT Barcelona
+
+DataFrame sin duplicados (mantiene última aparición):
+   nombre departamento    ciudad
+2   Diana    Marketing    Madrid
+3 Eduardo           IT  Valencia
+4     Ana       Ventas    Madrid
+5  Carlos           IT Barcelona
+
+DataFrame sin ninguna fila duplicada (elimina todas las instancias):
+   nombre departamento    ciudad
+2   Diana    Marketing    Madrid
+3 Eduardo           IT  Valencia</code></pre>
+        
+        <h3>Duplicados por Columna</h3>
+        
+        <pre><code class="language-python"># Identificar duplicados basados en columnas específicas
+print("Identificar duplicados solo por nombre:")
+print(df_dup.duplicated(subset=['nombre']))
+
+# Eliminar duplicados basados en columnas específicas
+df_sin_dup_cols = df_dup.drop_duplicates(subset=['nombre'])
+print("\nDataFrame sin duplicados por nombre:")
+print(df_sin_dup_cols)
+
+# Ejemplo con múltiples columnas
+print("\nIdentificar duplicados por combinación de nombre y departamento:")
+print(df_dup.duplicated(subset=['nombre', 'departamento']))
+
+# Eliminar duplicados basados en múltiples columnas
+df_sin_dup_multi = df_dup.drop_duplicates(subset=['nombre', 'departamento'])
+print("\nDataFrame sin duplicados por nombre y departamento:")
+print(df_sin_dup_multi)</code></pre>
+        
+        <pre class="output"><code class="language-shell">Identificar duplicados solo por nombre:
+0    False
+1    False
+2    False
+3    False
+4     True
+5     True
+dtype: bool
+
+DataFrame sin duplicados por nombre:
+   nombre departamento    ciudad
+0     Ana       Ventas    Madrid
+1  Carlos           IT Barcelona
+2   Diana    Marketing    Madrid
+3 Eduardo           IT  Valencia
+
+Identificar duplicados por combinación de nombre y departamento:
+0    False
+1    False
+2    False
+3    False
+4     True
+5     True
+dtype: bool
+
+DataFrame sin duplicados por nombre y departamento:
+   nombre departamento    ciudad
+0     Ana       Ventas    Madrid
+1  Carlos           IT Barcelona
+2   Diana    Marketing    Madrid
+3 Eduardo           IT  Valencia</code></pre>
+        
+        <div class="warning">
+           Al eliminar duplicados, ten en cuenta que el resultado dependerá del parámetro <code>keep</code>. Con <code>keep='first'</code> (valor predeterminado) se mantiene la primera ocurrencia, con <code>keep='last'</code> se mantiene la última, y con <code>keep=False</code> se eliminan todas las filas duplicadas, incluida la original.
+        </div>
+     </div>
+
+     <div class="content-section">
+        <h2 id="conversion-categoricas">Conversión de Variables Categóricas a Numéricas</h2>
+        
+        <p>Muchos algoritmos de aprendizaje automático requieren que los datos de entrada sean numéricos. Sin embargo, en conjuntos de datos reales, es común encontrar variables categóricas. Pandas ofrece formas de convertir estas variables categóricas a representaciones numéricas, especialmente a través de la creación de variables dummy.</p>
+        
+        <pre><code class="language-python"># Crear un DataFrame con variables categóricas
+datos_cat = {
+   'nombre': ['Ana', 'Carlos', 'Diana', 'Eduardo', 'Fernanda'],
+   'departamento': ['Ventas', 'IT', 'Marketing', 'IT', 'Ventas'],
+   'nivel_educativo': ['Universitario', 'Posgrado', 'Secundario', 'Universitario', 'Posgrado'],
+   'salario': [50000, 65000, 45000, 70000, 60000]
+}
+
+df_cat = pd.DataFrame(datos_cat)
+print("DataFrame original con variables categóricas:")
+print(df_cat)</code></pre>
+        
+        <pre class="output"><code class="language-shell">DataFrame original con variables categóricas:
+     nombre departamento  nivel_educativo  salario
+0       Ana       Ventas    Universitario    50000
+1    Carlos           IT         Posgrado    65000
+2     Diana    Marketing       Secundario    45000
+3   Eduardo           IT    Universitario    70000
+4  Fernanda       Ventas         Posgrado    60000</code></pre>
+        
+        <h3>Variables Dummy (One-Hot Encoding)</h3>
+        
+        <p>La codificación one-hot convierte cada categoría en una nueva columna binaria (0 o 1), también conocida como "variable dummy". Pandas proporciona la función <code>get_dummies()</code> para realizar esta conversión de manera sencilla.</p>
+        
+        <pre><code class="language-python"># Convertir 'departamento' a variables dummy
+dummies_depto = pd.get_dummies(df_cat['departamento'], prefix='depto')
+print("Variables dummy para 'departamento':")
+print(dummies_depto)
+
+# Concatenar las variables dummy al DataFrame original
+df_dummies = pd.concat([df_cat, dummies_depto], axis=1)
+print("\nDataFrame con variables dummy añadidas:")
+print(df_dummies)</code></pre>
+        
+        <pre class="output"><code class="language-shell">Variables dummy para 'departamento':
+   depto_IT depto_Marketing  depto_Ventas
+0         0               0             1
+1         1               0             0
+2         0               1             0
+3         1               0             0
+4         0               0             1
+
+DataFrame con variables dummy añadidas:
+     nombre departamento  nivel_educativo  salario  depto_IT  depto_Marketing  depto_Ventas
+0       Ana       Ventas    Universitario    50000        0               0             1
+1    Carlos           IT         Posgrado    65000        1               0             0
+2     Diana    Marketing       Secundario    45000        0               1             0
+3   Eduardo           IT    Universitario    70000        1               0             0
+4  Fernanda       Ventas         Posgrado    60000        0               0             1</code></pre>
+        
+        <pre><code class="language-python"># Convertir múltiples columnas a variables dummy de una vez
+df_dummies_all = pd.get_dummies(df_cat, columns=['departamento', 'nivel_educativo'])
+print("DataFrame con todas las variables categóricas convertidas a dummy:")
+print(df_dummies_all)</code></pre>
+        
+        <pre class="output"><code class="language-shell">DataFrame con todas las variables categóricas convertidas a dummy:
+     nombre  salario  departamento_IT  departamento_Marketing  departamento_Ventas  nivel_educativo_Posgrado  nivel_educativo_Secundario  nivel_educativo_Universitario
+0       Ana    50000              0                     0                   1                        0                          0                              1
+1    Carlos    65000              1                     0                   0                        1                          0                              0
+2     Diana    45000              0                     1                   0                        0                          1                              0
+3   Eduardo    70000              1                     0                   0                        0                          0                              1
+4  Fernanda    60000              0                     0                   1                        1                          0                              0</code></pre>
+        
+        <div class="note">
+           Al utilizar <code>get_dummies()</code>, la columna original se elimina solo si se especifica en el parámetro <code>columns</code>. Si se aplica directamente sobre una columna y luego se concatena, se mantienen ambas versiones.
+        </div>
+        
+        <h3>Problema de la Multicolinealidad</h3>
+        
+        <p>Cuando se utilizan variables dummy, se puede generar multicolinealidad perfecta, conocida como "trampa de las variables dummy". Para evitarla, se puede eliminar una de las categorías.</p>
+        
+        <pre><code class="language-python"># Evitar la trampa de las variables dummy eliminando una categoría
+df_dummies_drop = pd.get_dummies(df_cat, columns=['departamento'], drop_first=True)
+print("Variables dummy con eliminación de la primera categoría:")
+print(df_dummies_drop)</code></pre>
+        
+        <pre class="output"><code class="language-shell">Variables dummy con eliminación de la primera categoría:
+     nombre nivel_educativo  salario  departamento_Marketing  departamento_Ventas
+0       Ana   Universitario    50000                      0                    1
+1    Carlos        Posgrado    65000                      0                    0
+2     Diana      Secundario    45000                      1                    0
+3   Eduardo   Universitario    70000                      0                    0
+4  Fernanda        Posgrado    60000                      0                    1</code></pre>
+        
+        <div class="tip">
+           Usar <code>drop_first=True</code> elimina la primera categoría. La categoría eliminada se convierte en la "referencia" contra la cual se interpretan las demás. Por ejemplo, en este caso, "departamento_IT" se convierte en la referencia.
+        </div>
+        
+        <h3>Codificación de Variables Ordinales en Pandas</h3>
+        
+        <p>Cuando las categorías tienen un orden natural (por ejemplo, "Bajo", "Medio", "Alto"), puede ser más apropiado usar una codificación ordinal utilizando un mapeo manual.</p>
+        
+        <pre><code class="language-python"># Definir mapeo para codificación ordinal
+mapeo_nivel = {
+   'Secundario': 1,
+   'Universitario': 2,
+   'Posgrado': 3
+}
+
+# Aplicar mapeo
+df_cat['nivel_educativo_cod'] = df_cat['nivel_educativo'].map(mapeo_nivel)
+print("DataFrame con codificación ordinal para nivel educativo:")
+print(df_cat)</code></pre>
+        
+        <pre class="output"><code class="language-shell">DataFrame con codificación ordinal para nivel educativo:
+     nombre departamento nivel_educativo  salario  nivel_educativo_cod
+0       Ana       Ventas   Universitario    50000                    2
+1    Carlos           IT        Posgrado    65000                    3
+2     Diana    Marketing      Secundario    45000                    1
+3   Eduardo           IT   Universitario    70000                    2
+4  Fernanda       Ventas        Posgrado    60000                    3</code></pre>
+        
+        <h3>Usando el tipo de datos categórico de Pandas</h3>
+        
+        <p>Otra opción es utilizar el tipo de datos categórico de Pandas, que permite especificar un orden si las categorías son ordinales.</p>
+        
+        <pre><code class="language-python"># Crear una variable categórica con orden específico
+categorias = ['Secundario', 'Universitario', 'Posgrado']
+df_cat['nivel_cat'] = pd.Categorical(df_cat['nivel_educativo'], 
+                                  categories=categorias, 
+                                  ordered=True)
+
+print("Columna categórica ordinal:")
+print(df_cat[['nivel_educativo', 'nivel_cat']])
+
+# Obtener códigos numéricos de la columna categórica
+df_cat['nivel_cat_code'] = df_cat['nivel_cat'].cat.codes
+print("\nCódigos numéricos de la columna categórica:")
+print(df_cat[['nivel_educativo', 'nivel_cat', 'nivel_cat_code']])</code></pre>
+        
+        <pre class="output"><code class="language-shell">Columna categórica ordinal:
+  nivel_educativo     nivel_cat
+0   Universitario Universitario
+1        Posgrado      Posgrado
+2      Secundario    Secundario
+3   Universitario Universitario
+4        Posgrado      Posgrado
+
+Códigos numéricos de la columna categórica:
+  nivel_educativo     nivel_cat  nivel_cat_code
+0   Universitario Universitario               1
+1        Posgrado      Posgrado               2
+2      Secundario    Secundario               0
+3   Universitario Universitario               1
+4        Posgrado      Posgrado               2</code></pre>
+        
+        <div class="tip">
+           El método <code>cat.codes</code> devuelve los códigos numéricos de una columna categórica, donde los códigos se asignan según el orden de las categorías (0 para la primera categoría, 1 para la segunda, etc.).
+        </div>
+    </div>
+
+    <div class="content-section">    
+        <h2 id="material-practica">Ejercicios Prácticos</h2>
+
+        <p>Notebooks interactivos en Google Colab donde podrás practicar los conceptos básicos de Pandas para ciencia de datos. Ideal para consolidar lo aprendido en este capítulo con ejercicios prácticos y ejemplos ejecutables</p>
+
+        <ul class="resources-list">
+            <li><strong><a href="https://colab.research.google.com/drive/17M-W5vDG94XrqEV0MUKvCIWcqT-5nQGE" target="_blank">10 minutes to pandas</a></strong> - Breve tutorial de introducción a Pandas, dirigida principalmente a nuevos usuarios. </li>
+            <li><strong><a href="https://colab.research.google.com/drive/1xMwY_I3tA3gGCcCLZ7qbzvVoETmpNr4T" target="_blank">Trabajo autónomo en Pandas </a></strong></li>
+        </ul>
+
+        <h2 id="referencias">Referencias</h2>
+
+        <p>Para aprender más sobre Numpy, recomendamos consultar estos recursos oficiales:</p>
+
+        <ul class="resources-list">
+            <li><strong><a href="https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html" target="_blank">Tutoriales oficiales de Pandas</a></strong> - Esta es una guía de muchos tutoriales de pandas hechos por la comunidad, dirigida principalmente a nuevos usuarios.</li>
+            <li><strong><a href="https://s3.amazonaws.com/assets.datacamp.com/blog_assets/PandasPythonForDataScience.pdf" target="_blank">Pandas Cheatsheet</a></strong> - Hoja de referencia rápida con las funciones más utilizadas, operaciones básicas y ejemplos concisos. Perfecta para tener a mano durante la práctica o como repaso de conceptos clave.</li>
+        </ul>
+
+    </div>    
 
         <div class="content-section">
             <div class="feedback-section">
