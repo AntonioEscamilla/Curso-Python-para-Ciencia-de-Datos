@@ -1066,18 +1066,15 @@ plt.show()</code></pre>
 plt.figure(figsize=(8, 4))
 plt.plot(x, np.sin(x))
 
-# Cuadrícula básica
-plt.grid(True)
-
 # Cuadrícula con más opciones
 plt.grid(
     visible=True,            # Mostrar cuadrícula
     which='both',            # 'major', 'minor', 'both'
-    axis='both',             # 'x', 'y', 'both'
+    axis='y',                # 'x', 'y', 'both'
     linestyle='--',          # Estilo de línea: '-', '--', '-.', ':'
     linewidth=0.5,           # Ancho de línea
     alpha=0.7,               # Transparencia
-    color='gray'             # Color
+    color='red'              # Color
 )
 
 plt.title('Función Seno con Cuadrícula Personalizada')
@@ -1086,7 +1083,7 @@ plt.ylabel('sen(x)')
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/400" alt="Gráfico con cuadrícula personalizada">
+                <img src="images/matplotlib_05.png" alt="Gráfico con cuadrícula personalizada">
                 <div class="caption">Gráfico con cuadrícula personalizada</div>
             </div>
         </div>
@@ -1150,7 +1147,7 @@ plt.grid(True)
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/480" alt="Gráfico con diferentes estilos de línea">
+                <img src="images/matplotlib_06.png" alt="Gráfico con diferentes estilos de línea">
                 <div class="caption">Gráfico con diferentes estilos de línea y marcadores</div>
             </div>
             
@@ -1236,7 +1233,7 @@ fig.suptitle('Funciones Matemáticas Básicas', fontsize=16, y=1.02)
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/640" alt="Cuadrícula de subplots 2x2">
+                <img src="images/matplotlib_07.png" alt="Cuadrícula de subplots 2x2" style="width: 60%; height: auto;">
                 <div class="caption">Cuadrícula de subplots 2x2 con diferentes funciones</div>
             </div>
         </div>
@@ -1270,7 +1267,7 @@ plt.grid(True)
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/480" alt="Gráfico con rango personalizado">
+                <img src="images/matplotlib_08.png" alt="Gráfico con rango personalizado" style="width: 60%; height: auto;">
                 <div class="caption">Función seno con rango personalizado y líneas de referencia</div>
             </div>
             
@@ -1312,8 +1309,7 @@ plt.annotate('Mínimo',
 plt.annotate('Punto de inflexión',
              xy=(np.pi, 0),
              xytext=(np.pi + 0.5, 0.3),
-             arrowprops=dict(facecolor='red', shrink=0.05, width=1.5, 
-                            arrowstyle='->'))
+             arrowprops=dict(facecolor='red', linewidth=1.5, arrowstyle='->'))
 
 # Añadir una formula matemática
 plt.text(np.pi/4, -0.5, r'$\sin(x) = \frac{e^{ix} - e^{-ix}}{2i}$', 
@@ -1323,7 +1319,7 @@ plt.ylim(-1.5, 1.5)
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/480" alt="Gráfico con anotaciones de texto">
+                <img src="images/matplotlib_09.png" alt="Gráfico con anotaciones de texto" style="width: 70%; height: auto;">
                 <div class="caption">Función seno con diversas anotaciones de texto y fórmula matemática</div>
             </div>
         </div>
@@ -1358,7 +1354,7 @@ plt.grid(True)
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/480" alt="Gráfico de líneas múltiples">
+                <img src="images/matplotlib_10.png" alt="Gráfico de líneas múltiples" style="width: 70%; height: auto;">
                 <div class="caption">Gráfico de líneas con múltiples series de datos</div>
             </div>
             
@@ -1436,7 +1432,7 @@ plt.grid(axis='x', linestyle='--', alpha=0.7)
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/600" alt="Diferentes tipos de gráficos de barras">
+                <img src="images/matplotlib_11.png" alt="Diferentes tipos de gráficos de barras" style="width: 70%; height: auto;">
                 <div class="caption">Diferentes tipos de gráficos de barras: simple, agrupado, apilado y horizontal</div>
             </div>
             
@@ -1480,7 +1476,7 @@ plt.grid(True)
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/480" alt="Gráficos de dispersión">
+                <img src="images/matplotlib_12.png" alt="Gráficos de dispersión" style="width: 80%; height: auto;">
                 <div class="caption">Gráficos de dispersión con diferentes estilos y características</div>
             </div>
         </div>
@@ -1529,7 +1525,7 @@ plt.grid(True, alpha=0.3)
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/480" alt="Histogramas">
+                <img src="images/matplotlib_13.png" alt="Histogramas" style="width: 80%; height: auto;">
                 <div class="caption">Histogramas mostrando diferentes distribuciones</div>
             </div>
 
@@ -1578,7 +1574,7 @@ plt.grid(axis='y', linestyle='--', alpha=0.7)
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/480" alt="Diagramas de caja (boxplots)">
+                <img src="images/matplotlib_14.png" alt="Diagramas de caja (boxplots)" style="width: 80%; height: auto;">
                 <div class="caption">Diagramas de caja mostrando la distribución de diferentes grupos de datos</div>
             </div>
             
@@ -1626,8 +1622,8 @@ plt.tight_layout()
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/480" alt="Diagramas de violín">
-                <div class="caption">Comparación entre boxplots y diagramas de violín, y un violinplot con puntos de datos</div>
+                <img src="images/matplotlib_15.png" alt="Diagramas de violín" style="width: 80%; height: auto;">
+                <div class="caption">Comparación entre boxplots y diagramas de violín</div>
             </div>
             
             <div class="tip">
@@ -1705,7 +1701,7 @@ plt.tight_layout()
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/800" alt="Diagramas de torta">
+                <img src="images/matplotlib_16.png" alt="Diagramas de torta">
                 <div class="caption">Diferentes tipos de diagramas de torta: simple, personalizado y diagrama de dona</div>
             </div>
             
@@ -1750,28 +1746,10 @@ plt.xlabel('X')
 plt.ylabel('Y')
 plt.title('Gráfico de Líneas con Barras de Error')
 plt.grid(True)
-plt.show()
-
-# Barras de error en dos direcciones
-plt.figure(figsize=(10, 6))
-
-# Datos para el gráfico
-x = np.arange(1, 5)
-y = np.array([2, 4, 6, 8])
-xerr = np.array([0.3, 0.2, 0.4, 0.3])
-yerr = np.array([0.4, 0.5, 0.6, 0.7])
-
-# Gráfico de dispersión con barras de error en X e Y
-plt.errorbar(x, y, xerr=xerr, yerr=yerr, fmt='o', capsize=5,
-            ecolor='black', markerfacecolor='purple', markersize=8)
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.title('Gráfico de Dispersión con Barras de Error en X e Y')
-plt.grid(True)
 plt.show()</code></pre>
             
             <div class="img-container">
-                <img src="/api/placeholder/800/600" alt="Diagramas de error">
+                <img src="images/matplotlib_17.png" alt="Diagramas de error">
                 <div class="caption">Diferentes tipos de diagramas de error: en barras, en líneas, bidireccionales y asimétricos</div>
             </div>
             
