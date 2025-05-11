@@ -448,6 +448,18 @@
             background-color: rgba(255, 255, 255, 0.05);
         }
 
+        .custom-link{
+            color: var(--accent-green) !important; /* Forzar color verde */
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .custom-link:hover {
+            text-decoration: underline;
+            opacity: 0.9; 
+        }
+
         .resources-list {
             margin: 1.5rem 0;
         }
@@ -765,8 +777,6 @@
                 <li><a href="#tipos-ml">Tipos de Aprendizaje</a></li>
                 <li><a href="#flujo-trabajo">Flujo de Trabajo</a></li>
                 <li><a href="#scikit-learn">Scikit-learn</a></li>
-                <li><a href="#preparacion-datos">Preparación de Datos</a></li>
-                <li><a href="#evaluacion-modelos">Evaluación de Modelos</a></li>
                 <li><a href="#material-practica">Material de Práctica</a></li>
                 <li><a href="#referencias">Referencias</a></li>
             </ul>
@@ -824,8 +834,8 @@
             <p>En palabras de Arthur Samuel, quien acuñó el término en 1959, el Machine Learning es "el campo de estudio que da a las computadoras la capacidad de aprender sin ser programadas explícitamente".</p>
             
             <div class="img-container">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Scikit-learn_machine_learning_decision_tree.png/1200px-Scikit-learn_machine_learning_decision_tree.png" alt="Mapa de Machine Learning">
-                <div class="caption">Mapa de algoritmos de Machine Learning (Fuente: Scikit-learn)</div>
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/intro_ml.png" alt="Intro to Machine Learning">
+                <div class="caption">Introducción al Machine Learning</div>
             </div>
             
             <p>El Machine Learning se ha convertido en una herramienta indispensable en la ciencia de datos, permitiendo:</p>
@@ -841,6 +851,12 @@
             <h2 id="tipos-ml">Principales Tipos de Machine Learning</h2>
             
             <p>El aprendizaje automático se divide generalmente en tres categorías principales:</p>
+
+            <div class="img-container">
+                <img src="https://www.ntiva.com/hs-fs/hubfs/Machine%20learning%20(1).png?width=1800&height=941&name=Machine%20learning%20(1).png" alt="Tipos de Machine Learning" width="70%">
+                <div class="caption">Tipos de Machine Learning</div>
+            </div>
+            
             
             <h3>Aprendizaje Supervisado</h3>
             
@@ -871,6 +887,504 @@
                 En este curso, nos centraremos principalmente en técnicas de aprendizaje supervisado y no supervisado, que son las más utilizadas en proyectos de ciencia de datos.
             </div>
         </div>
+
+<div class="content-section">
+    <h2 id="flujo-trabajo">Flujo de Trabajo en un Proyecto de Machine Learning</h2>
+    
+    <p>Esta sección está basada en el Apéndice B (Machine Learning Project Checklist) del libro <a href="https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/" class="custom-link" target="_blank">Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow: Concepts, Tools, and Techniques to Build Intelligent Systems</a> 2nd Edition de <a href="https://twitter.com/aureliengeron" class="custom-link" target="_blank">Aurélien Géron</a>, con algunas adaptaciones y adiciones personales basadas en mi experiencia y en otros materiales didácticos.</p>
+    
+    <p>El libro está acompañado por un repositorio con Jupyter Notebooks: <a href="https://github.com/ageron/handson-ml2" class="custom-link" target="_blank">https://github.com/ageron/handson-ml2</a></p>
+    
+    <p>Un proyecto de Machine Learning sigue un proceso estructurado que permite desarrollar modelos efectivos y confiables. A continuación, presento una guía paso a paso que puede servir como lista de verificación para tus proyectos.</p>
+    
+    <div class="img-container">
+        <img src="https://miro.medium.com/max/2805/0*IT9aLhgbOVDkMNKM" alt="Flujo de trabajo en Machine Learning" width="50%">
+        <div class="caption">Flujo de trabajo típico en un proyecto de Machine Learning</div>
+    </div>
+    
+    <h3>1. Definición del Problema</h3>
+    
+    <p>El primer paso es entender claramente qué problema estamos tratando de resolver:</p>
+    
+    <ul>
+        <li><strong>Definir el objetivo</strong> en términos del negocio o aplicación</li>
+        <li><strong>Identificar cómo se usará</strong> la solución</li>
+        <li><strong>Revisar soluciones actuales</strong> (si las hay)</li>
+        <li><strong>Enmarcar el problema</strong> correctamente: supervisado/no supervisado, en línea/fuera de línea, etc.</li>
+        <li><strong>Establecer las métricas</strong> de desempeño apropiadas</li>
+        <li><strong>Determinar el desempeño mínimo</strong> necesario para alcanzar el objetivo</li>
+        <li><strong>Identificar problemas similares</strong> para reutilizar experiencias o herramientas</li>
+        <li><strong>Listar supuestos iniciales</strong> y verificarlos si es posible</li>
+    </ul>
+    
+    <div class="tip">
+        Dedicar tiempo suficiente a esta fase es crucial. Un problema bien definido está parcialmente resuelto. Es preferible invertir tiempo en esta etapa que rehacer todo el trabajo por un enfoque erróneo.
+    </div>
+    
+    <h3>2. Obtención de los Datos</h3>
+    
+    <p>Una vez definido el problema, debemos obtener los datos necesarios:</p>
+    
+    <ul>
+        <li><strong>Identificar los datos necesarios</strong> y la cantidad requerida</li>
+        <li><strong>Documentar las fuentes</strong> de los datos</li>
+        <li><strong>Verificar limitaciones legales</strong> y obtener autorizaciones si es necesario</li>
+        <li><strong>Calcular el espacio de almacenamiento</strong> requerido</li>
+        <li><strong>Obtener los datos</strong> y convertirlos a un formato manipulable</li>
+        <li><strong>Proteger información confidencial</strong> (anonimizar datos si es necesario)</li>
+        <li><strong>Verificar el tamaño y tipo de datos</strong> (series temporales, datos geoespaciales, etc.)</li>
+        <li><strong>Separar un conjunto de prueba</strong> y reservarlo sin manipular</li>
+    </ul>
+    
+    <div class="warning">
+        Es fundamental separar un conjunto de prueba al inicio del proceso y mantenerlo intacto. Si se utiliza para ajustar modelos, no será útil para evaluar el rendimiento real.
+    </div>
+</div>
+
+<div class="content-section">
+    <h3>3. Exploración de los Datos (EDA)</h3>
+    
+    <p>El análisis exploratorio de datos nos permite entender mejor la información con la que contamos:</p>
+    
+    <ul>
+        <li><strong>Crear una copia</strong> de los datos para explorarlos</li>
+        <li><strong>Utilizar Jupyter Notebooks</strong> para documentar la exploración</li>
+        <li><strong>Estudiar cada atributo</strong> y sus características:
+            <ul>
+                <li>Tipo de dato (categórico, numérico, texto, etc.)</li>
+                <li>Porcentaje de valores faltantes</li>
+                <li>Ruido y tipos de ruido presentes</li>
+                <li>Utilidad potencial para el proyecto</li>
+                <li>Distribución (gaussiana, uniforme, logarítmica, etc.)</li>
+            </ul>
+        </li>
+        <li><strong>Identificar los atributos objetivo</strong> (target) en proyectos supervisados</li>
+        <li><strong>Visualizar los datos</strong> para detectar patrones</li>
+        <li><strong>Estudiar correlaciones</strong> entre atributos</li>
+        <li><strong>Identificar transformaciones posibles</strong></li>
+        <li><strong>Documentar todos los hallazgos</strong></li>
+    </ul>
+    
+    <p>Existen varias librerías en Python que facilitan el EDA:</p>
+    
+    <pre><code class="python">
+# Ejemplos de librerías para EDA
+import pandas as pd
+import pandas_profiling  # Generación automática de reportes EDA
+import sweetviz         # Visualizaciones automáticas 
+import dtale            # Interfaz interactiva para exploración
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Ejemplo básico
+# Cargar datos
+df = pd.read_csv('datos.csv')
+
+# Resumen estadístico
+print(df.describe())
+
+# Verificar valores nulos
+print(df.isnull().sum())
+
+# Crear un informe completo con pandas_profiling
+from pandas_profiling import ProfileReport
+profile = ProfileReport(df, title="Informe de Datos")
+profile.to_file("informe_eda.html")
+    </code></pre>
+    
+    <div class="note">
+        La exploración de datos es un proceso iterativo. A medida que se adquiere más conocimiento sobre los datos, pueden surgir nuevas preguntas y vías de exploración.
+    </div>
+    
+    <h3>4. Preparación de los Datos</h3>
+    
+    <p>Esta fase es crucial para exponer mejor los patrones en los datos y prepararlos para los algoritmos de ML:</p>
+    
+    <ul>
+        <li><strong>Limpieza de datos:</strong>
+            <ul>
+                <li>Eliminar registros duplicados</li>
+                <li>Corregir o eliminar valores atípicos (cuando sea apropiado)</li>
+                <li>Manejar valores faltantes (imputación o eliminación)</li>
+            </ul>
+        </li>
+        <li><strong>Selección de atributos (Feature Selection):</strong>
+            <ul>
+                <li>Descartar atributos sin información útil</li>
+                <li>Eliminar redundancias</li>
+            </ul>
+        </li>
+        <li><strong>Ingeniería de atributos (Feature Engineering):</strong>
+            <ul>
+                <li>Discretizar variables continuas cuando sea útil</li>
+                <li>Descomponer atributos complejos (fechas, categorías, etc.)</li>
+                <li>Aplicar transformaciones matemáticas (log, sqrt, potencias)</li>
+                <li>Crear nuevos atributos derivados</li>
+            </ul>
+        </li>
+        <li><strong>Escalado de atributos (Feature Scaling):</strong>
+            <ul>
+                <li>Estandarización (z-score)</li>
+                <li>Normalización (Min-Max)</li>
+            </ul>
+        </li>
+    </ul>
+    
+    <pre><code class="python">
+# Ejemplo de preparación de datos en Python
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.impute import SimpleImputer
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
+# Definir transformadores para variables numéricas
+num_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())
+])
+
+# Definir transformadores para variables categóricas
+cat_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+])
+
+# Combinar transformadores
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', num_transformer, numerical_cols),
+        ('cat', cat_transformer, categorical_cols)
+    ])
+
+# Crear un pipeline para la preparación de datos
+data_pipeline = Pipeline(steps=[('preprocessor', preprocessor)])
+
+# Aplicar las transformaciones
+X_processed = data_pipeline.fit_transform(X)
+    </code></pre>
+    
+    <div class="tip">
+        Es recomendable encapsular todas las transformaciones en funciones o pipelines, para poder aplicarlas fácilmente a nuevos datos y asegurar la consistencia en el procesamiento.
+    </div>
+</div>
+
+<div class="content-section">
+    <h3>5. Selección de Modelos</h3>
+    
+    <p>En esta fase, evaluamos diferentes algoritmos para identificar los más prometedores:</p>
+    
+    <ul>
+        <li><strong>Entrenar modelos rápidos</strong> de diferentes categorías con parámetros estándar</li>
+        <li><strong>Medir y comparar su desempeño</strong> usando validación cruzada</li>
+        <li><strong>Analizar variables significativas</strong> para cada algoritmo</li>
+        <li><strong>Estudiar los tipos de errores</strong> que cometen los modelos</li>
+        <li><strong>Realizar rápidas iteraciones</strong> de ingeniería de atributos</li>
+        <li><strong>Seleccionar 3-5 modelos prometedores</strong>, preferiblemente con diferentes tipos de errores</li>
+    </ul>
+
+    <h3>Validación Cruzada (Cross-Validation)</h3>
+    
+    <p>Al evaluar diferentes modelos, es fundamental utilizar <strong>validación cruzada</strong> para obtener una estimación confiable de su rendimiento. Esta técnica divide los datos en varios subconjuntos o "pliegues" (folds) y realiza múltiples iteraciones de entrenamiento y evaluación.</p>
+    
+    <p>En la validación cruzada de k-pliegues (k-fold cross-validation), el proceso es el siguiente:</p>
+    
+    <ol>
+        <li>Se divide el conjunto de datos en k subconjuntos de igual tamaño</li>
+        <li>Para cada uno de los k subconjuntos:
+            <ul>
+                <li>Se entrena el modelo usando los k-1 subconjuntos restantes</li>
+                <li>Se evalúa el modelo en el subconjunto reservado</li>
+            </ul>
+        </li>
+        <li>Se promedian las k métricas de rendimiento para obtener una estimación más robusta</li>
+    </ol>
+    
+    <div class="img-container">
+        <img src="https://towardsdatascience.com/wp-content/uploads/2021/01/1AAwIlHM8TpAVe4l2FihNUQ.png" alt="Esquema de validación cruzada" width="70%">
+        <div class="caption">Ilustración del proceso de validación cruzada (Fuente: Scikit-learn)</div>
+    </div>
+    
+    <div class="note">La validación cruzada es especialmente importante cuando:
+        <ul>
+            <li>El conjunto de datos es pequeño</li>
+            <li>Se desea maximizar el uso de los datos disponibles</li>
+            <li>Se busca una estimación más precisa del rendimiento del modelo</li>
+        </ul>
+    </div>
+    
+    <pre><code class="python"># Ejemplo de evaluación de modelos en Python
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+
+# Definir modelos a evaluar
+models = {
+    'LogisticRegression': LogisticRegression(),
+    'RandomForest': RandomForestClassifier(),
+    'SVC': SVC(),
+    'KNeighbors': KNeighborsClassifier(),
+    'DecisionTree': DecisionTreeClassifier()
+}
+
+# Evaluar cada modelo con validación cruzada
+results = {}
+for name, model in models.items():
+    cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring='accuracy')
+    results[name] = {
+        'mean_score': cv_scores.mean(),
+        'std_score': cv_scores.std()
+    }
+    print(f"{name}: {cv_scores.mean():.4f} (±{cv_scores.std():.4f})")
+    </code></pre>
+    
+    <h3>6. Afinamiento de Modelos</h3>
+    
+    <p>Una vez identificados los modelos prometedores, optimizamos sus hiperparámetros:</p>
+    
+    <ul>
+        <li><strong>Ajustar hiperparámetros</strong> mediante validación cruzada</li>
+        <li><strong>Tratar las transformaciones de datos</strong> como hiperparámetros cuando sea apropiado</li>
+        <li><strong>Preferir búsqueda aleatoria</strong> (random search) sobre búsqueda en cuadrícula (grid search) para espacios grandes de hiperparámetros</li>
+        <li><strong>Explorar métodos de ensamble</strong> combinando los mejores modelos</li>
+        <li><strong>Evaluar el modelo final</strong> en el conjunto de prueba para estimar el error de generalización</li>
+    </ul>
+
+    <h3>Optimización de Hiperparámetros</h3>
+    
+    <p>Un paso crucial en el afinamiento de modelos es la <strong>optimización de hiperparámetros</strong>, que consiste en encontrar la configuración óptima de parámetros externos al modelo que afectan su rendimiento y capacidad de generalización.</p>
+    
+    <p>Los hiperparámetros son configuraciones que no se aprenden durante el entrenamiento, sino que deben especificarse previamente. Ejemplos comunes incluyen:</p>
+    
+    <ul>
+        <li><strong>Árboles de decisión/Random Forest:</strong> profundidad máxima, número mínimo de muestras por nodo, número de árboles</li>
+        <li><strong>SVM:</strong> tipo de kernel, parámetro de regularización C, gamma</li>
+        <li><strong>Redes neuronales:</strong> tasa de aprendizaje, número de capas ocultas, unidades por capa, dropout rate</li>
+        <li><strong>Gradient Boosting:</strong> tasa de aprendizaje, número de estimadores, profundidad de árboles</li>
+    </ul>
+    
+    <p>Existen principalmente dos enfoques para la búsqueda de hiperparámetros:</p>
+    
+    <table class="builtin-functions">
+        <tr>
+            <td><strong>Grid Search</strong></td>
+            <td>Evalúa exhaustivamente todas las combinaciones posibles de valores de hiperparámetros especificados. Es completa pero computacionalmente costosa cuando hay muchos parámetros.</td>
+        </tr>
+        <tr>
+            <td><strong>Random Search</strong></td>
+            <td>Muestrea aleatoriamente combinaciones del espacio de hiperparámetros. Suele ser más eficiente que Grid Search, especialmente cuando no todos los hiperparámetros son igualmente importantes.</td>
+        </tr>
+    </table>
+    
+    <pre><code class="python">
+# Ejemplo de afinamiento de hiperparámetros
+from sklearn.model_selection import RandomizedSearchCV
+from scipy.stats import randint, uniform
+
+# Definir espacio de búsqueda para Random Forest
+param_dist = {
+    'n_estimators': randint(100, 500),
+    'max_depth': randint(5, 30),
+    'min_samples_split': randint(2, 20),
+    'min_samples_leaf': randint(1, 10),
+    'max_features': ['auto', 'sqrt', 'log2', None]
+}
+
+# Crear el modelo base
+rf = RandomForestClassifier()
+
+# Configurar la búsqueda aleatoria
+random_search = RandomizedSearchCV(
+    rf, 
+    param_distributions=param_dist,
+    n_iter=100,
+    cv=5,
+    scoring='accuracy',
+    n_jobs=-1,
+    verbose=1
+)
+
+# Ejecutar la búsqueda
+random_search.fit(X_train, y_train)
+
+# Obtener y mostrar los mejores parámetros
+print("Mejores parámetros:", random_search.best_params_)
+print("Mejor puntuación:", random_search.best_score_)
+
+# Evaluar en el conjunto de prueba
+best_model = random_search.best_estimator_
+test_score = best_model.score(X_test, y_test)
+print(f"Puntuación en el conjunto de prueba: {test_score:.4f}")
+    </code></pre>
+    
+    <div class="warning">
+        El afinamiento excesivo de hiperparámetros puede llevar al sobreajuste (overfitting) en el conjunto de validación. Siempre evalúa el rendimiento final en un conjunto de prueba separado.
+    </div>
+</div>
+
+<div class="content-section">
+    <h3>7. Interpretabilidad del Modelo</h3>
+    
+    <p>Entender por qué y cómo funciona el modelo es esencial para generar confianza y detectar posibles problemas:</p>
+    
+    <ul>
+        <li><strong>Identificar las características más importantes</strong> que influyen en las predicciones</li>
+        <li><strong>Analizar la contribución</strong> de cada característica a las predicciones</li>
+        <li><strong>Evaluar las consecuencias</strong> de predicciones erróneas</li>
+        <li><strong>Examinar los tipos de errores</strong> que comete el modelo</li>
+        <li><strong>Establecer métodos para monitorear</strong> los errores en producción</li>
+        <li><strong>Entender las causas de los errores:</strong>
+            <ul>
+                <li>Valores atípicos</li>
+                <li>Clases desbalanceadas</li>
+                <li>Errores en los datos de entrada</li>
+                <li>Limitaciones del algoritmo</li>
+            </ul>
+        </li>
+    </ul>
+    
+    <pre><code class="python">
+# Ejemplo de análisis de interpretabilidad
+import shap
+import matplotlib.pyplot as plt
+from sklearn.inspection import permutation_importance
+
+# Para modelos basados en árboles, podemos ver directamente la importancia de características
+feature_importances = best_model.feature_importances_
+feature_names = X_train.columns
+
+# Visualizar importancia de características
+plt.figure(figsize=(10, 6))
+sorted_idx = np.argsort(feature_importances)
+plt.barh(range(len(sorted_idx)), feature_importances[sorted_idx])
+plt.yticks(range(len(sorted_idx)), np.array(feature_names)[sorted_idx])
+plt.xlabel('Importancia de Característica')
+plt.title('Importancia de Características del Modelo')
+plt.tight_layout()
+plt.show()
+
+# Para análisis más avanzados, podemos usar SHAP
+explainer = shap.TreeExplainer(best_model)
+shap_values = explainer.shap_values(X_test)
+
+# Resumen de valores SHAP
+shap.summary_plot(shap_values, X_test, feature_names=feature_names)
+
+# Gráfico de dependencia para ver relaciones específicas
+shap.dependence_plot("feature_name", shap_values, X_test)
+    </code></pre>
+    
+    <div class="tip">
+        La interpretabilidad es particularmente importante en aplicaciones críticas como finanzas, medicina o sistemas legales, donde las decisiones del modelo pueden tener consecuencias significativas.
+    </div>
+    
+    <h3>8. Presentación de la Solución</h3>
+    
+    <p>Comunicar efectivamente los resultados es clave para el éxito del proyecto:</p>
+    
+    <ul>
+        <li><strong>Documentar todo el proceso</strong> y las decisiones tomadas</li>
+        <li><strong>Crear una presentación clara</strong> que resalte el panorama general</li>
+        <li><strong>Explicar cómo la solución</strong> cumple con los objetivos iniciales</li>
+        <li><strong>Destacar hallazgos interesantes</strong> descubiertos durante el proceso</li>
+        <li><strong>Describir lo que funcionó y lo que no</strong> funcionó</li>
+        <li><strong>Enumerar supuestos y limitaciones</strong> del modelo</li>
+        <li><strong>Comunicar hallazgos clave</strong> mediante visualizaciones efectivas</li>
+    </ul>
+    
+    <div class="note">
+        Las visualizaciones son fundamentales para comunicar resultados complejos. Un gráfico bien diseñado puede transmitir información que sería difícil de entender en formato textual o numérico.
+    </div>
+</div>
+
+<div class="content-section">
+    <h3>9. Despliegue, Monitoreo y Mantenimiento</h3>
+    
+    <p>La implementación en producción y el mantenimiento continuo son esenciales para el éxito a largo plazo:</p>
+    
+    <ul>
+        <li><strong>Preparar la solución para producción:</strong>
+            <ul>
+                <li>Conectar a fuentes de datos en producción</li>
+                <li>Desarrollar pruebas unitarias</li>
+                <li>Optimizar el rendimiento</li>
+            </ul>
+        </li>
+        <li><strong>Implementar monitoreo continuo:</strong>
+            <ul>
+                <li>Verificar el rendimiento en tiempo real</li>
+                <li>Configurar alertas para fallos o degradación</li>
+            </ul>
+        </li>
+        <li><strong>Prevenir la degradación gradual:</strong>
+            <ul>
+                <li>Los modelos tienden a "pudrirse" con el tiempo a medida que los datos evolucionan</li>
+                <li>Establecer métricas para detectar cuándo es necesario reentrenar</li>
+            </ul>
+        </li>
+        <li><strong>Controlar la calidad de los datos de entrada</strong> para detectar anomalías o cambios</li>
+        <li><strong>Automatizar el reentrenamiento</strong> con nuevos datos (Continuous Training and Deployment)</li>
+    </ul>
+    
+    <pre><code class="python">
+# Ejemplo de cómo guardar un modelo para producción
+import joblib
+from sklearn.pipeline import Pipeline
+
+# Crear un pipeline completo que incluya preprocesamiento y modelo
+full_pipeline = Pipeline([
+    ('preprocessor', preprocessor),  # El preprocesador definido anteriormente
+    ('model', best_model)            # El mejor modelo encontrado
+])
+
+# Entrenar el pipeline completo
+full_pipeline.fit(X_train_raw, y_train)  # Datos sin preprocesar
+
+# Guardar el pipeline para uso en producción
+joblib.dump(full_pipeline, 'modelo_produccion.pkl')
+
+# Ejemplo de carga y uso del modelo en producción
+loaded_model = joblib.load('modelo_produccion.pkl')
+predictions = loaded_model.predict(new_data)  # Se puede usar directamente con datos sin procesar
+    </code></pre>
+    
+    <div class="warning">
+        Nunca subestimes la importancia del monitoreo y mantenimiento. Muchos proyectos de Machine Learning fallan no por el modelo inicial, sino por la falta de seguimiento y adaptación a los cambios en los datos y requisitos.
+    </div>
+</div>
+<div class="content-section">
+    
+    <h2 id="scikit-learn">Scikit-learn: La Librería Principal para Machine Learning en Python</h2>
+    
+    <p>Para implementar este flujo de trabajo, scikit-learn es la herramienta más utilizada en Python. Ofrece una API consistente para diferentes algoritmos y utilidades de preprocesamiento, evaluación y selección de modelos.</p>
+    
+    <div class="img-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Scikit-learn_machine_learning_decision_tree.png/1200px-Scikit-learn_machine_learning_decision_tree.png" alt="Mapa de Machine Learning">
+        <div class="caption">Mapa de algoritmos de Machine Learning (Fuente: Scikit-learn)</div>
+    </div>
+    
+    <p>En los próximos capítulos exploraremos en detalle cómo utilizar scikit-learn y otras librerías para implementar cada paso de este flujo de trabajo, centrándonos en regresión, clasificación y clustering.</p>
+    
+    <h2 id="material-practica">Material de Práctica</h2>
+    
+    <p>Para consolidar los conceptos aprendidos en este capítulo, te invito a realizar el siguiente ejercicio:</p>
+    
+    <div class="tip">
+        <strong>Ejercicio práctico:</strong> Identifica un problema de tu interés que pueda resolverse con Machine Learning. Utiliza la lista de verificación presentada para definir el problema, determinar qué datos necesitarías y qué enfoque utilizarías. Completa al menos las primeras dos etapas del flujo de trabajo (definición del problema y planificación de obtención de datos).
+    </div>
+
+    <h2 id="referencias">Referencias</h2>
+
+    <p>Para profundizar en Machine Learning con Python, recomendamos consultar estos valiosos recursos:</p>
+
+    <ul class="resources-list">
+        <li><strong><a href="https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/" target="_blank">Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow</a></strong>, un completo libro de Aurélien Géron que cubre desde los fundamentos hasta técnicas avanzadas de Machine Learning, con ejemplos prácticos y código en Python.</li>
+        <li><strong><a href="https://machinelearningmastery.com/machine-learning-in-python-step-by-step/" target="_blank">Machine Learning in Python: Step-By-Step Tutorial</a></strong>, un tutorial práctico de Jason Brownlee que guía a través del proceso completo de desarrollo de un proyecto de machine learning con Python, desde la carga de datos hasta la evaluación del modelo.</li>
+        <li><strong><a href="https://medium.com/@shvbajpai/how-to-master-python-for-machine-learning-from-scratch-a-step-by-step-tutorial-8c6569895cb0" target="_blank">How to Master Python for Machine Learning from Scratch</a></strong>, una guía detallada de Shivam Bajpai especialmente útil para principiantes que desean aprender Python específicamente para aplicaciones de machine learning, con enfoque en los conceptos fundamentales.</li>
+    </ul>
+</div>        
 
         <div class="content-section">
             <div class="feedback-section">
