@@ -1326,29 +1326,10 @@ preprocessor = ColumnTransformer(
 
 preprocessor</code></pre>
             
-<pre class="output"><code class="language-shell">ColumnTransformer(
-    transformers=[('numericas',
-                   Pipeline(steps=[('imputer',
-                                    SimpleImputer(strategy='median'))]),
-                   ['symboling', 'normalized-losses', 'wheel-base', 'length',
-                    'width', 'height', 'curb-weight', 'engine-size', 'bore',
-                    'stroke', 'compression-ratio', 'horsepower', 'peak-rpm',
-                    'city-mpg', 'highway-mpg']),
-                  ('categoricas',
-                   Pipeline(steps=[('imputer',
-                                    SimpleImputer(strategy='most_frequent')),
-                                   ('onehot',
-                                    OneHotEncoder(handle_unknown='ignore'))]),
-                   ['make', 'fuel-type', 'aspiration', 'body-style',
-                    'drive-wheels', 'engine-location', 'engine-type',
-                    'fuel-system']),
-                  ('categoricas ordinales',
-                   Pipeline(steps=[('ordenc',
-                                    OrdinalEncoder(handle_unknown='use_encoded_value',
-                                                   unknown_value=nan)),
-                                   ('imputer',
-                                    SimpleImputer(strategy='most_frequent'))]),
-                   ['num-of-doors', 'num-of-cylinders'])])</code></pre>
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/regresion_pipeline_transformer.png" alt="Diagrama de pipeline de transformación para preparación de datos en modelos de regresión">
+                <div class="caption">Diagrama del flujo de transformación de datos utilizando ColumnTransformer y Pipeline de scikit-learn.</div>
+            </div>
             
             <p>Este enfoque nos proporciona varias ventajas:</p>
             
