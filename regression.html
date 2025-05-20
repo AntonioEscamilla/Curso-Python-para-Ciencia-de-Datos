@@ -836,32 +836,1164 @@
             </ul>
             
             <h2 id="tipos-regresion">Tipos de Modelos de Regresión</h2>
-            
             <p>En este capítulo exploraremos varios tipos de modelos de regresión, cada uno con sus propias características y casos de uso:</p>
+        </div>
+
+        <div class="content-section">
+            <h2 id="flujo-regresion">Flujo de Trabajo para Problemas de Regresión</h2>
+
+            <p>Implementar un modelo de regresión efectivo requiere seguir un proceso estructurado que va desde la exploración de datos hasta la interpretación y despliegue del modelo. En esta sección, desarrollaremos un flujo de trabajo completo para problemas de regresión siguiendo estas etapas fundamentales:</p>
+
+            <ol>
+                <li><strong>Exploración y análisis de datos</strong>: Entender la estructura, distribución y relaciones en nuestros datos</li>
+                <li><strong>Preparación de datos</strong>: Limpieza, manejo de valores faltantes y transformación</li>
+                <li><strong>Ingeniería de características</strong>: Crear, seleccionar y procesar variables predictoras</li>
+                <li><strong>Selección y entrenamiento de modelos</strong>: Evaluar diferentes algoritmos de regresión</li>
+                <li><strong>Optimización de hiperparámetros</strong>: Afinar los modelos para mejor rendimiento</li>
+                <li><strong>Evaluación e interpretación</strong>: Medir la calidad predictiva y entender el modelo</li>
+                <li><strong>Implementación y monitoreo</strong>: Desplegar el modelo para su uso</li>
+            </ol>
+
+            <p>Utilizaremos un conjunto de datos de automóviles para predecir precios en base a diversas características, aplicando las técnicas más relevantes de regresión con scikit-learn y otras herramientas de Python para ciencia de datos.</p>
+
+            <div class="note">
+                Este flujo de trabajo es aplicable a prácticamente cualquier problema de regresión, con adaptaciones específicas según la naturaleza de los datos y el contexto del problema.
+            </div>
+        </div>
+
+        <div class="content-section">
+    <h2 id="introduccion-carga-datos">Etapa 1: Introducción y Carga de Datos</h2>
+    
+    <p>Utilizaremos un dataset de automóviles que contiene información sobre características técnicas y precios. Nuestro objetivo será construir un modelo que prediga el precio de un automóvil basado en sus características.</p>
+    
+    <h3>Importación de librerías básicas</h3>
+    
+    <p>Primero importamos las bibliotecas principales para análisis de datos y visualización:</p>
+    
+    <pre><code class="language-python">import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+print(pd.__version__)</code></pre>
+
+    <pre class="output"><code class="language-shell">2.2.2</code></pre>
+
+    <h3>Información del dataset</h3>
+    
+    <p>El conjunto de datos que utilizaremos contiene tres tipos de características:</p>
+    <ul>
+        <li>Especificaciones técnicas del automóvil (como dimensiones, peso, potencia, etc.)</li>
+        <li>Calificación de riesgo de seguro asignada</li>
+        <li>Pérdidas normalizadas en comparación con otros automóviles</li>
+    </ul>
+    
+    <p>Los valores faltantes están identificados con un "?" en el dataset original.</p>
+    
+    <pre><code class="language-python"># Definición de las columnas del dataset
+columnas = ['symboling', 'normalized-losses', 'make',
+           'fuel-type', 'aspiration', 'num-of-doors',
+           'body-style', 'drive-wheels', 'engine-location',
+           'wheel-base', 'length', 'width', 'height',
+           'curb-weight', 'engine-type', 'num-of-cylinders',
+           'engine-size', 'fuel-system', 'bore', 'stroke',
+           'compression-ratio', 'horsepower', 'peak-rpm',
+           'city-mpg', 'highway-mpg', 'price']
+
+# URL de los datos
+url_data = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/auto_imports.csv'
+
+# Carga de datos con manejo de valores faltantes
+auto_df = pd.read_csv(url_data,
+                      header=None,
+                      names=columnas,
+                      na_values='?')
+
+# Ver 5 registros aleatorios
+auto_df.sample(5)</code></pre>
+    
+    <div class="img-container">
+        <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/tabla%201.png" alt="Muestra de registros del dataset de automóviles">
+        <div class="caption">Muestra aleatoria de 5 registros del dataset de automóviles</div>
+    </div>
+    
+    <pre><code class="language-python"># Tamaño del dataset
+print(f'El tamaño del conjunto de datos es {auto_df.shape} \n')
+
+# Información del dataset
+auto_df.info()</code></pre>
+    
+    <pre class="output"><code class="language-shell">El tamaño del conjunto de datos es (205, 26) 
+
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 205 entries, 0 to 204
+Data columns (total 26 columns):
+ #   Column             Non-Null Count  Dtype  
+---  ------             --------------  -----  
+ 0   symboling          205 non-null    int64  
+ 1   normalized-losses  164 non-null    float64
+ 2   make               205 non-null    object 
+ 3   fuel-type          205 non-null    object 
+ 4   aspiration         205 non-null    object 
+ 5   num-of-doors       203 non-null    object 
+ 6   body-style         205 non-null    object 
+ 7   drive-wheels       205 non-null    object 
+ 8   engine-location    205 non-null    object 
+ 9   wheel-base         205 non-null    float64
+ 10  length             205 non-null    float64
+ 11  width              205 non-null    float64
+ 12  height             205 non-null    float64
+ 13  curb-weight        205 non-null    int64  
+ 14  engine-type        205 non-null    object 
+ 15  num-of-cylinders   205 non-null    object 
+ 16  engine-size        205 non-null    int64  
+ 17  fuel-system        205 non-null    object 
+ 18  bore               201 non-null    float64
+ 19  stroke             201 non-null    float64
+ 20  compression-ratio  205 non-null    float64
+ 21  horsepower         203 non-null    float64
+ 22  peak-rpm           203 non-null    float64
+ 23  city-mpg           205 non-null    int64  
+ 24  highway-mpg        205 non-null    int64  
+ 25  price              201 non-null    float64
+dtypes: float64(11), int64(5), object(10)
+memory usage: 41.8+ KB</code></pre>
+    
+    <div class="tip">
+        Observamos que algunas columnas tienen valores faltantes. Es importante identificar estos valores y planificar una estrategia para manejarlos durante la fase de preprocesamiento.
+    </div>
+</div>
+
+        <div class="content-section">
+    <h2 id="preparacion-datos">Etapa 2: Preparación de Datos</h2>
+    
+    <h3>Análisis de datos faltantes</h3>
+    
+    <p>Es fundamental identificar los valores faltantes en nuestro dataset para decidir la mejor estrategia de manejo. Durante la carga, reemplazamos los símbolos "?" con NaN para facilitar su detección:</p>
+    
+    <pre><code class="language-python"># Verificación de valores faltantes por columna
+auto_df.isna().sum()</code></pre>
+    
+    <pre class="output"><code class="language-shell">symboling            0
+normalized-losses   41
+make                 0
+fuel-type            0
+aspiration           0
+num-of-doors         2
+body-style           0
+drive-wheels         0
+engine-location      0
+wheel-base           0
+length               0
+width                0
+height               0
+curb-weight          0
+engine-type          0
+num-of-cylinders     0
+engine-size          0
+fuel-system          0
+bore                 4
+stroke               4
+compression-ratio    0
+horsepower           2
+peak-rpm             2
+city-mpg             0
+highway-mpg          0
+price                4
+dtype: int64</code></pre>
+    
+    <p>Podemos ver que algunas columnas tienen valores faltantes, siendo "normalized-losses" la que más presenta (41 valores). Durante el feature engineering, implementaremos estrategias para manejar estos valores.</p>
+    
+    <h3>Conversión de variables a su formato correcto</h3>
+    
+    <p>Vamos a convertir las variables categóricas al tipo de dato adecuado, distinguiendo entre categóricas nominales y ordinales:</p>
+    
+    <pre><code class="language-python"># Corregir las variables categóricas
+cols_categoricas = ["make", "fuel-type", "aspiration", "num-of-doors",
+                    "body-style", "drive-wheels", "engine-location",
+                    "engine-type", "num-of-cylinders", "fuel-system"]
+
+auto_df[cols_categoricas] = auto_df[cols_categoricas].astype("category")
+
+# Corregir variables categóricas ordinales
+auto_df["num-of-doors"] = pd.Categorical(auto_df["num-of-doors"],
+                                         categories=["two","four"],
+                                         ordered=True)
+
+auto_df["num-of-cylinders"] = pd.Categorical(auto_df["num-of-cylinders"],
+                                             categories=["two", "three", "four",
+                                                         "five", "six", "eight",
+                                                         "twelve"],
+                                             ordered=True)
+
+# Verificamos la información del dataset después de las conversiones
+auto_df.info()</code></pre>
+    
+    <pre class="output"><code class="language-shell">&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 205 entries, 0 to 204
+Data columns (total 26 columns):
+ #   Column             Non-Null Count  Dtype   
+---  ------             --------------  -----   
+ 0   symboling          205 non-null    int64   
+ 1   normalized-losses  164 non-null    float64 
+ 2   make               205 non-null    category
+ 3   fuel-type          205 non-null    category
+ 4   aspiration         205 non-null    category
+ 5   num-of-doors       203 non-null    category
+ 6   body-style         205 non-null    category
+ 7   drive-wheels       205 non-null    category
+ 8   engine-location    205 non-null    category
+ 9   wheel-base         205 non-null    float64 
+ 10  length             205 non-null    float64 
+ 11  width              205 non-null    float64 
+ 12  height             205 non-null    float64 
+ 13  curb-weight        205 non-null    int64   
+ 14  engine-type        205 non-null    category
+ 15  num-of-cylinders   205 non-null    category
+ 16  engine-size        205 non-null    int64   
+ 17  fuel-system        205 non-null    category
+ 18  bore               201 non-null    float64 
+ 19  stroke             201 non-null    float64 
+ 20  compression-ratio  205 non-null    float64 
+ 21  horsepower         203 non-null    float64 
+ 22  peak-rpm           203 non-null    float64 
+ 23  city-mpg           205 non-null    int64   
+ 24  highway-mpg        205 non-null    int64   
+ 25  price              201 non-null    float64 
+dtypes: category(10), float64(11), int64(5)
+memory usage: 28.6 KB</code></pre>
+    
+    <p>Ahora obtenemos algunos estadísticos descriptivos básicos del conjunto de datos:</p>
+    
+    <pre><code class="language-python"># Descripción estadística de las variables numéricas
+auto_df.describe()</code></pre>
+    
+    <div class="img-container">
+        <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/tabla%202.png" alt="Estadísticos descriptivos del dataset">
+        <div class="caption">Estadísticos descriptivos de las variables numéricas del dataset</div>
+    </div>
+    
+    <p>Las estadísticas descriptivas nos dan una idea de las distribuciones y rangos de nuestras variables numéricas. Por ejemplo, vemos que el precio (nuestra variable objetivo) varía desde 5,118 hasta 45,400 dólares, con un promedio de 13,207 dólares.</p>
+    
+    <div class="warning">
+        El análisis descriptivo es clave para detectar posibles problemas con los datos antes de entrenar un modelo. Por ejemplo, rangos extremadamente amplios pueden indicar outliers, y variables altamente sesgadas podrían requerir transformaciones.
+    </div>
+</div>
+
+        <div class="content-section">
+            <h2 id="analisis-univariable-bivariable">Etapa 3: Análisis Univariable y Bivariable</h2>
             
-            <h3>Regresión Lineal Simple</h3>
+            <h3>Análisis de variables categóricas</h3>
             
-            <p>La regresión lineal simple modela la relación entre una variable independiente (X) y una variable dependiente (y) mediante una línea recta. La ecuación que describe este modelo es:</p>
+            <p>En el análisis univariable examinamos cada variable individualmente para entender su distribución y detectar posibles problemas. Para las variables categóricas, verificamos su frecuencia:</p>
             
-            <p style="text-align: center; font-style: italic; margin: 1.5rem 0;">y = β₀ + β₁X + ε</p>
+<pre><code class="language-python">cols_cate_problemas = ["make", "fuel-system", "num-of-cylinders"]
+
+for col in cols_cate_problemas:
+    print(auto_df[col].value_counts())
+    print("")</code></pre>
             
-            <p>Donde:</p>
+<pre class="output"><code class="language-shell">make
+toyota         32
+nissan         18
+mazda          17
+honda          13
+mitsubishi     13
+subaru         12
+volkswagen     12
+peugot         11
+volvo          11
+audi           10
+bmw             8
+dodge           8
+mercedes-benz   8
+plymouth        7
+saab            6
+porsche         5
+jaguar          3
+chevrolet       3
+alfa-romeo      3
+isuzu           3
+mercury         1
+renault         1
+Name: count, dtype: int64
+
+fuel-system
+mpfi    94
+2bbl    66
+idi     20
+1bbl    11
+spdi     3
+4bbl     3
+mfi      1
+spfi     1
+Name: count, dtype: int64
+
+num-of-cylinders
+four     94
+six      40
+five     11
+eight     5
+two       4
+three     1
+twelve    1
+Name: count, dtype: int64</code></pre>
+            
+            <h3>Problemas identificados en variables categóricas</h3>
+            
+            <p>Algunos valores categóricos solo están presentes en un solo registro, lo que podría causar problemas en los encoders:</p>
             <ul>
-                <li><strong>y</strong>: Variable dependiente (lo que queremos predecir)</li>
-                <li><strong>β₀</strong>: Intercepto (valor de y cuando x = 0)</li>
-                <li><strong>β₁</strong>: Pendiente (cambio en y por unidad de cambio en X)</li>
-                <li><strong>X</strong>: Variable independiente (característica predictora)</li>
-                <li><strong>ε</strong>: Error aleatorio (parte que el modelo no puede explicar)</li>
+                <li>make = mercury o renault</li>
+                <li>fuel-system = mfi o spfi</li>
+                <li>num-of-cylinders = three o twelve</li>
             </ul>
             
-            <h3>Regresión Lineal Múltiple</h3>
+            <p>Este desequilibrio tendrá que ser considerado durante el feature engineering para evitar problemas de generalización.</p>
             
-            <p>La regresión lineal múltiple extiende el concepto a múltiples variables independientes:</p>
+            <h3>Scatter Plots para variables numéricas vs precio</h3>
             
-            <p style="text-align: center; font-style: italic; margin: 1.5rem 0;">y = β₀ + β₁X₁ + β₂X₂ + ... + βₙXₙ + ε</p>
+            <p>Ahora analizamos la relación entre las variables numéricas y nuestra variable objetivo (precio):</p>
+            
+<pre><code class="language-python"># Listado de variables numéricas excepto price
+cols_numericas = (auto_df
+                  .drop(columns=["price"])
+                  .select_dtypes(include=np.number)
+                  .columns.tolist())
+print(cols_numericas)
+print(len(cols_numericas))</code></pre>
+            
+<pre class="output"><code class="language-shell">['symboling', 'normalized-losses', 'wheel-base', 'length', 'width', 'height', 'curb-weight', 'engine-size', 'bore', 'stroke', 'compression-ratio', 'horsepower', 'peak-rpm', 'city-mpg', 'highway-mpg']
+15</code></pre>
+            
+<pre><code class="language-python"># Crear scatter plots: 5 filas y 3 columnas
+fig, axes = plt.subplots(5, 3, figsize=(15, 15))
+axes = axes.flatten()
+
+for i, col in enumerate(cols_numericas):
+    sns.regplot(data=auto_df,
+                x=col, y="price",
+                ax=axes[i])
+    axes[i].set_title(col)
+
+plt.tight_layout()
+plt.show()</code></pre>
+            
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/regresion%201.png" alt="Scatter plots de variables numéricas vs precio" width="70%">
+                <div class="caption">Scatter plots que muestran la relación entre cada variable numérica y el precio</div>
+            </div>
+            
+            <p>Estos gráficos nos permiten identificar visualmente relaciones entre las variables predictoras y el precio. Por ejemplo, podemos observar correlaciones positivas fuertes entre el precio y variables como 'engine-size', 'curb-weight' y 'width', mientras que hay correlaciones negativas con 'city-mpg' y 'highway-mpg'.</p>
+            
+            <h3>Correlación entre variables numéricas</h3>
+            
+<pre><code class="language-python"># Matriz de correlación
+automobile_corr = auto_df.corr(numeric_only=True)
+fig, ax = plt.subplots(figsize=(12, 10))
+sns.heatmap(automobile_corr, annot=True, fmt=".2f");</code></pre>
+            
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/regresion%202.png" alt="Matriz de correlación" width="70%">
+                <div class="caption">Matriz de correlación de las variables numéricas</div>
+            </div>
+            
+            <p>La matriz de correlación confirma nuestras observaciones de los scatter plots y proporciona una medida cuantitativa de la fuerza de cada relación. Por ejemplo:</p>
+            <ul>
+                <li>Las variables 'engine-size' y 'price' tienen una correlación de aproximadamente 0.87, indicando una fuerte relación lineal positiva.</li>
+                <li>Las variables 'city-mpg' y 'price' tienen una correlación de aproximadamente -0.69, señalando una relación lineal negativa moderada a fuerte.</li>
+            </ul>
             
             <div class="note">
-                Los modelos de regresión, aunque parecen simples, son extremadamente útiles en aplicaciones del mundo real. Incluso en la era del aprendizaje profundo, la regresión lineal sigue siendo una herramienta fundamental por su interpretabilidad y eficiencia.
+                También observamos correlaciones fuertes entre predictores (como entre 'length' y 'curb-weight'), lo que podría indicar multicolinealidad. Esta información será importante al seleccionar modelos, ya que algunos son más susceptibles a problemas de multicolinealidad que otros.
+            </div>
+            
+            <h3>Visualización de variables categóricas vs precio</h3>
+            
+<pre><code class="language-python"># Boxplots para variables categóricas vs precio
+fig, axes = plt.subplots(5, 2, figsize=(15, 15))
+axes = axes.flatten()
+
+for i, col in enumerate(cols_categoricas):
+    sns.boxplot(data=auto_df,
+                x="price", y=col,
+                ax=axes[i])
+    axes[i].set_title(col)
+
+plt.tight_layout()
+plt.show()</code></pre>
+            
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/regresion%203.png" alt="Boxplots de variables categóricas vs precio" width="70%">
+                <div class="caption">Boxplots que muestran la distribución de precios por categoría para cada variable categórica</div>
+            </div>
+            
+            <p>Hay variables categóricas que permiten distinguir claramente entre grupos de valores de precio. Por ejemplo:</p>
+            <ul>
+                <li>La variable 'engine-location' muestra una diferencia significativa en los precios entre los dos grupos ("front" y "rear"), lo que sugiere que es una variable informativa.</li>
+                <li>Por el contrario, la variable 'num-of-doors' no muestra una distinción clara en los precios, lo que indica que podría ser menos relevante para la predicción.</li>
+            </ul>
+            
+            <div class="tip">
+                Para medir formalmente la relación entre variables categóricas y una variable numérica como el precio, podríamos utilizar la prueba ANOVA (Analysis of Variance). Esta prueba nos diría si las diferencias entre los grupos son estadísticamente significativas.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 id="feature-engineering">Etapa 4: Feature Engineering</h2>
+            
+            <p>El feature engineering es fundamental para preparar nuestros datos para el modelado. En este caso, implementaremos estrategias para manejar valores faltantes y transformar variables categóricas.</p>
+            
+            <h3>Definición de pipelines de transformación</h3>
+            
+            <p>Utilizaremos scikit-learn para crear pipelines de preprocesamiento que aplicarán diferentes transformaciones según el tipo de variable:</p>
+            
+<pre><code class="language-python"># Librerías para el preprocesamiento de datos
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OrdinalEncoder
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+
+# Definición de columnas por tipo
+cols_numericas = ['symboling','normalized-losses',
+                 'wheel-base','length', 'width',
+                 'height', 'curb-weight',
+                 'engine-size', 'bore', 'stroke',
+                 'compression-ratio', 'horsepower',
+                 'peak-rpm','city-mpg',
+                 'highway-mpg']
+
+cols_categoricas = ["make", "fuel-type", "aspiration",
+                   "body-style", "drive-wheels",
+                   "engine-location", "engine-type",
+                   "fuel-system"]
+
+cols_categoricas_ord = ["num-of-doors", "num-of-cylinders"]</code></pre>
+            
+            <p>A continuación, definimos tres pipelines diferentes:</p>
+            
+<pre><code class="language-python"># Creación de pipelines de transformación
+# OneHotEncoder para variables categóricas nominales
+# OrdinalEncoder para variables categóricas ordinales
+
+numeric_pipe = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median'))])
+
+categorical_pipe = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))])
+
+categorical_ord_pipe = Pipeline(steps=[
+    ('ordenc', OrdinalEncoder(handle_unknown='use_encoded_value',
+                             unknown_value=np.nan)),
+    ('imputer', SimpleImputer(strategy='most_frequent'))])
+
+# Combinación de pipelines en un ColumnTransformer
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('numericas', numeric_pipe, cols_numericas),
+        ('categoricas', categorical_pipe, cols_categoricas),
+        ('categoricas ordinales', categorical_ord_pipe, cols_categoricas_ord)
+    ])
+
+preprocessor</code></pre>
+            
+<pre class="output"><code class="language-shell">ColumnTransformer(
+    transformers=[('numericas',
+                   Pipeline(steps=[('imputer',
+                                    SimpleImputer(strategy='median'))]),
+                   ['symboling', 'normalized-losses', 'wheel-base', 'length',
+                    'width', 'height', 'curb-weight', 'engine-size', 'bore',
+                    'stroke', 'compression-ratio', 'horsepower', 'peak-rpm',
+                    'city-mpg', 'highway-mpg']),
+                  ('categoricas',
+                   Pipeline(steps=[('imputer',
+                                    SimpleImputer(strategy='most_frequent')),
+                                   ('onehot',
+                                    OneHotEncoder(handle_unknown='ignore'))]),
+                   ['make', 'fuel-type', 'aspiration', 'body-style',
+                    'drive-wheels', 'engine-location', 'engine-type',
+                    'fuel-system']),
+                  ('categoricas ordinales',
+                   Pipeline(steps=[('ordenc',
+                                    OrdinalEncoder(handle_unknown='use_encoded_value',
+                                                   unknown_value=nan)),
+                                   ('imputer',
+                                    SimpleImputer(strategy='most_frequent'))]),
+                   ['num-of-doors', 'num-of-cylinders'])])</code></pre>
+            
+            <p>Este enfoque nos proporciona varias ventajas:</p>
+            
+            <ul>
+                <li><strong>Manejo consistente de datos faltantes</strong>: Usamos la mediana para variables numéricas y el valor más frecuente para categóricas.</li>
+                <li><strong>Codificación apropiada</strong>: OneHotEncoder para variables categóricas nominales y OrdinalEncoder para variables ordinales.</li>
+                <li><strong>Robustez a valores desconocidos</strong>: Configuramos los encoders para manejar valores no vistos durante el entrenamiento.</li>
+                <li><strong>Reproducibilidad</strong>: El pipeline garantiza que las mismas transformaciones se apliquen a los datos de entrenamiento y prueba.</li>
+            </ul>
+            
+            <div class="note">
+                Trabajar con pipelines mejora significativamente la reproducibilidad y evita el data leakage, que ocurre cuando información del conjunto de prueba influye en el preprocesamiento. Además, facilita la aplicación de las mismas transformaciones a nuevos datos durante la fase de predicción.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 id="modelos-regresion">Etapa 5: Modelos de Regresión</h2>
+            
+            <p>En esta etapa, implementaremos y evaluaremos diversos modelos de regresión para predecir el precio de los automóviles. Comenzaremos dividiendo nuestros datos en conjuntos de entrenamiento y prueba, y luego probaremos diferentes algoritmos para identificar el más efectivo.</p>
+            
+            <h3>Metodología de selección de modelos</h3>
+            
+            <p>Para una selección eficiente de modelos, seguiremos esta metodología:</p>
+            
+            <ol>
+                <li>Dividir los datos en conjuntos de entrenamiento (80%) y prueba (20%)</li>
+                <li>Evaluar múltiples modelos inicialmente para obtener un baseline</li>
+                <li>Seleccionar los modelos con mejor rendimiento para optimización posterior</li>
+                <li>Realizar validación cruzada para estimar el desempeño generalizado</li>
+                <li>Optimizar hiperparámetros para los modelos más prometedores</li>
+                <li>Seleccionar el modelo final basado en desempeño y estabilidad</li>
+            </ol>
+            
+            <h3>División del dataset</h3>
+            
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+X_features = auto_df.drop('price', axis='columns')
+y_target = auto_df['price']
+
+X_train, X_test, y_train, y_test = train_test_split(X_features,
+                                                    y_target,
+                                                    test_size=0.2,
+                                                    random_state=42)
+
+print(X_train.shape, y_train.shape)
+print(X_test.shape, y_test.shape)</code></pre>
+            
+<pre class="output"><code class="language-shell">(160, 25) (160,)
+(41, 25) (41,)</code></pre>
+            
+            <h3>Implementación de funciones de evaluación</h3>
+            
+            <p>Definimos funciones para entrenar y evaluar modelos de forma consistente:</p>
+            
+<pre><code class="language-python">from sklearn.metrics import mean_absolute_error
+from sklearn.dummy import DummyRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Lasso
+from sklearn.linear_model import Ridge
+from sklearn.linear_model import ElasticNet
+from sklearn.svm import SVR
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.tree import DecisionTreeRegressor
+import warnings
+
+warnings.filterwarnings("ignore")
+
+# Diccionario para almacenar resultados
+result_dict = {}
+
+# Funciones de ayuda para entrenar y evaluar modelos
+def entrenar_modelo(modelo,
+                   preprocessor,
+                   x_data,
+                   y_data,
+                   test_frac=0.2,
+                   ):
+    """
+    Función para entrenar y evaluar un modelo
+    Args:
+        modelo: modelo de ML
+        preprocessor: preprocesador de datos
+        x_data: datos de entrada
+        y_data: datos de salida
+        test_frac: fracción de datos para el conjunto de prueba
+    Returns:
+        dict: diccionario con los puntajes de entrenamiento y prueba
+    """
+    # Dividir el dataset en entrenamiento y prueba
+    x_train, x_test, y_train, y_test = train_test_split(x_data, y_data,
+                                                       random_state=42,
+                                                       test_size=test_frac)
+
+    # Crear el pipeline con el preprocesador y el modelo
+    regressor_pipe = Pipeline(steps=[("preprocessor", preprocessor),
+                                    ("model", modelo)])
+
+    # Entrenar el pipeline de regresión
+    model = regressor_pipe.fit(x_train, y_train)
+    y_pred_train = model.predict(x_train)
+
+    # Predecir con el pipeline de regresión
+    y_pred = model.predict(x_test)
+
+    train_score = mean_absolute_error(y_train, y_pred_train)
+    test_score = mean_absolute_error(y_test, y_pred)
+
+    print(f"Entrenamiento_score : {train_score}")
+    print(f"Prueba_score : {test_score}")
+
+    return {
+        'Entrenamiento_score': train_score,
+        'Prueba_score': test_score
+    }
+
+# Función para comparar los resultados de los modelos
+def compare_results():
+    for key in result_dict:
+        print('Regresión: ', key)
+        print('Entrenamiento score', result_dict[key]['Entrenamiento_score'])
+        print('Prueba score', result_dict[key]['Prueba_score'])
+        print()</code></pre>
+            
+            <h3>Evaluación de modelos</h3>
+            
+            <p>Ahora implementaremos y evaluaremos varios modelos de regresión, comenzando con un modelo base simple:</p>
+            
+<pre><code class="language-python"># Modelo Dummy (línea base)
+result_dict['Dummy Regressor'] = entrenar_modelo(DummyRegressor(strategy='median'), preprocessor, X_train, y_train)</code></pre>
+            
+<pre class="output"><code class="language-shell">Entrenamiento_score : 4968.09375
+Prueba_score : 5037.7439024390245</code></pre>
+            
+<pre><code class="language-python"># Regresión lineal
+result_dict['Linear Regressor'] = entrenar_modelo(LinearRegression(), preprocessor, X_train, y_train)</code></pre>
+            
+<pre class="output"><code class="language-shell">Entrenamiento_score : 876.91871739725
+Prueba_score : 2140.5372525530713</code></pre>
+            
+<pre><code class="language-python"># ElasticNet
+result_dict['Elasticnet'] = entrenar_modelo(ElasticNet(alpha=1, l1_ratio=0.5, max_iter=100000, warm_start=True),
+                                            preprocessor,
+                                            X_train,
+                                            y_train)</code></pre>
+            
+<pre class="output"><code class="language-shell">Entrenamiento_score : 1823.047871927852
+Prueba_score : 2310.247878703888</code></pre>
+            
+<pre><code class="language-python"># SVR (Support Vector Regression)
+result_dict['SVR'] = entrenar_modelo(SVR(kernel='linear', epsilon=0.05, C=0.3),
+                                     preprocessor,
+                                     X_train,
+                                     y_train)</code></pre>
+            
+<pre class="output"><code class="language-shell">Entrenamiento_score : 1973.1475811870937
+Prueba_score : 2428.6209834285455</code></pre>
+            
+<pre><code class="language-python"># KNN (K-Nearest Neighbors)
+result_dict['KNN'] = entrenar_modelo(KNeighborsRegressor(n_neighbors=10),
+                                     preprocessor,
+                                     X_train,
+                                     y_train)</code></pre>
+            
+<pre class="output"><code class="language-shell">Entrenamiento_score : 2319.37421875
+Prueba_score : 2659.3841463414633</code></pre>
+            
+<pre><code class="language-python"># Decision Tree
+result_dict['Decision Tree'] = entrenar_modelo(DecisionTreeRegressor(max_depth=2),
+                                              preprocessor,
+                                              X_train,
+                                              y_train)</code></pre>
+            
+<pre class="output"><code class="language-shell">Entrenamiento_score : 2095.9670005416547
+Prueba_score : 2509.0853658536585</code></pre>
+            
+<pre><code class="language-python"># Comparar todos los resultados
+compare_results()</code></pre>
+            
+<pre class="output"><code class="language-shell">Regresión:  Dummy Regressor
+Entrenamiento score 4968.09375
+Prueba score 5037.7439024390245
+
+Regresión:  Linear Regressor
+Entrenamiento score 876.91871739725
+Prueba score 2140.5372525530713
+
+Regresión:  Elasticnet
+Entrenamiento score 1823.047871927852
+Prueba score 2310.247878703888
+
+Regresión:  SVR
+Entrenamiento score 1973.1475811870937
+Prueba score 2428.6209834285455
+
+Regresión:  KNN
+Entrenamiento score 2319.37421875
+Prueba score 2659.3841463414633
+
+Regresión:  Decision Tree
+Entrenamiento score 2095.9670005416547
+Prueba score 2509.0853658536585</code></pre>
+            
+            <h3>Visualización comparativa de modelos</h3>
+            
+<pre><code class="language-python"># Visualización comparativa de resultados
+# Crear un diccionario solo con los resultados de prueba de cada modelo
+nombre_modelos = result_dict.keys()
+resultados_train = {}  # crear diccionario vacío
+resultados_test = {}   # crear diccionario vacío
+
+for nombre in nombre_modelos:
+    resultados_train[nombre] = result_dict[nombre]['Entrenamiento_score']
+    resultados_test[nombre] = result_dict[nombre]['Prueba_score']
+
+df_comparacion = pd.DataFrame([resultados_train, resultados_test],
+                             index=['train', 'test'])
+
+# Plot the bar chart
+fig, ax = plt.subplots(figsize=(10, 4))
+df_comparacion.T.plot(kind='bar', ax=ax)
+
+# Adjust the layout
+ax.set_ylabel('MAE score')
+ax.set_title('Comparación de Modelos [MAE] ')
+
+# Set the x-tick labels inside the bars and rotate by 90 degrees
+ax.set_xticks(range(len(df_comparacion.columns)))
+ax.set_xticklabels([])
+
+# Draw the x-tick labels inside the bars rotated by 45 degrees
+for i, label in enumerate(df_comparacion.columns):
+    bar_center = (df_comparacion.loc['train', label] +
+                 df_comparacion.loc['test', label]) / 2
+    ax.text(i, bar_center, label, ha='center',
+           va='center_baseline', rotation=45)
+
+# Plotear línea en el resultado de DummyRegressor
+ax.axhline(df_comparacion['Dummy Regressor']['test'],
+          color='red',
+          linestyle='--',
+          alpha=0.8)
+
+plt.tight_layout()
+plt.show()</code></pre>
+            
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/regresion%204.png" alt="Comparación de modelos de regresión">
+                <div class="caption">Comparación de error (MAE) en entrenamiento y prueba para diferentes modelos</div>
+            </div>
+            
+            <div class="note">
+                Basándonos en los resultados, observamos que:
+                <ul>
+                    <li>Todos los modelos superan significativamente al modelo base (Dummy Regressor).</li>
+                    <li>La regresión lineal tiene el mejor rendimiento en el conjunto de entrenamiento, pero muestra una diferencia considerable entre entrenamiento y prueba, lo que podría indicar sobreajuste.</li>
+                    <li>ElasticNet muestra un buen balance entre rendimiento en entrenamiento y prueba, sugiriendo mejor generalización.</li>
+                    <li>Los modelos con más parámetros (como la regresión lineal completa) presentan mayor diferencia entre rendimiento de entrenamiento y prueba, indicando posible sobreajuste.</li>
+                </ul>
+            </div>
+            
+            <div class="warning">
+                Una diferencia grande entre el rendimiento en entrenamiento y prueba (como vemos en el modelo de regresión lineal) indica sobreajuste. Esto significa que el modelo ha "memorizado" los datos de entrenamiento en lugar de aprender patrones generalizables. En la siguiente sección, utilizaremos validación cruzada para obtener una estimación más robusta del rendimiento de generalización.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 id="cross-validation">Etapa 6: Cross Validation y Selección de Modelos</h2>
+            
+            <p>La validación cruzada (cross-validation) es una técnica fundamental para estimar de manera más robusta el rendimiento de generalización de nuestros modelos. En esta etapa, evaluaremos los modelos más prometedores utilizando validación cruzada de K-folds.</p>
+            
+            <h3>Implementación de Cross Validation</h3>
+            
+<pre><code class="language-python">from sklearn import model_selection
+
+# Lista para almacenar cada uno los modelos seleccionados para el cross validation
+models = []
+
+# Almacenando los modelos como una tupla (nombre, modelo)
+models.append(('Elastic_net', ElasticNet(alpha=1, l1_ratio=0.5, max_iter=100000, warm_start=True)))
+models.append(('Kneighbors', KNeighborsRegressor(n_neighbors=10)))
+models.append(('Decision_tree', DecisionTreeRegressor(max_depth=2)))
+models.append(('SVR', SVR(kernel='linear', epsilon=0.05, C=0.3)))
+
+# Semilla para obtener los mismos resultados de pruebas
+seed = 2
+results = []
+names = []
+scoring = 'neg_mean_absolute_error'
+
+for name, model in models:
+    # Kfold cross validation
+    kfold = model_selection.KFold(n_splits=10)
+    model_pipe = Pipeline(steps=[("preprocessor", preprocessor),
+                                ("model", model)])
+    # X train, y train
+    cv_results = model_selection.cross_val_score(model_pipe, X_train, y_train, cv=kfold, scoring=scoring)
+    # la métrica neg_mean_absolute_error se debe convertir en positiva
+    cv_results = np.abs(cv_results)
+    results.append(cv_results)
+    names.append(name)
+    msg = f"{name}: {cv_results.mean():.2f} (±{cv_results.std():.2f})"
+    print(msg)</code></pre>
+            
+<pre class="output"><code class="language-shell">Elastic_net: 2120.58 (±1023.35)
+Kneighbors: 2566.21 (±1188.78)
+Decision_tree: 2494.75 (±1103.84)
+SVR: 2445.58 (±1048.04)</code></pre>
+            
+            <p>Los resultados muestran el error absoluto medio (MAE) y su desviación estándar a través de 10 folds. ElasticNet tiene el MAE más bajo, pero todos los modelos muestran una alta variabilidad en sus resultados.</p>
+            
+            <h3>Visualización de resultados de Cross Validation</h3>
+            
+<pre><code class="language-python"># Visualización de resultados de cross validation mediante boxplots
+plt.figure(figsize=(8, 4))
+result_df = pd.DataFrame(results, index=names).T
+sns.boxplot(data=result_df)
+plt.title("Resultados de Cross Validation")
+plt.show()
+
+# Visualización de resultados de cada fold
+plt.figure(figsize=(8, 4))
+sns.lineplot(data=result_df)
+plt.title("Resultados de cada Kfold")
+plt.show()</code></pre>
+            
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/regresion%205.png" alt="Boxplot de resultados de validación cruzada">
+                <div class="caption">Boxplot mostrando la distribución de MAE en los 10 folds para cada modelo</div>
+            </div>
+            
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/regresion%205_1.png" alt="Líneas de resultados por fold">
+                <div class="caption">Variación del MAE en cada fold para los diferentes modelos</div>
+            </div>
+            
+            <h3>Comparación estadística de modelos</h3>
+            
+            <p>Realizamos una prueba estadística (ANOVA) para determinar si las diferencias entre los modelos son significativas:</p>
+            
+<pre><code class="language-python"># Comparación estadística de modelos
+from scipy.stats import f_oneway
+
+model1 = result_df['Elastic_net']
+model2 = result_df['Kneighbors']
+model3 = result_df['Decision_tree']
+model4 = result_df['SVR']
+
+statistic, p_value = f_oneway(model1, model2, model3, model4)
+print(f'Statistic: {statistic}')
+print(f'p_value: {p_value}')
+
+alpha = 0.05  # nivel de significancia
+if p_value < alpha:
+    print("Existe una diferencia estadísticamente "
+          "significativa en los resultados de"
+          " cross-validation de los modelos.")
+else:
+    print("No existe una diferencia estadísticamente "
+          "significativa en los resultados de "
+          "cross-validation de los modelos.")</code></pre>
+            
+<pre class="output"><code class="language-shell">Statistic: 0.4463637923536907
+p_value: 0.721363278798939
+No existe una diferencia estadísticamente significativa en los resultados de cross-validation de los modelos.</code></pre>
+            
+            <div class="note">
+                La prueba estadística indica que, a pesar de las diferencias numéricas en los promedios de MAE, estas diferencias no son estadísticamente significativas (p-value > 0.05). Esto puede deberse a la alta variabilidad en los resultados, posiblemente causada por el tamaño limitado del conjunto de datos.
+            </div>
+            
+            <p>A pesar de que no hay diferencias estadísticamente significativas, seleccionamos ElasticNet para la optimización de hiperparámetros debido a que:</p>
+            <ol>
+                <li>Presenta el MAE más bajo en la validación cruzada</li>
+                <li>La regularización combinada de L1 y L2 ayuda a controlar el sobreajuste</li>
+                <li>Proporciona un modelo interpretable donde los coeficientes indican la importancia de las características</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2 id="optimizacion-hiperparametros">Etapa 7: Optimización de Hiperparámetros</h2>
+            
+            <p>Ahora que hemos seleccionado ElasticNet como nuestro modelo principal, procederemos a optimizar sus hiperparámetros para mejorar su rendimiento. Los principales hiperparámetros a ajustar son:</p>
+            
+            <ul>
+                <li><strong>alpha</strong>: Controla la fuerza de la regularización. Valores más altos reducen la complejidad del modelo.</li>
+                <li><strong>l1_ratio</strong>: Controla el balance entre regularización L1 (Lasso) y L2 (Ridge). Un valor de 1 equivale a pure Lasso, y 0 a pure Ridge.</li>
+            </ul>
+            
+            <h3>Grid Search para ElasticNet</h3>
+            
+<pre><code class="language-python">from sklearn.model_selection import GridSearchCV
+
+# Optimización de Elastic Net Regression
+parameters = {
+    'model__alpha': [0.2, 0.4, 0.6, 0.8, 1.0],
+    'model__l1_ratio': [0.1, 0.3, 0.5, 0.7, 0.9]
+}
+elastic_net_pipe = Pipeline(steps=[("preprocessor", preprocessor),
+                            ("model", ElasticNet(max_iter=100000, warm_start=True))])
+grid_search = GridSearchCV(elastic_net_pipe, parameters, cv=5,
+                          return_train_score=True,
+                          scoring='neg_mean_absolute_error')
+grid_search.fit(X_train, y_train);
+
+# Resultados de la hiperparametrización
+# La medida neg_mean_absolute_error se debe convertir en positiva
+print(f"Mejor resultado = {abs(grid_search.best_score_)}")
+print(f"Mejor std = {grid_search.cv_results_['std_test_score'][grid_search.best_index_]}")
+print(f"Mejor parámetros = {grid_search.best_params_}")</code></pre>
+            
+<pre class="output"><code class="language-shell">Mejor resultado = 1756.596029557147
+Mejor std = 426.13874790189107
+Mejor parámetros = {'model__alpha': 0.2, 'model__l1_ratio': 0.9}</code></pre>
+            
+            <p>La búsqueda en cuadrícula (grid search) nos indica que los mejores hiperparámetros para nuestro modelo ElasticNet son:</p>
+            <ul>
+                <li><strong>alpha = 0.2</strong>: Un valor relativamente bajo, lo que sugiere que se necesita menos regularización de lo que inicialmente configuramos.</li>
+                <li><strong>l1_ratio = 0.9</strong>: Un valor cercano a 1, lo que indica que el modelo se beneficia principalmente de la regularización L1 (similar a Lasso), que promueve la selección de características.</li>
+            </ul>
+            
+            <h3>Evaluación del modelo optimizado</h3>
+            
+            <p>Evaluamos el rendimiento del modelo ElasticNet con los hiperparámetros optimizados:</p>
+            
+<pre><code class="language-python">model = ElasticNet(
+        alpha=grid_search.best_params_['model__alpha'],
+        l1_ratio=grid_search.best_params_['model__l1_ratio'],
+        max_iter=100000,
+        warm_start=True
+    )
+
+# Evaluar el modelo con los mejores hiperparámetros
+elastic_net_pipe = Pipeline(steps=[
+    ("preprocessor", preprocessor),
+    ("model", model)
+])
+elastic_net_model = elastic_net_pipe.fit(X_train, y_train)
+y_pred = elastic_net_model.predict(X_test)
+y_pred_train = elastic_net_model.predict(X_train)
+
+print('Mean Absolute Error en conjunto de Prueba: ', mean_absolute_error(y_test, y_pred))</code></pre>
+            
+<pre class="output"><code class="language-shell">Mean Absolute Error en conjunto de Prueba:  2393.867610873727</code></pre>
+            
+            <div class="note">
+                El error medio absoluto (MAE) de nuestro modelo optimizado en el conjunto de prueba es de aproximadamente 2,394. Considerando que el rango de precios en nuestro dataset va desde 5,118 hasta 45,400 dólares, este error representa aproximadamente un 6-7% del rango total, lo cual es razonable para este problema.
+            </div>
+            
+            <h3>Visualización de Errores de Predicción</h3>
+            
+<pre><code class="language-python"># Visualización de errores de predicción
+from sklearn.metrics import PredictionErrorDisplay
+
+PredictionErrorDisplay.from_predictions(y_true=y_test,
+                                       y_pred=y_pred,
+                                       kind="actual_vs_predicted");
+
+PredictionErrorDisplay.from_predictions(y_true=y_test,
+                                       y_pred=y_pred,
+                                       kind="residual_vs_predicted");</code></pre>
+            
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/regresion%206.png" alt="Valores reales vs predichos">
+                <div class="caption">Gráfico de valores reales vs predichos</div>
+            </div>
+            
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/regresion%206_1.png" alt="Residuos vs valores predichos">
+                <div class="caption">Gráfico de residuos vs valores predichos</div>
+            </div>
+            
+            <p>Estas visualizaciones nos proporcionan información importante sobre el comportamiento de nuestro modelo:</p>
+            
+            <ul>
+                <li><strong>Gráfico de valores reales vs predichos</strong>: Los puntos cercanos a la diagonal representan predicciones precisas. Podemos observar que el modelo tiende a subestimar los precios más altos y muestra mayor precisión en el rango medio-bajo.</li>
+                <li><strong>Gráfico de residuos vs predichos</strong>: Idealmente, los residuos deberían distribuirse aleatoriamente alrededor de cero sin patrones evidentes. El patrón en forma de embudo (heteroscedasticidad) sugiere que la varianza del error aumenta con el precio, lo que es común en datos económicos.</li>
+            </ul>
+            
+            <div class="tip">
+                La heteroscedasticidad observada en los residuos podría sugerir que una transformación logarítmica de la variable objetivo podría mejorar el rendimiento del modelo, ya que esta transformación suele estabilizar la varianza y mejorar la linealidad en datos económicos como los precios.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 id="interpretacion-modelo">Etapa 8: Interpretación del Modelo</h2>
+            
+            <p>Una vez optimizado nuestro modelo, es fundamental entender qué características influyen más en las predicciones. Esto proporciona insights valiosos sobre los factores que afectan el precio de los automóviles.</p>
+            
+            <h3>Análisis de Importancia de Características</h3>
+            
+            <p>Utilizaremos la técnica de "Permutation Importance" para evaluar la importancia de cada característica en el modelo:</p>
+            
+<pre><code class="language-python">from sklearn.inspection import permutation_importance
+
+# Calculamos importancia por permutación (funciona con el pipeline completo)
+imps = permutation_importance(elastic_net_pipe, X_test, y_test,
+                              n_repeats=5,
+                              scoring="neg_mean_absolute_error",
+                              n_jobs=-1, random_state=42)
+
+# Visualizamos los resultados
+fig = plt.figure(figsize=(10, 8))
+perm_sorted_idx = imps.importances_mean.argsort()
+plt.boxplot(imps.importances[perm_sorted_idx].T, vert=False, labels=X_test.columns[perm_sorted_idx])
+plt.title("Permutation Importances (test set)");
+
+# Seleccionamos las características más importantes según permutation importance
+cols_seleccionadas = X_test.columns[perm_sorted_idx][-8:].tolist()  # Top 8 características
+print("Características más importantes según permutation importance:")
+print(cols_seleccionadas)</code></pre>
+            
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/regresion%207.png" alt="Importancia de características por permutación">
+                <div class="caption">Importancia de características según el método de permutación</div>
+            </div>
+            
+<pre class="output"><code class="language-shell">Características más importantes según permutation importance:
+['city-mpg', 'horsepower', 'drive-wheels', 'width', 'curb-weight', 'wheel-base', 'make', 'engine-size']</code></pre>
+            
+            <h3>Interpretación de las características más importantes</h3>
+            
+            <p>Los resultados de la importancia por permutación confirman muchas de nuestras observaciones iniciales del análisis exploratorio. Las características más influyentes en el precio de un automóvil son:</p>
+            
+            <ol>
+                <li><strong>engine-size</strong>: El tamaño del motor es el factor más determinante del precio, lo que es intuitivo ya que motores más grandes suelen asociarse con automóviles de mayor potencia y precio.</li>
+                <li><strong>horsepower</strong>: La potencia del motor, estrechamente relacionada con el rendimiento y las prestaciones del vehículo.</li>
+                <li><strong>curb-weight</strong>: El peso del vehículo, que se correlaciona tanto con el tamaño como con la calidad de los materiales.</li>
+                <li><strong>width</strong>: La anchura del vehículo, asociada con el espacio interior y posiblemente la categoría del automóvil.</li>
+                <li><strong>highway-mpg</strong> y <strong>city-mpg</strong>: La eficiencia de combustible, que presenta una relación negativa con el precio.</li>
+                <li><strong>length</strong>: La longitud del vehículo, otro indicador de su tamaño y categoría.</li>
+                <li><strong>fuel-type</strong>: El tipo de combustible, que puede influir en el precio debido a diferencias en costos de producción y mercado objetivo.</li>
+            </ol>
+            
+            <div class="note">
+                El modelo ElasticNet selecciona características automáticamente mediante regularización L1, asignando coeficientes cercanos a cero a las características menos importantes. Esto es especialmente útil en casos con alta dimensionalidad o multicolinealidad entre predictores.
+            </div>
+            
+            <h3>Implicaciones para el negocio</h3>
+            
+            <p>Estos resultados tienen varias implicaciones útiles:</p>
+            
+            <ul>
+                <li><strong>Valoración de vehículos</strong>: Los concesionarios podrían utilizar principalmente estas 8 características para estimar rápidamente el valor de un vehículo.</li>
+                <li><strong>Desarrollo de productos</strong>: Los fabricantes podrían enfocarse en optimizar estas características específicas según su estrategia de posicionamiento de precios.</li>
+                <li><strong>Análisis competitivo</strong>: Analizar cómo diferentes marcas balancean estas características permite entender mejor sus estrategias de precios.</li>
+            </ul>
+            
+            <div class="tip">
+                Al construir aplicaciones prácticas con este modelo, podría ser beneficioso crear un modelo simplificado que utilice solo las características más importantes. Esto facilitaría la implementación y reducir la cantidad de datos necesarios para realizar predicciones.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 id="modelo-final">Etapa 9: Modelo Final y Guardado</h2>
+            
+            <p>En esta etapa final, guardamos nuestro modelo optimizado para uso futuro y demostramos cómo utilizarlo para realizar nuevas predicciones. El guardado del modelo permite integrar nuestro trabajo en aplicaciones, servicios o flujos de trabajo automatizados.</p>
+            
+            <h3>Guardado del Modelo</h3>
+            
+            <p>Utilizamos la biblioteca joblib, que es eficiente para serializar modelos de scikit-learn:</p>
+            
+<pre><code class="language-python"># Guardado del modelo final
+from joblib import dump  # librería de serialización
+
+# Grabar el modelo en un archivo
+dump(elastic_net_model, 'elastic-model-auto.joblib')</code></pre>
+            
+<pre class="output"><code class="language-shell">['elastic-model-auto.joblib']</code></pre>
+            
+            <h3>Carga y Uso del Modelo</h3>
+            
+            <p>Demostramos cómo cargar el modelo guardado y utilizarlo para realizar nuevas predicciones:</p>
+            
+<pre><code class="language-python">import pandas as pd
+from joblib import load
+
+# Cargar el modelo
+modelo = load('elastic-model-auto.joblib')
+print(modelo)</code></pre>
+            
+<pre class="output"><code class="language-shell">Pipeline(steps=[('preprocessor',
+                 ColumnTransformer(
+                     transformers=[('numericas',
+                                    Pipeline(steps=[('imputer',
+                                                     SimpleImputer(strategy='median'))]),
+                                    ['symboling', 'normalized-losses',
+                                     'wheel-base', 'length', 'width', 'height',
+                                     'curb-weight', 'engine-size', 'bore',
+                                     'stroke', 'compression-ratio', 'horsepower',
+                                     'peak-rpm', 'city-mpg', 'highway-mpg']),
+                                   ('categoricas',
+                                    Pipeline(steps=[('imputer',
+                                                     SimpleImputer(strategy='most_frequent')),
+                                                    ('onehot',
+                                                     OneHotEncoder(handle_unknown='ignore'))]),
+                                    ['make', 'fuel-type', 'aspiration',
+                                     'body-style', 'drive-wheels',
+                                     'engine-location', 'engine-type',
+                                     'fuel-system']),
+                                   ('categoricas ordinales',
+                                    Pipeline(steps=[('ordenc',
+                                                     OrdinalEncoder(handle_unknown='use_encoded_value',
+                                                                    unknown_value=nan)),
+                                                    ('imputer',
+                                                     SimpleImputer(strategy='most_frequent'))]),
+                                    ['num-of-doors', 'num-of-cylinders'])])),
+                ('model',
+                 ElasticNet(alpha=0.2, l1_ratio=0.9, max_iter=100000,
+                            warm_start=True))])</code></pre>
+            
+            <p>Ahora, tomamos algunos datos de ejemplo para realizar predicciones con el modelo cargado:</p>
+            
+<pre><code class="language-python"># Tomar dos datos de entrada para realizar la predicción
+datos_prueba = X_features.sample(2)
+datos_prueba</code></pre>
+            
+            <div class="img-container">
+                <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/test_data.png" alt="Datos de prueba para predicción">
+                <div class="caption">Muestra de datos de prueba para realizar predicciones</div>
+            </div>
+            
+<pre><code class="language-python"># Resultados de predicción con el modelo
+predicciones = modelo.predict(datos_prueba)
+print(predicciones)</code></pre>
+            
+<pre class="output"><code class="language-shell">[16371.67580828  7975.86683396]</code></pre>
+            
+            <h3>Consideraciones para implementación en producción</h3>
+            
+            <p>Al implementar este modelo en un entorno de producción, debemos considerar:</p>
+            
+            <ol>
+                <li><strong>Validación de entradas</strong>: Asegurar que las nuevas entradas estén en el mismo formato y rango que los datos de entrenamiento.</li>
+                <li><strong>Monitoreo de rendimiento</strong>: Implementar sistemas para monitorear el rendimiento del modelo a lo largo del tiempo, detectando posibles degradaciones.</li>
+                <li><strong>Actualización periódica</strong>: Planificar actualizaciones periódicas del modelo con datos nuevos para mantener su precisión frente a cambios en el mercado.</li>
+                <li><strong>Manejo de errores</strong>: Implementar manejo robusto de errores y excepciones para casos donde los datos de entrada sean problemáticos.</li>
+                <li><strong>Documentación</strong>: Documentar claramente las características requeridas, sus formatos y cualquier preprocesamiento específico necesario.</li>
+            </ol>
+            
+            <div class="note">
+                El pipeline completo incluye tanto el preprocesamiento como el modelo, lo que simplifica enormemente la implementación, ya que no es necesario replicar manualmente los pasos de preprocesamiento cada vez que se realiza una predicción.
+            </div>
+            
+            <div class="tip">
+                En entornos de producción, considera encapsular el modelo dentro de una API REST, lo que facilitará su integración con diferentes sistemas y aplicaciones, y permitirá un control centralizado sobre las versiones y actualizaciones del modelo.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 id="material-practica">Material de Práctica</h2>
+
+            <p>Para consolidar los conceptos aprendidos en este capítulo, te invitamos a realizar los siguientes ejercicios prácticos:</p>
+
+            <ul class="resources-list">
+                <li><strong><a href="https://colab.research.google.com/drive/1GXhDiFw5DgOOoNkghgETf5DPP7b6en3A" target="_blank">Construcción de un proyecto de regresión completo</a></strong> - Notebook con un flujo de trabajo completo para problemas de regresión, similar al presentado en este capítulo.</li>
+            </ul>
+            
+            <div class="tip">
+                <strong>Ejercicio práctico:</strong> Intenta replicar el flujo de trabajo presentado en este capítulo con un dataset diferente, como el dataset de Boston Housing o California Housing disponibles en scikit-learn. Compara el rendimiento de diferentes modelos y analiza qué características son más importantes en cada caso.
+            </div>
+
+            <h2 id="referencias">Referencias</h2>
+
+            <p>Para profundizar en los conceptos de regresión y técnicas relacionadas, recomendamos consultar estos recursos:</p>
+
+            <ul class="resources-list">
+                <li><strong><a href="https://scikit-learn.org/stable/modules/linear_model.html" target="_blank">Documentación oficial de modelos lineales en scikit-learn</a></strong> - Referencia completa sobre implementación de modelos de regresión en Python.</li>
+                <li><strong><a href="https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques" target="_blank">Competencia de Kaggle: House Prices</a></strong> - Competencia popular para practicar técnicas avanzadas de regresión.</li>
+                <li><strong><a href="https://www.statsmodels.org/stable/regression.html" target="_blank">Statsmodels</a></strong> - Biblioteca Python que ofrece implementaciones de modelos estadísticos con enfoque en la inferencia estadística.</li>
+            </ul>
+            
+            <div class="note">
+                Recuerda que la práctica constante es fundamental para dominar las técnicas de regresión. Intenta aplicar lo aprendido a diferentes datasets y problemas del mundo real para consolidar tu comprensión y desarrollar intuición sobre cuándo y cómo aplicar cada técnica.
             </div>
         </div>
 
