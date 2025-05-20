@@ -762,10 +762,16 @@
             <h3>Secciones</h3>
             <ul>
                 <li><a href="#intro-regresion">Introducción a la Regresión</a></li>
-                <li><a href="#regresion-lineal">Regresión Lineal</a></li>
-                <li><a href="#regresion-polinomial">Regresión Polinomial</a></li>
-                <li><a href="#regularizacion">Técnicas de Regularización</a></li>
-                <li><a href="#evaluacion-modelos">Evaluación de Modelos</a></li>
+                <li><a href="#workflow-regresion">Flujo de Trabajo Completo</a></li>
+                <li><a href="#introduccion-carga-datos">1. Introducción y Carga de Datos</a></li>
+                <li><a href="#preparacion-datos">2. Preparación de Datos</a></li>
+                <li><a href="#analisis-univariable-bivariable">3. Análisis Uni/Bivariable</a></li>
+                <li><a href="#feature-engineering">4. Feature Engineering</a></li>
+                <li><a href="#modelos-regresion">5. Modelos de Regresión</a></li>
+                <li><a href="#cross-validation">6. Cross Validation</a></li>
+                <li><a href="#optimizacion-hiperparametros">7. Optimización Hiperparámetros</a></li>
+                <li><a href="#interpretacion-modelo">8. Interpretación del Modelo</a></li>
+                <li><a href="#modelo-final">9. Modelo Final y Guardado</a></li>
                 <li><a href="#material-practica">Material de Práctica</a></li>
                 <li><a href="#referencias">Referencias</a></li>
             </ul>
@@ -837,10 +843,32 @@
             
             <h2 id="tipos-regresion">Tipos de Modelos de Regresión</h2>
             <p>En este capítulo exploraremos varios tipos de modelos de regresión, cada uno con sus propias características y casos de uso:</p>
+
+            <h3>Regresión Lineal Simple</h3>
+            <p>La regresión lineal simple modela la relación entre una variable independiente (X) y una variable dependiente (y) mediante una línea recta. La ecuación que describe este modelo es:</p>
+            <p style="text-align: center; font-style: italic; margin: 1.5rem 0;">y = β₀ + β₁X + ε</p>
+            <p>Este modelo es intuitivo, fácil de interpretar y sirve como base para entender modelos más complejos.</p>
+
+            <h3>Modelos con Regularización</h3>
+            <p>La regularización ayuda a controlar el sobreajuste, especialmente útil cuando hay muchas características:</p>
+            <ul>
+                <li><strong>Ridge (L2)</strong>: Penaliza los coeficientes grandes, reduciendo su magnitud sin llevarlos a cero. Ideal cuando todas las características son potencialmente relevantes.</li>
+                <li><strong>Lasso (L1)</strong>: Puede reducir coeficientes exactamente a cero, realizando selección de características automáticamente. Excelente cuando hay muchas características irrelevantes.</li>
+                <li><strong>ElasticNet</strong>: Combina las penalizaciones L1 y L2, ofreciendo lo mejor de ambos mundos. Como vimos en nuestro análisis, este modelo mostró un buen balance entre ajuste y generalización para la predicción de precios.</li>
+            </ul>
+
+            <h3>Support Vector Regression (SVR)</h3>
+            <p>El SVR extiende los principios de las máquinas de vectores de soporte al dominio de la regresión. Busca encontrar un hiperplano que incluya la mayor cantidad de puntos dentro de un margen ε definido, mientras penaliza los puntos fuera de este margen. Es particularmente efectivo en espacios de alta dimensionalidad y cuando la relación entre las variables no es estrictamente lineal.</p>
+
+            <h3>K-Nearest Neighbors (KNN)</h3>
+            <p>La regresión KNN predice el valor de un punto basándose en el promedio de los valores de sus k vecinos más cercanos. Es un modelo no paramétrico que no hace suposiciones sobre la distribución de los datos, haciéndolo flexible pero computacionalmente costoso para grandes conjuntos de datos. Es especialmente útil cuando la relación entre variables es muy compleja o desconocida.</p>
+
+            <h3>Árboles de Decisión</h3>
+            <p>Los árboles de decisión para regresión dividen recursivamente el espacio de características en regiones, asignando a cada región un valor de predicción que minimiza el error. Son muy interpretables y pueden capturar relaciones no lineales, pero tienden a sobreajustar si no se controla su complejidad (por ejemplo, limitando la profundidad como hicimos en nuestro análisis).</p>
         </div>
 
         <div class="content-section">
-            <h2 id="flujo-regresion">Flujo de Trabajo para Problemas de Regresión</h2>
+            <h2 id="workflow-regresion">Flujo de Trabajo para Problemas de Regresión</h2>
 
             <p>Implementar un modelo de regresión efectivo requiere seguir un proceso estructurado que va desde la exploración de datos hasta la interpretación y despliegue del modelo. En esta sección, desarrollaremos un flujo de trabajo completo para problemas de regresión siguiendo estas etapas fundamentales:</p>
 
