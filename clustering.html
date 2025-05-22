@@ -762,10 +762,13 @@
             <h3>Secciones</h3>
             <ul>
                 <li><a href="#intro-clustering">Introducción al Clustering</a></li>
-                <li><a href="#k-means">K-Means</a></li>
-                <li><a href="#jerarquico">Clustering Jerárquico</a></li>
-                <li><a href="#dbscan">DBSCAN</a></li>
-                <li><a href="#evaluacion">Evaluación de Clusters</a></li>
+                <li><a href="#workflow-clustering">Workflow Completo</a></li>
+                <li><a href="#preprocesamiento">Preprocesamiento</a></li>
+                <li><a href="#analisis-exploratorio">Análisis Exploratorio</a></li>
+                <li><a href="#kmeans-implementacion">Implementación K-Means</a></li>
+                <li><a href="#comparacion-algoritmos">Comparación de Algoritmos</a></li>
+                <li><a href="#optimizacion-pca">Optimización con PCA</a></li>
+                <li><a href="#resultados-finales">Resultados Finales</a></li>
                 <li><a href="#material-practica">Material de Práctica</a></li>
                 <li><a href="#referencias">Referencias</a></li>
             </ul>
@@ -876,6 +879,811 @@
                 A diferencia de la clasificación y regresión, en el clustering no hay una "respuesta correcta" predefinida. La evaluación de los resultados a menudo requiere métricas internas (como cohesión y separación) o validación basada en conocimiento del dominio.
             </div>
         </div>
+
+        <div class="content-section">
+    <h2 id="workflow-clustering">Workflow Completo de Clustering: Análisis del Dataset Iris</h2>
+    
+    <p>A continuación, implementaremos un flujo de trabajo completo de clustering utilizando el famoso dataset Iris. Este ejercicio práctico te permitirá experimentar con diferentes algoritmos de clustering, comparar su rendimiento y optimizar hiperparámetros.</p>
+    
+    <p>Nuestro objetivo es:</p>
+    <ul>
+        <li>Implementar algoritmos de clustering (KMeans, Agglomerative, DBSCAN, MeanShift)</li>
+        <li>Comparar rendimiento usando métricas de evaluación</li>
+        <li>Optimizar hiperparámetros usando PCA para reducción dimensional</li>
+    </ul>
+    
+    <h3>1. Importación de Librerías</h3>
+    
+    <p>Comenzamos importando todas las librerías necesarias para nuestro análisis de clustering:</p>
+    
+    <pre><code class="language-python">import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
+
+# Librerías de sklearn
+from sklearn import metrics
+from sklearn.cluster import KMeans, AgglomerativeClustering, DBSCAN, MeanShift
+from sklearn import preprocessing
+from sklearn.decomposition import PCA
+from sklearn.model_selection import ParameterGrid
+
+# Configuración de gráficos
+plt.style.use('default')
+plt.rcParams['figure.figsize'] = (10, 6)</code></pre>
+</div>
+
+<div class="content-section">
+    <h3>2. Carga y Exploración del Dataset Iris</h3>
+    
+    <p>El dataset Iris es perfecto para practicar clustering ya que contiene 150 muestras de flores con 4 características numéricas y 3 clases naturales (especies). Aunque conocemos las etiquetas verdaderas, las usaremos solo para evaluar qué tan bien nuestros algoritmos de clustering descubren los grupos naturales.</p>
+    
+    <pre><code class="language-python"># Cargar el dataset Iris desde sklearn
+from sklearn.datasets import load_iris
+
+# Cargar datos
+iris_data = load_iris()
+iris_df = pd.DataFrame(iris_data.data, columns=iris_data.feature_names)
+iris_df['class'] = iris_data.target
+
+# Renombrar columnas para mayor claridad
+iris_df.columns = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
+
+print("Forma del dataset:", iris_df.shape)
+print("\nPrimeras 5 filas:")
+iris_df.head()</code></pre>
+    
+    <pre class="output"><code class="language-shell">Forma del dataset: (150, 5)
+
+Primeras 5 filas:
+   sepal-length  sepal-width  petal-length  petal-width  class
+0           5.1          3.5           1.4          0.2      0
+1           4.9          3.0           1.4          0.2      0
+2           4.7          3.2           1.3          0.2      0
+3           4.6          3.1           1.5          0.2      0
+4           5.0          3.6           1.4          0.2      0</code></pre>
+    
+    <p>Examinemos las características básicas del dataset:</p>
+    
+    <pre><code class="language-python"># Información básica del dataset
+print("Información del dataset:")
+print("\nClases únicas:", iris_df['class'].unique())
+print("Distribución de clases:")
+print(iris_df['class'].value_counts().sort_index())
+
+print("\nVerificar valores nulos:")
+print(iris_df.isnull().sum())
+
+print("\nEstadísticas descriptivas:")
+iris_df.describe()</code></pre>
+    
+    <pre class="output"><code class="language-shell">Información del dataset:
+
+Clases únicas: [0 1 2]
+Distribución de clases:
+class
+0    50
+1    50
+2    50
+Name: count, dtype: int64
+
+Verificar valores nulos:
+sepal-length    0
+sepal-width     0
+petal-length    0
+petal-width     0
+class           0
+dtype: int64</code></pre>
+</div>
+
+<div class="content-section">
+    <h3 id="preprocesamiento">3. Preprocesamiento de Datos</h3>
+    
+    <p>Antes de aplicar los algoritmos de clustering, preparamos los datos mezclando el dataset aleatoriamente y separando las características de las etiquetas:</p>
+    
+    <pre><code class="language-python"># Mezclar el dataset aleatoriamente
+iris_df = iris_df.sample(frac=1, random_state=42).reset_index(drop=True)
+
+print("Dataset después de mezclar:")
+print(iris_df.head())
+
+# Separar características y etiquetas
+iris_features = iris_df.drop('class', axis=1)
+iris_labels = iris_df['class']
+
+print(f"\nForma de características: {iris_features.shape}")
+print(f"Forma de etiquetas: {iris_labels.shape}")</code></pre>
+    
+    <pre class="output"><code class="language-shell">Dataset después de mezclar:
+   sepal-length  sepal-width  petal-length  petal-width  class
+0           6.1          2.8           4.7          1.2      1
+1           5.7          3.8           1.7          0.3      0
+2           7.7          2.6           6.9          2.3      2
+3           6.0          2.9           4.5          1.5      1
+4           6.8          2.8           4.8          1.4      1
+
+Forma de características: (150, 4)
+Forma de etiquetas: (150,)</code></pre>
+</div>
+
+<div class="content-section">
+    <h3 id="analisis-exploratorio">4. Análisis Exploratorio de Datos</h3>
+    
+    <h4>4.1 Análisis Univariable</h4>
+    
+    <p>Comenzamos explorando las distribuciones individuales de cada característica para entender mejor nuestros datos:</p>
+    
+    <pre><code class="language-python"># Análisis univariable - Estadísticas por característica
+print("Estadísticas descriptivas de las características:")
+iris_features.describe()</code></pre>
+    
+    <pre><code class="language-python"># Visualizar distribuciones
+fig, axes = plt.subplots(2, 2, figsize=(8, 6))
+axes = axes.ravel()
+
+for i, column in enumerate(iris_features.columns):
+    axes[i].hist(iris_features[column], bins=20, alpha=0.7, color='skyblue', edgecolor='black')
+    axes[i].set_title(f'Distribución de {column}')
+    axes[i].set_xlabel(column)
+    axes[i].set_ylabel('Frecuencia')
+
+plt.tight_layout()
+plt.show()</code></pre>
+
+        <div class="img-container">
+            <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/clustering_1.png" alt="Distribuciones de las características del dataset Iris" width="50%">
+            <div class="caption">Distribuciones de las cuatro características principales del dataset Iris</div>
+        </div>
+    
+    <h4>4.2 Análisis Bivariable</h4>
+    
+    <p>Exploramos las relaciones entre pares de características mediante scatter plots para identificar posibles patrones de agrupamiento:</p>
+    
+    <pre><code class="language-python"># Análisis bivariable - Scatter plots
+fig, axes = plt.subplots(2, 2, figsize=(8, 6))
+
+# Scatter plot 1: sepal-length vs sepal-width
+axes[0,0].scatter(iris_df['sepal-length'], iris_df['sepal-width'], cmap='viridis', s=60, alpha=0.7)
+axes[0,0].set_xlabel('Sepal Length')
+axes[0,0].set_ylabel('Sepal Width')
+axes[0,0].set_title('Sepal Length vs Sepal Width')
+
+# Scatter plot 2: petal-length vs petal-width
+axes[0,1].scatter(iris_df['petal-length'], iris_df['petal-width'], cmap='viridis', s=60, alpha=0.7)
+axes[0,1].set_xlabel('Petal Length')
+axes[0,1].set_ylabel('Petal Width')
+axes[0,1].set_title('Petal Length vs Petal Width')
+
+# Scatter plot 3: sepal-length vs petal-length
+axes[1,0].scatter(iris_df['sepal-length'], iris_df['petal-length'], cmap='viridis', s=60, alpha=0.7)
+axes[1,0].set_xlabel('Sepal Length')
+axes[1,0].set_ylabel('Petal Length')
+axes[1,0].set_title('Sepal Length vs Petal Length')
+
+# Scatter plot 4: sepal-width vs petal-width
+axes[1,1].scatter(iris_df['sepal-width'], iris_df['petal-width'], cmap='viridis', s=60, alpha=0.7)
+axes[1,1].set_xlabel('Sepal Width')
+axes[1,1].set_ylabel('Petal Width')
+axes[1,1].set_title('Sepal Width vs Petal Width')
+
+plt.tight_layout()
+plt.show()</code></pre>
+
+        <div class="img-container">
+            <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/clustering_2.png" alt="Análisis bivariable de las características del dataset Iris" width="60%">
+            <div class="caption">Relaciones entre pares de características mostrando patrones de agrupamiento natural</div>
+        </div>
+    
+    <p>Calculamos la matriz de correlación para entender mejor las relaciones lineales entre las variables:</p>
+    
+    <pre><code class="language-python"># Matriz de correlación
+correlation_matrix = iris_features.corr()
+
+# Visualizar matriz de correlación
+plt.figure(figsize=(8, 6))
+plt.imshow(correlation_matrix, cmap='coolwarm', aspect='auto')
+plt.colorbar()
+plt.xticks(range(len(correlation_matrix.columns)), correlation_matrix.columns, rotation=45)
+plt.yticks(range(len(correlation_matrix.columns)), correlation_matrix.columns)
+plt.title('Matriz de Correlación - Dataset Iris')
+
+# Añadir valores numéricos
+for i in range(len(correlation_matrix.columns)):
+    for j in range(len(correlation_matrix.columns)):
+        plt.text(j, i, f'{correlation_matrix.iloc[i, j]:.2f}',
+                ha='center', va='center', color='black')
+
+plt.tight_layout()
+plt.show()</code></pre>
+
+        <div class="img-container">
+            <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/clustering_3.png" alt="Matriz de correlación del dataset Iris" width="60%">
+            <div class="caption">Matriz de correlación mostrando las relaciones lineales entre características</div>
+        </div>
+</div>
+
+<div class="content-section">
+    <h3 id="kmeans-implementacion">5. Implementación de K-Means</h3>
+
+    <p>Comenzamos con K-Means, uno de los algoritmos de clustering más populares. Aplicamos el algoritmo usando todas las características del dataset y evaluamos su rendimiento:</p>
+    
+    <pre><code class="language-python"># Implementar KMeans con todas las características
+kmeans_model = KMeans(n_clusters=3, random_state=42, max_iter=1000).fit(iris_features)
+
+# Obtener las etiquetas predichas y centroides
+predicted_labels = kmeans_model.labels_
+centroids = kmeans_model.cluster_centers_
+
+print("Centroides de los clusters:")
+print(pd.DataFrame(centroids, columns=iris_features.columns))
+print(f"\nNúmero de puntos por cluster:")
+unique, counts = np.unique(predicted_labels, return_counts=True)
+for i, count in enumerate(counts):
+    print(f"Cluster {i}: {count} puntos")</code></pre>
+    
+    <pre class="output"><code class="language-shell">Centroides de los clusters:
+   sepal-length  sepal-width  petal-length  petal-width
+0      5.006000     3.428000      1.462000     0.246000
+1      5.901613     2.748387      4.393548     1.433871
+2      6.850000     3.073684      5.742105     2.071053
+
+Número de puntos por cluster:
+Cluster 0: 50 puntos
+Cluster 1: 62 puntos
+Cluster 2: 38 puntos</code></pre>
+    
+    <p>Para evaluar la calidad del clustering, definimos una función que calcula múltiples métricas de evaluación:</p>
+    
+    <pre><code class="language-python"># Función para calcular métricas de evaluación
+def evaluate_clustering(true_labels, predicted_labels, data):
+    """
+    Calcula las métricas de evaluación para clustering
+    """
+    silhouette = metrics.silhouette_score(data, predicted_labels)
+    adjusted_rand = metrics.adjusted_rand_score(true_labels, predicted_labels)
+    homogeneity = metrics.homogeneity_score(true_labels, predicted_labels)
+
+    return {
+        'Silhouette Score': silhouette,
+        'Adjusted Rand Score': adjusted_rand,
+        'Homogeneity Score': homogeneity
+    }
+
+# Evaluar KMeans
+kmeans_metrics = evaluate_clustering(iris_labels, predicted_labels, iris_features)
+
+print("Métricas de evaluación para KMeans:")
+print("-" * 40)
+for metric, value in kmeans_metrics.items():
+    print(f"{metric}: {value:.4f}")</code></pre>
+    
+    <pre class="output"><code class="language-shell">Métricas de evaluación para KMeans:
+----------------------------------------
+Silhouette Score: 0.5528
+Adjusted Rand Score: 0.7302
+Homogeneity Score: 0.7515</code></pre>
+    
+    <p>Visualizamos los resultados comparando el clustering real con el predicho por K-Means:</p>
+    
+    <pre><code class="language-python"># Visualizar resultados de KMeans
+fig, axes = plt.subplots(1, 2, figsize=(8, 4))
+
+# Gráfico 1: Clustering real vs predicho
+axes[0].scatter(iris_features['sepal-length'], iris_features['petal-length'],
+                c=iris_labels, cmap='viridis', s=40, alpha=0.7, edgecolors='black')
+axes[0].set_title('Clustering Real (Ground Truth)')
+axes[0].set_xlabel('Sepal Length')
+axes[0].set_ylabel('Petal Length')
+
+axes[1].scatter(iris_features['sepal-length'], iris_features['petal-length'],
+                c=predicted_labels, cmap='viridis', s=40, alpha=0.7, edgecolors='black')
+axes[1].scatter(centroids[:, 0], centroids[:, 2], c='red', s=50, marker='X',
+                edgecolors='black', label='Centroides')
+axes[1].set_title('Clustering KMeans')
+axes[1].set_xlabel('Sepal Length')
+axes[1].set_ylabel('Petal Length')
+axes[1].legend()
+
+plt.tight_layout()
+plt.show()</code></pre>
+
+        <div class="img-container">
+            <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/clustering_4.png" alt="Comparación entre clustering real y K-Means">
+            <div class="caption">Comparación entre las clases reales del dataset Iris y los clusters encontrados por K-Means</div>
+        </div>
+
+</div>
+
+<div class="content-section">
+    <h3 id="comparacion-algoritmos">6. Comparación de Algoritmos de Clustering</h3>
+
+    <p>Ahora compararemos el rendimiento de diferentes algoritmos de clustering para determinar cuál funciona mejor con nuestros datos. Implementaremos K-Means, Clustering Aglomerativo, DBSCAN y MeanShift:</p>
+    
+    <pre><code class="language-python"># Función para construir y evaluar modelos
+def build_and_evaluate_model(clustering_function, data, true_labels, **kwargs):
+    """
+    Construye un modelo de clustering y evalúa su rendimiento
+    """
+    model = clustering_function(**kwargs).fit(data)
+    metrics_dict = evaluate_clustering(true_labels, model.labels_, data)
+    return model, metrics_dict
+
+# Diccionario para almacenar resultados
+results = {}
+models = {}
+
+print("Evaluando algoritmos de clustering...")
+print("=" * 60)</code></pre>
+    
+    <pre class="output"><code class="language-shell">Evaluando algoritmos de clustering...
+============================================================</code></pre>
+    
+    <h4>6.1 K-Means</h4>
+    
+    <pre><code class="language-python"># 1. KMeans
+print("1. KMeans")
+print("-" * 20)
+kmeans_model, kmeans_results = build_and_evaluate_model(
+    KMeans, iris_features, iris_labels,
+    n_clusters=3, max_iter=1000
+)
+results['KMeans'] = kmeans_results
+models['KMeans'] = kmeans_model
+
+for metric, value in kmeans_results.items():
+    print(f"{metric}: {value:.4f}")
+print()</code></pre>
+    
+    <pre class="output"><code class="language-shell">1. KMeans
+--------------------
+Silhouette Score: 0.5512
+Adjusted Rand Score: 0.7163
+Homogeneity Score: 0.7364</code></pre>
+    
+    <h4>6.2 Clustering Aglomerativo</h4>
+    
+    <pre><code class="language-python"># 2. Agglomerative Clustering
+print("2. Agglomerative Clustering")
+print("-" * 30)
+agg_model, agg_results = build_and_evaluate_model(
+    AgglomerativeClustering, iris_features, iris_labels,
+    n_clusters=3
+)
+results['Agglomerative'] = agg_results
+models['Agglomerative'] = agg_model
+
+for metric, value in agg_results.items():
+    print(f"{metric}: {value:.4f}")
+print()</code></pre>
+    
+    <pre class="output"><code class="language-shell">2. Agglomerative Clustering
+------------------------------
+Silhouette Score: 0.5543
+Adjusted Rand Score: 0.7312
+Homogeneity Score: 0.7608</code></pre>
+    
+    <h4>6.3 DBSCAN</h4>
+    
+    <pre><code class="language-python"># 3. DBSCAN
+print("3. DBSCAN")
+print("-" * 15)
+dbscan_model, dbscan_results = build_and_evaluate_model(
+    DBSCAN, iris_features, iris_labels,
+    eps=0.9, min_samples=5
+)
+results['DBSCAN'] = dbscan_results
+models['DBSCAN'] = dbscan_model
+
+for metric, value in dbscan_results.items():
+    print(f"{metric}: {value:.4f}")
+
+# Información adicional sobre DBSCAN
+n_clusters = len(set(dbscan_model.labels_)) - (1 if -1 in dbscan_model.labels_ else 0)
+n_noise = list(dbscan_model.labels_).count(-1)
+print(f"Número de clusters encontrados: {n_clusters}")
+print(f"Puntos de ruido: {n_noise}")
+print()</code></pre>
+    
+    <pre class="output"><code class="language-shell">3. DBSCAN
+---------------
+Silhouette Score: 0.6867
+Adjusted Rand Score: 0.5681
+Homogeneity Score: 0.5794
+Número de clusters encontrados: 2
+Puntos de ruido: 0</code></pre>
+    
+    <h4>6.4 MeanShift</h4>
+    
+    <pre><code class="language-python"># 4. MeanShift
+print("4. MeanShift")
+print("-" * 15)
+from sklearn.cluster import estimate_bandwidth
+
+# Estimar bandwidth automáticamente
+bandwidth = estimate_bandwidth(iris_features)
+print(f"Bandwidth estimado: {bandwidth:.4f}")
+
+meanshift_model, meanshift_results = build_and_evaluate_model(
+    MeanShift, iris_features, iris_labels,
+    bandwidth=bandwidth
+)
+results['MeanShift'] = meanshift_results
+models['MeanShift'] = meanshift_model
+
+for metric, value in meanshift_results.items():
+    print(f"{metric}: {value:.4f}")
+
+n_clusters_ms = len(set(meanshift_model.labels_))
+print(f"Número de clusters encontrados: {n_clusters_ms}")</code></pre>
+    
+    <pre class="output"><code class="language-shell">4. MeanShift
+---------------
+Bandwidth estimado: 1.2021
+Silhouette Score: 0.6858
+Adjusted Rand Score: 0.5584
+Homogeneity Score: 0.5537
+Número de clusters encontrados: 2</code></pre>
+    
+    <h4>6.5 Resumen Comparativo</h4>
+    
+    <pre><code class="language-python"># Crear tabla comparativa de resultados
+results_df = pd.DataFrame(results).T
+results_df = results_df.round(4)
+
+print("RESUMEN COMPARATIVO DE ALGORITMOS")
+print("=" * 50)
+print(results_df)</code></pre>
+    
+    <pre class="output"><code class="language-shell">RESUMEN COMPARATIVO DE ALGORITMOS
+==================================================
+                Silhouette Score  Adjusted Rand Score  Homogeneity Score
+KMeans                    0.5512               0.7163             0.7364
+Agglomerative            0.5543               0.7312             0.7608
+DBSCAN                   0.6867               0.5681             0.5794
+MeanShift                0.6858               0.5584             0.5537</code></pre>
+    
+    <pre><code class="language-python"># Visualizar comparación
+fig, axes = plt.subplots(1, 3, figsize=(14, 5))
+metrics_names = list(results_df.columns)
+
+for i, metric in enumerate(metrics_names):
+    algorithms = results_df.index
+    values = results_df[metric]
+
+    bars = axes[i].bar(algorithms, values, color=['skyblue', 'lightgreen', 'salmon', 'gold'])
+    axes[i].set_title(f'{metric}')
+    axes[i].set_ylabel('Score')
+    axes[i].tick_params(axis='x', rotation=45)
+
+    # Añadir valores en las barras
+    for bar, value in zip(bars, values):
+        height = bar.get_height()
+        axes[i].text(bar.get_x() + bar.get_width()/2., height + 0.01,
+                    f'{value:.3f}', ha='center', va='bottom')
+
+plt.tight_layout()
+plt.show()</code></pre>
+
+        <div class="img-container">
+            <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/clustering_5.png" alt="Comparación de métricas entre algoritmos de clustering" width="80%">
+            <div class="caption">Comparación visual de las métricas de evaluación para todos los algoritmos de clustering</div>
+        </div>
+
+</div>
+
+<div class="content-section">
+    <h3 id="optimizacion-pca">7. Optimización de Hiperparámetros usando PCA</h3>
+
+    <p>Para mejorar nuestros resultados y facilitar la visualización, aplicamos PCA (Análisis de Componentes Principales) para reducir la dimensionalidad a 2 componentes, manteniendo la mayor parte de la varianza de los datos originales:</p>
+    
+    <pre><code class="language-python"># Aplicar PCA para reducir a 2 componentes
+pca = PCA(n_components=2, random_state=42)
+iris_pca = pca.fit_transform(iris_features)
+
+print("Varianza explicada por cada componente:")
+for i, variance in enumerate(pca.explained_variance_ratio_):
+    print(f"Componente {i+1}: {variance:.4f} ({variance*100:.2f}%)")
+
+print(f"\nVarianza total explicada: {sum(pca.explained_variance_ratio_):.4f} ({sum(pca.explained_variance_ratio_)*100:.2f}%)")
+
+# Crear DataFrame con componentes PCA
+iris_pca_df = pd.DataFrame(iris_pca, columns=['PC1', 'PC2'])
+iris_pca_df['class'] = iris_labels.values
+
+print(f"\nForma de datos después de PCA: {iris_pca_df.shape}")
+iris_pca_df.head()</code></pre>
+    
+    <pre class="output"><code class="language-shell">Varianza explicada por cada componente:
+Componente 1: 0.9246 (92.46%)
+Componente 2: 0.0531 (5.31%)
+
+Varianza total explicada: 0.9777 (97.77%)
+
+Forma de datos después de PCA: (150, 3)</code></pre>
+    
+    <pre><code class="language-python"># Visualizar datos después de PCA
+plt.figure(figsize=(10, 6))
+scatter = plt.scatter(iris_pca_df['PC1'], iris_pca_df['PC2'],
+                     c=iris_pca_df['class'], cmap='viridis', s=70, alpha=0.7, edgecolors='black')
+plt.xlabel(f'Primera Componente Principal')
+plt.ylabel(f'Segunda Componente Principal')
+plt.title('Dataset Iris después de PCA (2 componentes)')
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Datos para optimización
+pca_features = iris_pca_df[['PC1', 'PC2']]</code></pre>
+
+        <div class="img-container">
+            <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/clustering_6.png" alt="Dataset Iris proyectado en 2D usando PCA" width="60%">
+            <div class="caption">Dataset Iris proyectado en un espacio bidimensional usando PCA, conservando 97.77% de la varianza</div>
+        </div>
+    
+    <h4>7.1 Optimización de K-Means</h4>
+    
+    <p>Ahora optimizamos los hiperparámetros de cada algoritmo utilizando los datos transformados por PCA:</p>
+    
+    <pre><code class="language-python"># Optimización de hiperparámetros para KMeans
+print("OPTIMIZACIÓN DE HIPERPARÁMETROS - KMEANS")
+print("=" * 50)
+
+# Parámetros a probar
+kmeans_params = {'n_clusters': [2, 3, 4, 5]}
+parameter_grid = ParameterGrid(kmeans_params)
+
+best_kmeans_score = -1
+best_kmeans_params = None
+kmeans_results_opt = []
+
+for params in parameter_grid:
+    model = KMeans(random_state=42, max_iter=1000, **params)
+    model.fit(pca_features)
+
+    silhouette = metrics.silhouette_score(pca_features, model.labels_)
+
+    result = {'params': params, 'silhouette_score': silhouette}
+    kmeans_results_opt.append(result)
+
+    print(f"Parámetros: {params} | Silhouette Score: {silhouette:.4f}")
+
+    if silhouette > best_kmeans_score:
+        best_kmeans_score = silhouette
+        best_kmeans_params = params
+
+print(f"\nMejores parámetros KMeans: {best_kmeans_params}")
+print(f"Mejor Silhouette Score: {best_kmeans_score:.4f}")</code></pre>
+    
+    <pre class="output"><code class="language-shell">OPTIMIZACIÓN DE HIPERPARÁMETROS - KMEANS
+==================================================
+Parámetros: {'n_clusters': 2} | Silhouette Score: 0.6810
+Parámetros: {'n_clusters': 3} | Silhouette Score: 0.5528
+Parámetros: {'n_clusters': 4} | Silhouette Score: 0.4979
+Parámetros: {'n_clusters': 5} | Silhouette Score: 0.4258
+
+Mejores parámetros KMeans: {'n_clusters': 2}
+Mejor Silhouette Score: 0.6810</code></pre>
+    
+    <h4>7.2 Optimización de DBSCAN</h4>
+    
+    <pre><code class="language-python"># Optimización de hiperparámetros para DBSCAN
+print("\nOPTIMIZACIÓN DE HIPERPARÁMETROS - DBSCAN")
+print("=" * 50)
+
+# Parámetros a probar
+dbscan_params = {
+    'eps': [0.3, 0.5, 0.7, 0.9],
+    'min_samples': [3, 5, 7]
+}
+parameter_grid = ParameterGrid(dbscan_params)
+
+best_dbscan_score = -1
+best_dbscan_params = None
+dbscan_results_opt = []
+
+for params in parameter_grid:
+    model = DBSCAN(**params)
+    model.fit(pca_features)
+
+    # Verificar que se formaron clusters válidos
+    n_clusters = len(set(model.labels_)) - (1 if -1 in model.labels_ else 0)
+    n_noise = list(model.labels_).count(-1)
+
+
+    silhouette = metrics.silhouette_score(pca_features, model.labels_)
+    result = {'params': params, 'silhouette_score': silhouette,
+             'n_clusters': n_clusters, 'n_noise': n_noise}
+    dbscan_results_opt.append(result)
+
+    print(f"Parámetros: {params} | Silhouette: {silhouette:.4f} | Clusters: {n_clusters} | Ruido: {n_noise}")
+
+    if silhouette > best_dbscan_score:
+        best_dbscan_score = silhouette
+        best_dbscan_params = params
+
+
+print(f"\nMejores parámetros DBSCAN: {best_dbscan_params}")
+print(f"Mejor Silhouette Score: {best_dbscan_score:.4f}")</code></pre>
+    
+    <pre class="output"><code class="language-shell">OPTIMIZACIÓN DE HIPERPARÁMETROS - DBSCAN
+==================================================
+Parámetros: {'eps': 0.3, 'min_samples': 3} | Silhouette: 0.6231 | Clusters: 3 | Ruido: 6
+Parámetros: {'eps': 0.3, 'min_samples': 5} | Silhouette: 0.6867 | Clusters: 2 | Ruido: 17
+Parámetros: {'eps': 0.3, 'min_samples': 7} | Silhouette: 0.6867 | Clusters: 2 | Ruido: 17
+Parámetros: {'eps': 0.5, 'min_samples': 3} | Silhouette: 0.5574 | Clusters: 3 | Ruido: 0
+Parámetros: {'eps': 0.5, 'min_samples': 5} | Silhouette: 0.5574 | Clusters: 3 | Ruido: 0
+Parámetros: {'eps': 0.5, 'min_samples': 7} | Silhouette: 0.5574 | Clusters: 3 | Ruido: 0
+Parámetros: {'eps': 0.7, 'min_samples': 3} | Silhouette: 0.6867 | Clusters: 2 | Ruido: 0
+Parámetros: {'eps': 0.7, 'min_samples': 5} | Silhouette: 0.6867 | Clusters: 2 | Ruido: 0
+Parámetros: {'eps': 0.7, 'min_samples': 7} | Silhouette: 0.6867 | Clusters: 2 | Ruido: 0
+Parámetros: {'eps': 0.9, 'min_samples': 3} | Silhouette: 0.6867 | Clusters: 2 | Ruido: 0
+Parámetros: {'eps': 0.9, 'min_samples': 5} | Silhouette: 0.6867 | Clusters: 2 | Ruido: 0
+Parámetros: {'eps': 0.9, 'min_samples': 7} | Silhouette: 0.6867 | Clusters: 2 | Ruido: 0
+
+Mejores parámetros DBSCAN: {'eps': 0.3, 'min_samples': 5}
+Mejor Silhouette Score: 0.6867</code></pre>
+    
+    <h4>7.3 Optimización de MeanShift</h4>
+    
+    <pre><code class="language-python"># Optimización de hiperparámetros para MeanShift
+print("\nOPTIMIZACIÓN DE HIPERPARÁMETROS - MEANSHIFT")
+print("=" * 50)
+
+# Estimar bandwidth base
+base_bandwidth = estimate_bandwidth(pca_features)
+print(f"Bandwidth base estimado: {base_bandwidth:.4f}")
+
+# Parámetros a probar (múltiplos del bandwidth base)
+bandwidth_multipliers = [0.5, 0.8, 1.0, 1.2, 1.5]
+meanshift_params = [{'bandwidth': base_bandwidth * mult} for mult in bandwidth_multipliers]
+
+best_meanshift_score = -1
+best_meanshift_params = None
+meanshift_results_opt = []
+
+for params in meanshift_params:
+    model = MeanShift(**params)
+    model.fit(pca_features)
+
+    n_clusters = len(set(model.labels_))
+    silhouette = metrics.silhouette_score(pca_features, model.labels_)
+
+    result = {'params': params, 'silhouette_score': silhouette, 'n_clusters': n_clusters}
+    meanshift_results_opt.append(result)
+
+    print(f"Bandwidth: {params['bandwidth']:.4f} | Silhouette: {silhouette:.4f} | Clusters: {n_clusters}")
+
+    if silhouette > best_meanshift_score:
+        best_meanshift_score = silhouette
+        best_meanshift_params = params
+
+print(f"\nMejores parámetros MeanShift: {best_meanshift_params}")
+print(f"Mejor Silhouette Score: {best_meanshift_score:.4f}")</code></pre>
+    
+    <pre class="output"><code class="language-shell">OPTIMIZACIÓN DE HIPERPARÁMETROS - MEANSHIFT
+==================================================
+Bandwidth base estimado: 1.0495
+Bandwidth: 0.5248 | Silhouette: 0.2639 | Clusters: 16
+Bandwidth: 0.8396 | Silhouette: 0.6858 | Clusters: 2
+Bandwidth: 1.0495 | Silhouette: 0.6858 | Clusters: 2
+Bandwidth: 1.2594 | Silhouette: 0.5528 | Clusters: 3
+Bandwidth: 1.5743 | Silhouette: 0.5528 | Clusters: 3
+
+Mejores parámetros MeanShift: {'bandwidth': 0.8396011904761905}
+Mejor Silhouette Score: 0.6858</code></pre>
+</div>
+
+<div class="content-section">
+    <h3 id="resultados-finales">8. Resultados Finales y Comparación</h3>
+
+    <p>Finalmente, entrenamos los modelos con los mejores parámetros encontrados y comparamos los resultados:</p>
+    
+    <pre><code class="language-python"># Comparación final con parámetros optimizados
+print("\nCOMPARACIÓN FINAL CON PARÁMETROS OPTIMIZADOS")
+print("=" * 60)
+
+# Entrenar modelos con mejores parámetros
+optimized_results = {}
+optimized_models = {}
+
+# KMeans optimizado
+if best_kmeans_params:
+    kmeans_opt = KMeans(random_state=42, max_iter=1000, **best_kmeans_params).fit(pca_features)
+    kmeans_metrics_opt = evaluate_clustering(iris_labels, kmeans_opt.labels_, pca_features)
+    optimized_results['KMeans_Optimized'] = kmeans_metrics_opt
+    optimized_models['KMeans_Optimized'] = kmeans_opt
+    print(f"KMeans con parámetros: {best_kmeans_params}")
+
+# DBSCAN optimizado (si se encontraron parámetros válidos)
+if best_dbscan_params:
+    dbscan_opt = DBSCAN(**best_dbscan_params).fit(pca_features)
+    dbscan_metrics_opt = evaluate_clustering(iris_labels, dbscan_opt.labels_, pca_features)
+    optimized_results['DBSCAN_Optimized'] = dbscan_metrics_opt
+    optimized_models['DBSCAN_Optimized'] = dbscan_opt
+    print(f"DBSCAN con parámetros: {best_dbscan_params}")
+else:
+    print("DBSCAN: No se pudieron optimizar parámetros")
+
+# MeanShift optimizado
+if best_meanshift_params:
+    meanshift_opt = MeanShift(**best_meanshift_params).fit(pca_features)
+    meanshift_metrics_opt = evaluate_clustering(iris_labels, meanshift_opt.labels_, pca_features)
+    optimized_results['MeanShift_Optimized'] = meanshift_metrics_opt
+    optimized_models['MeanShift_Optimized'] = meanshift_opt
+    print(f"MeanShift con parámetros: {best_meanshift_params}")</code></pre>
+    
+    <pre class="output"><code class="language-shell">COMPARACIÓN FINAL CON PARÁMETROS OPTIMIZADOS
+============================================================
+KMeans con parámetros: {'n_clusters': 2}
+DBSCAN con parámetros: {'eps': 0.3, 'min_samples': 5}
+MeanShift con parámetros: {'bandwidth': 0.8396011904761905}</code></pre>
+    
+    <pre><code class="language-python"># Mostrar resultados
+if optimized_results:
+    optimized_df = pd.DataFrame(optimized_results).T
+    optimized_df = optimized_df.round(4)
+
+    print("\nRESULTADOS CON PARÁMETROS OPTIMIZADOS:")
+    print(optimized_df)
+else:
+    print("No se pudieron generar resultados optimizados")</code></pre>
+    
+    <pre class="output"><code class="language-shell">RESULTADOS CON PARÁMETROS OPTIMIZADOS:
+                    Silhouette Score  Adjusted Rand Score  Homogeneity Score
+KMeans_Optimized           0.6810               0.5681             0.5794
+DBSCAN_Optimized           0.6867               0.5681             0.5794
+MeanShift_Optimized        0.6858               0.5681             0.5794</code></pre>
+    
+    <pre><code class="language-python"># Visualización final de resultados optimizados
+n_models = len(optimized_models)
+fig, axes = plt.subplots(1, n_models, figsize=(5*n_models, 5))
+# Si solo hay un modelo, axes no será una lista
+if n_models == 1:
+    axes = [axes]
+colors = ['viridis', 'plasma', 'inferno']
+for i, (title, model) in enumerate(optimized_models.items()):
+    scatter = axes[i].scatter(pca_features['PC1'], pca_features['PC2'],
+                            c=model.labels_, cmap=colors[i % len(colors)],
+                            s=100, alpha=0.7, edgecolors='black')
+    axes[i].set_title(f'{title}\nSilhouette: {optimized_results[title]["Silhouette Score"]:.4f}')
+    axes[i].set_xlabel('PC1')
+    axes[i].set_ylabel('PC2')
+    axes[i].grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+print("\n¡Análisis de clustering completado!")</code></pre>
+    
+    <pre class="output"><code class="language-shell">¡Análisis de clustering completado!</code></pre>
+
+        <div class="img-container">
+            <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/clustering_7.png" alt="Resultados finales de clustering con parámetros optimizados">
+            <div class="caption">Visualización final de los clusters encontrados por cada algoritmo optimizado en el espacio PCA 2D</div>
+        </div>
+
+</div>
+
+<div class="content-section">
+    <h2 id="material-practica">Material de Práctica</h2>
+    
+    <p>Para consolidar los conceptos aprendidos sobre clustering, te invito a practicar con este ejercicio completo:</p>
+    
+    <ul class="resources-list">
+        <li><strong><a href="https://colab.research.google.com/drive/1W-5GWSX9SODNhxFrO9DzfKHpsmJxzTtJ" target="_blank">Workflow Completo de Clustering - Dataset Iris</a></strong> - Implementa y compara diferentes algoritmos de clustering con optimización de hiperparámetros.</li>
+    </ul>
+    
+    <div class="tip">
+        <strong>Ejercicio adicional:</strong> Prueba aplicar este mismo workflow a otros datos como Penguin o Wine datasets. Observa cómo cambian los resultados según las características de los datos y experimenta con diferentes métricas de evaluación.
+    </div>
+
+    <h2 id="referencias">Referencias</h2>
+
+    <p>Para profundizar en algoritmos de clustering con Python, recomendamos consultar estos recursos:</p>
+
+    <ul class="resources-list">
+        <li><strong><a href="https://scikit-learn.org/stable/modules/clustering.html" target="_blank">Clustering - Scikit-learn Documentation</a></strong>, la documentación oficial de scikit-learn sobre algoritmos de clustering, con ejemplos detallados y comparaciones entre diferentes métodos.</li>
+        <li><strong><a href="https://medium.com/data-science/the-5-clustering-algorithms-data-scientists-need-to-know-a36d136ef68" target="_blank">The 5 Clustering Algorithms Data Scientists Need to Know</a></strong>, un artículo completo de Towards Data Science que explica los algoritmos de clustering más importantes con ejemplos prácticos en Python.</li>
+    </ul>
+</div>
 
         <div class="content-section">
             <div class="feedback-section">
