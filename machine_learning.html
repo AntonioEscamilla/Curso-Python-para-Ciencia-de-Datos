@@ -1367,6 +1367,73 @@ predictions = loaded_model.predict(new_data)  # Se puede usar directamente con d
     
     <p>En los próximos capítulos exploraremos en detalle cómo utilizar scikit-learn y otras librerías para implementar cada paso de este flujo de trabajo, centrándonos en regresión, clasificación y clustering.</p>
     
+    <h2 id="conceptos-aplicados">Conceptos Clave Aplicados en Scikit-learn</h2>
+    
+    <p>Para trabajar efectivamente con Machine Learning en Python, es fundamental comprender dos conceptos centrales en scikit-learn: la diferencia entre transformadores y estimadores, y cómo utilizar pipelines para crear flujos de trabajo eficientes y reproducibles.</p>
+    
+    <h3 id="transformadores-estimadores">Transformadores vs Predictores en Scikit-learn</h3>
+    
+    <p>En el ecosistema de scikit-learn, todos los objetos son <strong>estimadores</strong>, pero existen diferentes tipos especializados que cumplen funciones específicas en el flujo de trabajo de Machine Learning.</p>
+    
+    <div class="img-container">
+        <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/transform_vs_predict.png" alt="Diferencia entre Transformadores y Predictores" width="80%">
+        <div class="caption">Esquema conceptual de la diferencia entre Transformadores y Predictores</div>
+    </div>
+
+    <h4>Transformadores (Transformers)</h4>
+    
+    <p>Los <strong>transformadores</strong> son un tipo especial de estimador que se usa para transformar datos. Implementan métodos adicionales para modificar los datos de entrada.</p>
+    
+    <p>Características principales de los transformadores:</p>
+    <ul>
+        <li><strong>Método <code>fit(X)</code>:</strong> Aprende parámetros para la transformación a partir de los datos</li>
+        <li><strong>Método <code>transform(X)</code>:</strong> Aplica la transformación aprendida a nuevos datos</li>
+        <li><strong>Método <code>fit_transform(X)</code>:</strong> Combina fit() y transform() en una sola operación</li>
+        <li><strong>Se usan para preprocesamiento:</strong> Escalado, codificación, reducción de dimensionalidad, etc.</li>
+    </ul>
+
+    <h4>Predictores (Predictors)</h4>
+
+    <p>Los <strong>predictores</strong> son estimadores que implementan el método <code>predict()</code> para hacer predicciones sobre nuevos datos. A diferencia de los transformadores que modifican los datos, los predictores aprenden patrones y relaciones para generar predicciones.</p>
+
+    <p>Características principales de los predictores:</p>
+    <ul>
+        <li><strong>Método <code>fit(X, y)</code>:</strong> Aprende patrones de los datos de entrenamiento y sus etiquetas</li>
+        <li><strong>Método <code>predict(X)</code>:</strong> Genera predicciones para nuevos datos basándose en el conocimiento aprendido</li>
+        <li><strong>Método <code>score(X, y)</code>:</strong> Evalúa la calidad de las predicciones comparándolas con las etiquetas verdaderas</li>
+        <li><strong>Se usan para entrenar modelos en tareas de predicción:</strong> Clasificación, regresión, clustering, etc.</li>
+    </ul>
+
+    <h3 id="pipelines-sklearn">Pipelines en Scikit-learn</h3>
+
+    <p>Un <strong>Pipeline</strong> en scikit-learn es una herramienta que permite encadenar múltiples pasos de procesamiento y modelado en un flujo secuencial. Esta es una de las características más poderosas de scikit-learn para crear workflows reproducibles y eficientes.</p>
+
+    <div class="img-container">
+        <img src="https://github.com/AntonioEscamilla/images-in-readMe/raw/master/Curso%20Python/pipelines.png" alt="Diagrama de Pipeline de Scikit-learn" width="50%">
+        <div class="caption">Flujo de datos en un Pipeline de scikit-learn</div>
+    </div>
+
+    <h4>¿Por qué usar Pipelines?</h4>
+
+    <p>Los pipelines resuelven varios problemas comunes en Machine Learning:</p>
+
+    <ul>
+        <li><strong>Prevención de Data Leakage:</strong> Aseguran que las transformaciones se apliquen correctamente en validación cruzada</li>
+        <li><strong>Reproducibilidad:</strong> Encapsulan todo el flujo de trabajo en un objeto reutilizable</li>
+        <li><strong>Simplicidad:</strong> Reducen la complejidad del código y facilitan el mantenimiento</li>
+        <li><strong>Optimización conjunta:</strong> Permiten la búsqueda de hiperparámetros en todo el pipeline</li>
+        <li><strong>Facilidad de despliegue:</strong> Un pipeline entrenado puede guardarse y utilizarse directamente en producción</li>
+    </ul>
+
+    <h4>Estructura de un Pipeline</h4>
+
+    <p>Un pipeline está compuesto por:</p>
+    <ul>
+        <li><strong>Pasos intermedios:</strong> Deben ser transformadores (implementar <code>fit()</code> y <code>transform()</code>)</li>
+        <li><strong>Paso final:</strong> Puede ser cualquier estimador (transformador, predictor, etc.)</li>
+        <li><strong>Nombres de pasos:</strong> Cada paso tiene un nombre único para poder referenciarlo</li>
+    </ul>
+    
     <h2 id="material-practica">Material de Práctica</h2>
     
     <p>Para consolidar los conceptos aprendidos en este capítulo, te invito a realizar el siguiente ejercicio:</p>
