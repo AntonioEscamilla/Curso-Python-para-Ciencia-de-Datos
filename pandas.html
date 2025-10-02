@@ -976,9 +976,34 @@ DataFrame desde array NumPy:
 				
 			<p>Pandas ofrece métodos simples y eficientes para leer y escribir datos en formatos CSV y Excel. Estas funcionalidades son esenciales para trabajar con datos en el mundo real.</p>
 
-			<a href="https://github.com/AntonioEscamilla/Curso-Python-para-Ciencia-de-Datos/raw/main/datos.csv" download="empleados.csv">
-  				Descargar archivo CSV
-			</a>
+<a href="#" id="downloadLink">Descargar archivo CSV</a>
+
+<script>
+document.getElementById('downloadLink').addEventListener('click', function(e) {
+  e.preventDefault();
+  
+  const url = 'https://raw.githubusercontent.com/AntonioEscamilla/Curso-Python-para-Ciencia-de-Datos/main/datos.csv';
+  const filename = 'datos.csv';
+  
+  fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(a);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error al descargar el archivo');
+    });
+});
+</script>
 				
 			<h3>Lectura desde CSV</h3>
 				
